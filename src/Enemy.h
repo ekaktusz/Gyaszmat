@@ -7,7 +7,7 @@ class Enemy : Entity
 private:
     /* data */
 public:
-    void draw();
     Enemy(/* args */);
     ~Enemy();
+    void draw(sf::RenderTarget& target, sf::RenderStates states) const;
 };

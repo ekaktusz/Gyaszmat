@@ -1,10 +1,9 @@
 #include "Game.h"
 #include <SFML/Window.hpp>
-#include <SFML/Graphics.hpp>
 
 const std::string Game::name = "Gyaszmat";
 
-Game::Game(/* args */)
+Game::Game() : renderWindow({Game::XX, Game::YY}, Game::name)
 {
 }
 
@@ -14,21 +13,25 @@ Game::~Game()
 
 void Game::run()
 {
-    sf::RenderWindow window(sf::VideoMode(Game::XX, Game::YY), Game::name);
     sf::CircleShape shape(100.f);
     shape.setFillColor(sf::Color::Green);
 
-    while (window.isOpen())
+    while (renderWindow.isOpen())
     {
         sf::Event event;
-        while (window.pollEvent(event))
+        while (renderWindow.pollEvent(event))
         {
             if (event.type == sf::Event::Closed)
-                window.close();
+                renderWindow.close();
         }
 
-        window.clear();
-        window.draw(shape);
-        window.display();
+        renderWindow.clear();
+        draw();
+        renderWindow.display();
     }
+}
+
+void Game::draw()
+{
+    renderWindow.draw(player);
 }

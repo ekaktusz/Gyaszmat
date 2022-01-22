@@ -1,8 +1,8 @@
 #pragma once
 
-#include <SFML/Window.hpp>
+#include <SFML/Graphics.hpp>
 
-class Entity
+class Entity : public sf::Drawable
 {
 private:
     unsigned int x, y;
@@ -11,5 +11,4 @@ public:
     Entity();
     Entity(unsigned int x, unsigned int y);
     ~Entity();
-    virtual void draw() = 0;
 };

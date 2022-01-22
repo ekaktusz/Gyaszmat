@@ -1,14 +1,16 @@
 #include "Player.h"
 
-Player::Player(/* args */)
+Player::Player()
 {
+    texture.loadFromFile("./assets/test_player.png");
+    sprite.setTexture(texture); 
 }
 
 Player::~Player()
 {
 }
 
-void Player::draw()
+void Player::draw(sf::RenderTarget& target, sf::RenderStates states) const
 {
-    
+    target.draw(sprite);
 }

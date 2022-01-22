@@ -8,7 +8,7 @@ Enemy::~Enemy()
 {
 }
 
-void Enemy::draw()
+void Enemy::draw(sf::RenderTarget& target, sf::RenderStates states) const
 {
-    
+
 }

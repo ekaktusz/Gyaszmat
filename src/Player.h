@@ -2,12 +2,13 @@
 
 #include "Entity.h"
 
-class Player : Entity
+class Player : public Entity
 {
 private:
-    /* data */
+    sf::Texture texture;
+    sf::Sprite sprite;
 public:
-    void draw();
-    Player(/* args */);
+    Player();
     ~Player();
+    void draw(sf::RenderTarget& target, sf::RenderStates states) const;
 };
