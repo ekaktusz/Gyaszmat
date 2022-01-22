@@ -3,7 +3,7 @@ if [ $# -eq 0 ]; then
     make -C build
 fi
 
-if [ $1 = "clean" ]; then
+if [[ $1 == "clean" ]]; then
     cmake --build build --target clean
     rm -r build/*
     echo "Project cleaned."
