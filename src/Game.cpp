@@ -16,53 +16,46 @@ Game::~Game()
 
 void Game::run()
 {
+    sf::Vector2f position, previous;
+    const float speed = 60.0f;
+    sf::Clock clock;
+    float accumulator = 0;
+    const float timestep = 1.0f / 10.0f;
+
     while (renderWindow.isOpen())
     {
         sf::Event event;
         while (renderWindow.pollEvent(event))
         {
-            switch (event.type)
+            if (event.type == sf::Event::Closed)
             {
-            case sf::Event::Closed:
                 renderWindow.close();
-                break;
-
-            case sf::Event::KeyPressed:
-
-                if (event.key.code == sf::Keyboard::W)
-                {
-                    sf::Vector2f position = player.sprite.getPosition();
-                    //cout << "WWW: x: " << position.x << ", y: " << position.y << endl;
-                    player.sprite.move(0, -5);
-                }
-                if (event.key.code == sf::Keyboard::A)
-                {
-                    sf::Vector2f position = player.sprite.getPosition();
-                    //cout << "AAA: x: " << position.x << ", y: " << position.y << endl;
-                    player.sprite.move(-5, 0);
-                }
-                if (event.key.code == sf::Keyboard::S)
-                {
-                    sf::Vector2f position = player.sprite.getPosition();
-                    //cout << "SSS: x: " << position.x << ", y: " << position.y << endl;
-                    player.sprite.move(0, 5);
-                }
-                if (event.key.code == sf::Keyboard::D)
-                {
-                    sf::Vector2f position = player.sprite.getPosition();
-                    //cout << "DDD: x: " << position.x << ", y: " << position.y << endl;
-                    player.sprite.move(5, 0);
-                }
-                break;
-
-            default:
-                break;
             }
-
-            renderWindow.clear();
-            draw();
-            renderWindow.display();
         }
+
+        accumulator += clock.restart().asSeconds();
+        while (accumulator >= timestep)
+        {
+            accumulator -= timestep;
+            previous = position;
+
+            if (sf::Keyboard::isKeyPressed(sf::Keyboard::A))
+                position.x -= speed;
+
+            if (sf::Keyboard::isKeyPressed(sf::Keyboard::D))
+                position.x += speed;
+
+            if (sf::Keyboard::isKeyPressed(sf::Keyboard::W))
+                position.y -= speed;
+
+            if (sf::Keyboard::isKeyPressed(sf::Keyboard::S))
+                position.y += speed;
+        }
+
+        renderWindow.clear();
+        player.sprite.setPosition(previous + ((position - previous) * (accumulator / timestep)));
+        draw();
+        renderWindow.display();
     }
 }
 
