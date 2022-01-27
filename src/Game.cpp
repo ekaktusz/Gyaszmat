@@ -47,8 +47,7 @@ void Game::run()
 
             if (sf::Keyboard::isKeyPressed(sf::Keyboard::W))
                 position.y -= speed;
-
-            if (sf::Keyboard::isKeyPressed(sf::Keyboard::S))
+            else if (position.y <= 0)
                 position.y += speed;
         }
 
