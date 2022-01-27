@@ -11,4 +11,5 @@ public:
     Player();
     ~Player();
     void draw(sf::RenderTarget &target, sf::RenderStates states) const;
+    void move(sf::Keyboard::Key keyCode);
 };
