@@ -1,0 +1,24 @@
+{
+    "configurations": [
+        {
+            "name": "Attach Debugger",
+            "type": "cppdbg",
+            "request": "attach",
+            "program": "${workspaceFolder}/build/gyaszmat",
+            "processId": "${command:pickProcess}",
+            "MIMode": "lldb"
+        },
+        {
+            "name": "Gyaszmat Debug",
+            "type": "cppdbg",
+            "request": "launch",
+            "program": "${workspaceFolder}/build/gyaszmat",
+            "args": [],
+            "stopAtEntry": false,
+            "cwd": "${workspaceFolder}",
+            "environment": [],
+            "externalConsole": false,
+            "MIMode": "lldb"
+        }
+    ]
+} 
