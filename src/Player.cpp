@@ -1,8 +1,10 @@
 #include "Player.h"
+#include <filesystem>
 
 Player::Player()
 {
-    texture.loadFromFile("./assets/test_player.png");
+    std::filesystem::path playerAsset = std::filesystem::current_path() / "assets" / "test_player.png";
+    texture.loadFromFile(playerAsset.string());
     sprite.setTexture(texture); 
 }
 

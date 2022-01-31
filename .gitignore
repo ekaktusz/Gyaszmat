@@ -1,3 +1,6 @@
+.vs
 .vscode
 build/*
 .DS_Store
+src/out
+include/SFML

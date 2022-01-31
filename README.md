@@ -4,7 +4,7 @@ Gyaszmat is the best game ever created in C++ using SFML.
 
 ## Building on Linux (Debian based)
 
-### Setup environment
+### Setup the environment
 Install libsfml-dev from the official repositories.
 
 ```
@@ -22,7 +22,7 @@ To clean the build call the build script with the `clean` parameter.
 ./build.sh clean
 ```
 
-## Executing
+### Executing
 The out file can be executed directly from terminal:
 ```
 ./build/gyaszmat
@@ -30,7 +30,7 @@ The out file can be executed directly from terminal:
 
 ## Building on macOs
 
-### Setup environment
+### Setup the environment
 
 Download SFML SDK from here:
 https://www.sfml-dev.org/files/SFML-2.5.1-macOS-clang.tar.gz
@@ -58,3 +58,19 @@ cp -R SFML-2.5.1-macos-clang/extlibs /Library/Frameworks
 
 ### Build, clean and execute
 The steps are exactly the same as described in the Linux section.
+
+## Building on Windows (Technical Alpha Preview 0.1)
+
+### Setup the environment
+1. Download and install Visual Studio 2022 with cmake
+2. Also download and install cmake seperately (don't know if needed but who cares)
+3. Download the most recent 64 bit Visual C++ SFML from: https://www.sfml-dev.org/download/sfml/2.5.1/
+4. Unzip SFML-2.5.1 folder from the zip file and place the folder to the Gyaszmat/include folder and rename it to SFML.
+5. Open project in Visual Studio, it should parse everything.
+
+### Build
+Just press the build all button in Visual Studio.
+
+### Execution
+1. Copy all the dll-s from Gyaszmat/include/SFML/ to Gyaszmat\src\out\build\x64-Debug
+2. Copy the Gyaszmat/assets folder to Gyaszmat\src\out\build\x64-Debug
