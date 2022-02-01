@@ -21,11 +21,14 @@
 class Game
 {
 private:
-    Player player; //later if we have multiple players change it to vector?
+    Player player; 
     std::vector<Enemy> enemies;
-    sf::RenderWindow renderWindow;
 
-    void draw();
+    sf::RenderWindow renderWindow;
+    sf::Event event;
+
+    void render();
+    void update();
 public:
     static const unsigned int XX = 800;
     static const unsigned int YY = 600;

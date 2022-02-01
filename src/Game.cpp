@@ -5,6 +5,7 @@ const std::string Game::name = "Gyaszmat";
 
 Game::Game() : renderWindow({Game::XX, Game::YY}, Game::name)
 {
+    renderWindow.setFramerateLimit(60);
 }
 
 Game::~Game()
@@ -22,41 +23,29 @@ void Game::run()
 
     while (renderWindow.isOpen())
     {
-        sf::Event event;
-        while (renderWindow.pollEvent(event))
-        {
-            if (event.type == sf::Event::Closed)
-            {
-                renderWindow.close();
-            }
-        }
-
-        accumulator += clock.restart().asSeconds();
-        while (accumulator >= timestep)
-        {
-            accumulator -= timestep;
-            previous = position;
-
-            if (sf::Keyboard::isKeyPressed(sf::Keyboard::A))
-                position.x -= speed;
-
-            if (sf::Keyboard::isKeyPressed(sf::Keyboard::D))
-                position.x += speed;
-
-            if (sf::Keyboard::isKeyPressed(sf::Keyboard::W) && position.y >= 60)
-                position.y -= speed;
-            else if (position.y <= 0)
-                position.y += speed;
-        }
-
-        renderWindow.clear();
-        player.sprite.setPosition(previous + ((position - previous) * (accumulator / timestep)));
-        draw();
-        renderWindow.display();
+        update();
+        render();
     }
 }
 
-void Game::draw()
+void Game::update()
 {
+    while (renderWindow.pollEvent(event))
+    {
+        if (event.type == sf::Event::Closed || sf::Keyboard::isKeyPressed(sf::Keyboard::Escape))
+        {
+            renderWindow.close();
+        }
+    }
+
+    player.update();
+}
+
+void Game::render()
+{
+    renderWindow.clear();
+
     renderWindow.draw(player);
+
+    renderWindow.display();
 }
