@@ -5,7 +5,7 @@ const std::string Game::name = "Gyaszmat";
 
 Game::Game() : renderWindow({Game::XX, Game::YY}, Game::name)
 {
-    renderWindow.setFramerateLimit(60);
+    this->renderWindow.setFramerateLimit(60);
 }
 
 Game::~Game()
@@ -14,38 +14,54 @@ Game::~Game()
 
 void Game::run()
 {
-    sf::Vector2f position, previous;
-    const float speed = 60.0f;
-    sf::Clock clock;
-    float accumulator = 0;
-    const float timestep = 1.0f / 10.0f;
-
-
-    while (renderWindow.isOpen())
+    while (this->renderWindow.isOpen())
     {
-        update();
-        render();
+        this->update();
+        this->render();
     }
 }
 
 void Game::update()
 {
-    while (renderWindow.pollEvent(event))
+    while (this->renderWindow.pollEvent(this->event))
     {
-        if (event.type == sf::Event::Closed || sf::Keyboard::isKeyPressed(sf::Keyboard::Escape))
+        if (this->event.type == sf::Event::Closed || sf::Keyboard::isKeyPressed(sf::Keyboard::Escape))
         {
-            renderWindow.close();
+            this->renderWindow.close();
+        }
+        if (this->event.type == sf::Event::KeyReleased &&
+            (
+            this->event.key.code == sf::Keyboard::A ||
+            this->event.key.code == sf::Keyboard::D ||
+            this->event.key.code == sf::Keyboard::W ||
+            this->event.key.code == sf::Keyboard::S
+            ))
+        {
+            this->player.resetAnimationTimer();
         }
     }
 
-    player.update();
+    this->player.update();
+    this->updateCollision();
 }
 
 void Game::render()
 {
-    renderWindow.clear();
+    this->renderWindow.clear();
 
-    renderWindow.draw(player);
+    this->renderWindow.draw(player);
 
-    renderWindow.display();
+    this->renderWindow.display();
+}
+
+void Game::updateCollision()
+{
+    if (this->player.getGlobalBounds().top + this->player.getGlobalBounds().height > this->renderWindow.getSize().y)
+    {
+        this->player.stopFalling();
+        this->player.setPosition(
+            this->player.getGlobalBounds().left,
+            this->renderWindow.getSize().y - this->player.getGlobalBounds().height
+        );
+    }
 }
