@@ -5,6 +5,7 @@ const std::string Game::name = "Gyaszmat";
 
 Game::Game() : renderWindow({Game::XX, Game::YY}, Game::name)
 {
+    this->renderWindow.setFramerateLimit(60);
 }
 
 Game::~Game()
@@ -13,50 +14,54 @@ Game::~Game()
 
 void Game::run()
 {
-    sf::Vector2f position, previous;
-    const float speed = 60.0f;
-    sf::Clock clock;
-    float accumulator = 0;
-    const float timestep = 1.0f / 10.0f;
-
-
-    while (renderWindow.isOpen())
+    while (this->renderWindow.isOpen())
     {
-        sf::Event event;
-        while (renderWindow.pollEvent(event))
-        {
-            if (event.type == sf::Event::Closed)
-            {
-                renderWindow.close();
-            }
-        }
-
-        accumulator += clock.restart().asSeconds();
-        while (accumulator >= timestep)
-        {
-            accumulator -= timestep;
-            previous = position;
-
-            if (sf::Keyboard::isKeyPressed(sf::Keyboard::A))
-                position.x -= speed;
-
-            if (sf::Keyboard::isKeyPressed(sf::Keyboard::D))
-                position.x += speed;
-
-            if (sf::Keyboard::isKeyPressed(sf::Keyboard::W) && position.y >= 60)
-                position.y -= speed;
-            else if (position.y <= 0)
-                position.y += speed;
-        }
-
-        renderWindow.clear();
-        player.sprite.setPosition(previous + ((position - previous) * (accumulator / timestep)));
-        draw();
-        renderWindow.display();
+        this->update();
+        this->render();
     }
 }
 
-void Game::draw()
+void Game::update()
 {
-    renderWindow.draw(player);
+    while (this->renderWindow.pollEvent(this->event))
+    {
+        if (this->event.type == sf::Event::Closed || sf::Keyboard::isKeyPressed(sf::Keyboard::Escape))
+        {
+            this->renderWindow.close();
+        }
+        if (this->event.type == sf::Event::KeyReleased &&
+            (
+            this->event.key.code == sf::Keyboard::A ||
+            this->event.key.code == sf::Keyboard::D ||
+            this->event.key.code == sf::Keyboard::W ||
+            this->event.key.code == sf::Keyboard::S
+            ))
+        {
+            this->player.resetAnimationTimer();
+        }
+    }
+
+    this->player.update();
+    this->updateCollision();
+}
+
+void Game::render()
+{
+    this->renderWindow.clear();
+
+    this->renderWindow.draw(player);
+
+    this->renderWindow.display();
+}
+
+void Game::updateCollision()
+{
+    if (this->player.getGlobalBounds().top + this->player.getGlobalBounds().height > this->renderWindow.getSize().y)
+    {
+        this->player.stopFalling();
+        this->player.setPosition(
+            this->player.getGlobalBounds().left,
+            this->renderWindow.getSize().y - this->player.getGlobalBounds().height
+        );
+    }
 }
