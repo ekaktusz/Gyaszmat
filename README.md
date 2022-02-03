@@ -1,6 +1,8 @@
 # Gyaszmat
-Gyaszmat is the best game ever created in C++ using SFML. 
+Gyaszmat is the best game ever created in C++ using SFML.
 
+
+**Roadmap:** https://trello.com/b/wMSF3RLJ/gyaszmat
 
 ## Building on Linux (Debian based)
 
