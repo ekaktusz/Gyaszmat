@@ -7,9 +7,11 @@ Player::Player()
     // Load game assets
     std::filesystem::path idlePlayerAsset = std::filesystem::current_path() / "assets" / "owlet_monster" / "Owlet_Monster_Idle_4.png";
     std::filesystem::path runningPlayerAsset = std::filesystem::current_path() / "assets" / "owlet_monster" / "Owlet_Monster_Run_6.png";
+    std::filesystem::path jumpingPlayerAsset = std::filesystem::current_path() / "assets" / "owlet_monster" / "Owlet_Monster_Jump_8.png";
 
     this->idleTexture.loadFromFile(idlePlayerAsset.string());
     this->movingTexture.loadFromFile(runningPlayerAsset.string());
+    this->jumpingTexture.loadFromFile(jumpingPlayerAsset.string());
 
     this->sprite.setTexture(idleTexture);
     // Set starting frame to the first 32x32 part of the image
@@ -27,8 +29,9 @@ Player::Player()
     this->maxVelocity = sf::Vector2f(8.f, 50.f);
     this->minVelocity = sf::Vector2f(1.f, 1.f);
     this->acceleration = 1.7f; 
-    this->drag = 0.85f; // this is the default stopping force, the smaller the harder the drag
-    this->gravity = 3;
+    this->drag = 0.85f; // this is the default stopping force, the smaller the harder the drag: decceleration
+    this->gravity = 1;
+    this->jumpSpeed = -20.f;
 }
 
 Player::~Player()
@@ -48,26 +51,9 @@ bool Player::getAnimationSwitch()
     return tempAnimationSwitch;
 }
 
-void Player::update(sf::Event& event)
+void Player::update()
 {
-    this->animationState = PlayerAnimationStates::IDLE;
-    if (sf::Keyboard::isKeyPressed(sf::Keyboard::Key::A))
-    {
-        this->move(-1.f, 0.f);
-        this->animationState = PlayerAnimationStates::MOVING_LEFT;
-    }
-    else if (sf::Keyboard::isKeyPressed(sf::Keyboard::Key::D))
-    {
-        this->move(1.f, 0.f);
-        this->animationState = PlayerAnimationStates::MOVING_RIGHT;
-    }
-    std::cout << event.type << "\n";
-    if (event.type == sf::Event::KeyPressed && event.key.code == sf::Keyboard::W) 
-    {
-        std::cout << "SEGG" << "\n";
-        this->move(0.f, 60.f);
-    }
-    
+    this->updateKeyboard();
     this->updateAnimation();
     this->updatePhysics();
 }
@@ -123,6 +109,24 @@ void Player::updateAnimation()
             this->sprite.setOrigin(this->sprite.getGlobalBounds().width / 2.f, 0);
         }
     }
+    else if (this->animationState == PlayerAnimationStates::JUMPING)
+    {
+        std::cout << "hello" << std::endl;
+        this->sprite.setTexture(jumpingTexture);
+        // matek: v_jump + g * t = 0 egyenlet adja meg hogy mikor ér a tetejére. ebbõl t = -v_jump. t itt a frame számot jelenti
+        // mivel 60 fps-sel megyünk ez a képlet adja meg hogy milyen tempóba menjen az animáció. valszeg tré és ezen változtatni kéne majd
+        // bugzik is rendesen
+        if (this->animationTimer.getElapsedTime().asSeconds() >= 2*(-jumpSpeed / 60.f) || this->getAnimationSwitch())
+        {
+            this->currentFrame.left += 32;
+            if (this->currentFrame.left >= 224)
+            {
+                this->currentFrame.left = 0;
+            }
+            this->animationTimer.restart();
+            this->sprite.setTextureRect(this->currentFrame);
+        }
+    }
 }
 
 void Player::updatePhysics()
@@ -136,11 +140,13 @@ void Player::updatePhysics()
     if (std::abs(this->velocity.y) < this->minVelocity.y)
         this->velocity.y = 0.f;
 
-    // Set max speed in the y dimension too.
+    // Set max speed in the y dimension
     if (std::abs(this->velocity.y) > this->maxVelocity.y)
-    {
-        this->velocity.y = this->maxVelocity.y * ((this->velocity.y < 0.f) ? -1.f : 1.f);
-    }
+        this->velocity.y = this->maxVelocity.y * ((this->velocity.y < 0.f) ? -1.f : 1.f); // based on directuon
+
+    // Set max speed in the x dimension
+    if (std::abs(this->velocity.x) > this->maxVelocity.x)
+        this->velocity.x = this->maxVelocity.x * ((this->velocity.x < 0.f) ? -1.f : 1.f); // based on directuon
 
     this->sprite.move(this->velocity);
 }
@@ -153,6 +159,7 @@ const sf::FloatRect Player::getGlobalBounds() const
 void Player::stopFalling()
 {
     this->velocity.y = 0.f;
+    onGround = true;
 }
 
 void Player::setPosition(const float x, const float y)
@@ -163,15 +170,31 @@ void Player::setPosition(const float x, const float y)
 void Player::move(float x, float y)
 {
     this->velocity.x += x * this->acceleration;
-    this->velocity.y -= y;
-
-    if (std::abs(this->velocity.x) > this->maxVelocity.x)
-    {
-        this->velocity.x = this->maxVelocity.x * ((this->velocity.x < 0.f) ? -1.f : 1.f);
-    }
+    this->velocity.y += y;
 }
 
 void Player::resetAnimationTimer() {
     this->animationTimer.restart();
     this->animationSwitch = true;
+}
+
+void Player::updateKeyboard()
+{
+    if (this->onGround) this->animationState = PlayerAnimationStates::IDLE;
+    if (sf::Keyboard::isKeyPressed(sf::Keyboard::Key::W) && onGround)
+    {
+        this->onGround = false;
+        this->animationState = PlayerAnimationStates::JUMPING;
+        this->move(0.f, this->jumpSpeed);
+    }
+    if (sf::Keyboard::isKeyPressed(sf::Keyboard::Key::A))
+    {
+        this->move(-1.f, 0.f);
+        this->animationState = PlayerAnimationStates::MOVING_LEFT;
+    }
+    else if (sf::Keyboard::isKeyPressed(sf::Keyboard::Key::D))
+    {
+        this->move(1.f, 0.f);
+        this->animationState = PlayerAnimationStates::MOVING_RIGHT;
+    }
 }

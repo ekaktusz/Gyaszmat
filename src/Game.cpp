@@ -1,6 +1,8 @@
 #include "Game.h"
 #include <SFML/Window.hpp>
 
+#include <iostream>
+
 const std::string Game::name = "Gyaszmat";
 
 Game::Game() : renderWindow({Game::XX, Game::YY}, Game::name)
@@ -39,9 +41,10 @@ void Game::update()
         {
             this->player.resetAnimationTimer();
         }
+        
     }
 
-    this->player.update(event);
+    this->player.update();
     this->updateCollision();
 }
 
