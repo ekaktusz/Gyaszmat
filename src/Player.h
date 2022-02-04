@@ -40,7 +40,7 @@ public:
     const sf::FloatRect getGlobalBounds() const;
     
     void draw(sf::RenderTarget& target, sf::RenderStates states) const;
-    void update();
+    void update(sf::Event& event);
     
     void stopFalling();
     void setPosition(const float x, const float y);

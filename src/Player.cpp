@@ -1,5 +1,6 @@
 #include "Player.h"
 #include <filesystem>
+#include <iostream>
 
 Player::Player()
 {
@@ -23,7 +24,7 @@ Player::Player()
     this->animationSwitch = true;
 
     // Can be played with
-    this->maxVelocity = sf::Vector2f(8.f, 15.f);
+    this->maxVelocity = sf::Vector2f(8.f, 50.f);
     this->minVelocity = sf::Vector2f(1.f, 1.f);
     this->acceleration = 1.7f; 
     this->drag = 0.85f; // this is the default stopping force, the smaller the harder the drag
@@ -47,7 +48,7 @@ bool Player::getAnimationSwitch()
     return tempAnimationSwitch;
 }
 
-void Player::update()
+void Player::update(sf::Event& event)
 {
     this->animationState = PlayerAnimationStates::IDLE;
     if (sf::Keyboard::isKeyPressed(sf::Keyboard::Key::A))
@@ -59,6 +60,12 @@ void Player::update()
     {
         this->move(1.f, 0.f);
         this->animationState = PlayerAnimationStates::MOVING_RIGHT;
+    }
+    std::cout << event.type << "\n";
+    if (event.type == sf::Event::KeyPressed && event.key.code == sf::Keyboard::W) 
+    {
+        std::cout << "SEGG" << "\n";
+        this->move(0.f, 60.f);
     }
     
     this->updateAnimation();
@@ -121,7 +128,7 @@ void Player::updateAnimation()
 void Player::updatePhysics()
 {
     this->velocity.y += this->gravity;
-    this->velocity *= this->drag;
+    this->velocity.x *= this->drag;
 
     // This is neccessary cause other wise it will go slower and slower but never gonna actually stop
     if (std::abs(this->velocity.x) < this->minVelocity.x)
@@ -156,6 +163,7 @@ void Player::setPosition(const float x, const float y)
 void Player::move(float x, float y)
 {
     this->velocity.x += x * this->acceleration;
+    this->velocity.y -= y;
 
     if (std::abs(this->velocity.x) > this->maxVelocity.x)
     {

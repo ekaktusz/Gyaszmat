@@ -41,7 +41,7 @@ void Game::update()
         }
     }
 
-    this->player.update();
+    this->player.update(event);
     this->updateCollision();
 }
 
