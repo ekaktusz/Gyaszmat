@@ -9,9 +9,11 @@
 	},
 	"linux": {
 		"options": {
+			/*
 			"env": {
 				"PATH": "${config:terminal.integrated.env.linux.PATH}"
 			}
+			*/
 		}
 	},
 	"osx": {

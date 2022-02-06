@@ -5,7 +5,7 @@
 			"name": "Debug Gyaszmat",
 			"type": "cppdbg",
 			"request": "launch",
-			"program": "${workspaceFolder}/build/${workspaceRootFolderName}d.exe",
+			"program": "${workspaceFolder}/build/gyaszmatd.exe",
 			"args": [],
 			"stopAtEntry": false,
 			"cwd": "${workspaceFolder}/build",
@@ -28,15 +28,16 @@
 				}
 			},
 			"linux": {
-				"program": "${workspaceFolder}/build/${workspaceRootFolderName}d",
+				"program": "${workspaceFolder}/build/gyaszmatd",
 				"MIMode": "gdb",
 				"miDebuggerPath": "/usr/bin/gdb",
+				/*
 				"env": {
 					"PATH": "${config:terminal.integrated.env.linux.PATH}",
-				}
+				*/
 			},
 			"osx": {
-				"program": "${workspaceFolder}/build/${workspaceRootFolderName}d",
+				"program": "${workspaceFolder}/build/gyaszmatd",
 				"MIMode": "lldb",
 				"env": {
 					"PATH": "${config:terminal.integrated.env.osx.PATH}",
