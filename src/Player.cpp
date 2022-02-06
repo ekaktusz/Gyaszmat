@@ -43,14 +43,6 @@ void Player::draw(sf::RenderTarget& target, sf::RenderStates states) const
     target.draw(sprite);
 }
 
-// This animation switch mechanism is required for smoother animations: no stutter and flickering
-bool Player::getAnimationSwitch() 
-{
-    bool tempAnimationSwitch = this->animationSwitch;
-    this->animationSwitch = false;
-    return tempAnimationSwitch;
-}
-
 void Player::update()
 {
     this->updateKeyboard();
@@ -58,8 +50,51 @@ void Player::update()
     this->updatePhysics();
 }
 
+void Player::updateKeyboard()
+{
+    if (sf::Keyboard::isKeyPressed(sf::Keyboard::Key::W) && onGround)
+    {
+        this->onGround = false;
+        this->move(0.f, this->jumpSpeed);
+    }
+    if (sf::Keyboard::isKeyPressed(sf::Keyboard::Key::A))
+    {
+        this->move(-1.f, 0.f);
+    }
+    else if (sf::Keyboard::isKeyPressed(sf::Keyboard::Key::D))
+    {
+        this->move(1.f, 0.f);
+    }
+}
+
 void Player::updateAnimation()
 {   
+    if (this->velocity.y > 0)
+        this->animationState = PlayerAnimationStates::FALLING;
+    else if (this->velocity.y < 0)
+        this->animationState = PlayerAnimationStates::JUMPING;
+    else 
+    {
+        if (this->velocity.x > 0)
+            this->animationState = PlayerAnimationStates::MOVING_RIGHT;
+        else if (this->velocity.x < 0)
+            this->animationState = PlayerAnimationStates::MOVING_LEFT;
+        else
+            this->animationState = PlayerAnimationStates::IDLE;
+    }
+
+    // this is for flipping the image to the right direction
+    if (this->velocity.x > 0) 
+    {
+        this->sprite.setScale(2, 2);
+        this->sprite.setOrigin(0.f, 0.f);
+    }
+    else if (this->velocity.x < 0)
+    {
+        this->sprite.setScale(-2, 2);
+        this->sprite.setOrigin(this->sprite.getGlobalBounds().width / 2.f, 0);
+    }
+
     if (this->animationState == PlayerAnimationStates::IDLE)
     {
         this->sprite.setTexture(this->idleTexture);
@@ -87,9 +122,6 @@ void Player::updateAnimation()
             }
             this->animationTimer.restart();
             this->sprite.setTextureRect(this->currentFrame);
-            // this is for flipping the image to the right direction
-            this->sprite.setScale(2, 2);
-            this->sprite.setOrigin(0.f, 0.f);
         }
     }
     else if (this->animationState == PlayerAnimationStates::MOVING_LEFT)
@@ -104,19 +136,30 @@ void Player::updateAnimation()
             }
             this->animationTimer.restart();
             this->sprite.setTextureRect(this->currentFrame);
-            // this is for flipping the image to the right direction
-            this->sprite.setScale(-2, 2);
-            this->sprite.setOrigin(this->sprite.getGlobalBounds().width / 2.f, 0);
+            
         }
     }
     else if (this->animationState == PlayerAnimationStates::JUMPING)
     {
-        std::cout << "hello" << std::endl;
         this->sprite.setTexture(jumpingTexture);
-        // matek: v_jump + g * t = 0 egyenlet adja meg hogy mikor ér a tetejére. ebbõl t = -v_jump. t itt a frame számot jelenti
+        // matek: v_jump + g * t = 0 egyenlet adja meg hogy mikor ér a tetejére. ebbõl g * t = -v_jump. t itt a frame számot jelenti
         // mivel 60 fps-sel megyünk ez a képlet adja meg hogy milyen tempóba menjen az animáció. valszeg tré és ezen változtatni kéne majd
         // bugzik is rendesen
-        if (this->animationTimer.getElapsedTime().asSeconds() >= 2*(-jumpSpeed / 60.f) || this->getAnimationSwitch())
+        if (this->animationTimer.getElapsedTime().asSeconds() >= 0.3 || this->getAnimationSwitch())
+        {
+            this->currentFrame.left += 32;
+            if (this->currentFrame.left >= 224)
+            {
+                this->currentFrame.left = 0;
+            }
+            this->animationTimer.restart();
+            this->sprite.setTextureRect(this->currentFrame);
+        }
+    }
+    else if (this->animationState == PlayerAnimationStates::FALLING)
+    {
+        this->sprite.setTexture(jumpingTexture);
+        if (this->animationTimer.getElapsedTime().asSeconds() >= 0.3 || this->getAnimationSwitch())
         {
             this->currentFrame.left += 32;
             if (this->currentFrame.left >= 224)
@@ -133,6 +176,7 @@ void Player::updatePhysics()
 {
     this->velocity.y += this->gravity;
     this->velocity.x *= this->drag;
+    if (!this->onGround) this->velocity.x *= this->drag; // if in air bigger drag
 
     // This is neccessary cause other wise it will go slower and slower but never gonna actually stop
     if (std::abs(this->velocity.x) < this->minVelocity.x)
@@ -151,9 +195,10 @@ void Player::updatePhysics()
     this->sprite.move(this->velocity);
 }
 
-const sf::FloatRect Player::getGlobalBounds() const
+void Player::move(float x, float y)
 {
-    return this->sprite.getGlobalBounds();
+    this->velocity.x += x * this->acceleration;
+    this->velocity.y += y;
 }
 
 void Player::stopFalling()
@@ -167,10 +212,12 @@ void Player::setPosition(const float x, const float y)
     this->sprite.setPosition(x, y);
 }
 
-void Player::move(float x, float y)
+// This animation switch mechanism is required for smoother animations: no stutter and flickering
+bool Player::getAnimationSwitch()
 {
-    this->velocity.x += x * this->acceleration;
-    this->velocity.y += y;
+    bool tempAnimationSwitch = this->animationSwitch;
+    this->animationSwitch = false;
+    return tempAnimationSwitch;
 }
 
 void Player::resetAnimationTimer() {
@@ -178,23 +225,7 @@ void Player::resetAnimationTimer() {
     this->animationSwitch = true;
 }
 
-void Player::updateKeyboard()
+const sf::FloatRect Player::getGlobalBounds() const
 {
-    if (this->onGround) this->animationState = PlayerAnimationStates::IDLE;
-    if (sf::Keyboard::isKeyPressed(sf::Keyboard::Key::W) && onGround)
-    {
-        this->onGround = false;
-        this->animationState = PlayerAnimationStates::JUMPING;
-        this->move(0.f, this->jumpSpeed);
-    }
-    if (sf::Keyboard::isKeyPressed(sf::Keyboard::Key::A))
-    {
-        this->move(-1.f, 0.f);
-        this->animationState = PlayerAnimationStates::MOVING_LEFT;
-    }
-    else if (sf::Keyboard::isKeyPressed(sf::Keyboard::Key::D))
-    {
-        this->move(1.f, 0.f);
-        this->animationState = PlayerAnimationStates::MOVING_RIGHT;
-    }
+    return this->sprite.getGlobalBounds();
 }

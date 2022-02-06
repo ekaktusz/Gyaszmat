@@ -32,7 +32,6 @@ private:
 
     // Methods
     void move(const float x, const float y);
-
     void updateKeyboard();
     void updateAnimation();
     void updatePhysics();
