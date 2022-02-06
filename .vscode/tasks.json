@@ -1,0 +1,46 @@
+{
+	"version": "2.0.0",
+	"windows": {
+		"options": {
+			"env": {
+				"Path": "${config:terminal.integrated.env.windows.Path}"
+			}
+		}
+	},
+	"linux": {
+		"options": {
+			"env": {
+				"PATH": "${config:terminal.integrated.env.linux.PATH}"
+			}
+		}
+	},
+	"osx": {
+		"options": {
+			"env": {
+				"PATH": "${config:terminal.integrated.env.osx.PATH}"
+			}
+		}
+	},
+	"presentation": {
+		"echo": false,
+		"reveal": "never",
+		"focus": false,
+		"panel": "shared",
+		"clear": false,
+		"showReuseMessage": true
+	},
+	"tasks": [
+		{
+			"label": "Build: Debug",
+			"command": "bash ./build.sh",
+			"type": "shell",
+			"group": {
+				"kind": "build",
+				"isDefault": true
+			},
+			"problemMatcher": [
+				"$gcc"
+			]
+		}
+	]
+}

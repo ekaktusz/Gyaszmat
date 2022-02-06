@@ -1,6 +1,4 @@
 .vs
-.vscode/*
-!.vscode/launch.json
 build/*
 .DS_Store
 src/out

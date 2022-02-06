@@ -1,24 +1,46 @@
 {
-    "configurations": [
-        {
-            "name": "Attach Debugger",
-            "type": "cppdbg",
-            "request": "attach",
-            "program": "${workspaceFolder}/build/gyaszmat",
-            "processId": "${command:pickProcess}",
-            "MIMode": "lldb"
-        },
-        {
-            "name": "Gyaszmat Debug",
-            "type": "cppdbg",
-            "request": "launch",
-            "program": "${workspaceFolder}/build/gyaszmat",
-            "args": [],
-            "stopAtEntry": false,
-            "cwd": "${workspaceFolder}",
-            "environment": [],
-            "externalConsole": false,
-            "MIMode": "lldb"
-        }
-    ]
-} 
+	"version": "0.2.0",
+	"configurations": [
+		{
+			"name": "GDB/LLDB",
+			"type": "cppdbg",
+			"request": "launch",
+			"program": "${workspaceFolder}/build/${workspaceRootFolderName}.exe",
+			"args": [],
+			"stopAtEntry": false,
+			"cwd": "${workspaceFolder}/build",
+			"preLaunchTask": "Build: Debug",
+			"externalConsole": false,
+			"internalConsoleOptions": "neverOpen",
+			"setupCommands": [
+				{
+					"description": "Enable pretty-printing for gdb",
+					"text": "-enable-pretty-printing",
+					"ignoreFailures": true
+				}
+			],
+			"windows": {
+				"MIMode": "gdb",
+				"miDebuggerPath": "C:/mingw32/bin/gdb.exe",
+				"env": {
+					"Path": "${config:terminal.integrated.env.windows.Path}"
+				}
+			},
+			"linux": {
+				"program": "${workspaceFolder}/bin/Debug/${workspaceRootFolderName}",
+				"MIMode": "gdb",
+				"miDebuggerPath": "/usr/bin/gdb",
+				"env": {
+					"PATH": "${config:terminal.integrated.env.linux.PATH}",
+				}
+			},
+			"osx": {
+				"program": "${workspaceFolder}/build/${workspaceRootFolderName}",
+				"MIMode": "lldb",
+				"env": {
+					"PATH": "${config:terminal.integrated.env.osx.PATH}",
+				}
+			},
+		}
+	]
+}

@@ -1,14 +1,14 @@
 #pragma once
 
-#include <SFML/Graphics.hpp>
+#include "PCH.hpp"
 
 class Entity : public sf::Drawable
 {
 private:
-    unsigned int x, y;
-    unsigned int sizeX, sizeY; // for now lets assume that everything will be rectangular (?)
+	unsigned int x, y;
+	unsigned int sizeX, sizeY; // for now lets assume that everything will be rectangular (?)
 public:
-    Entity();
-    Entity(unsigned int x, unsigned int y);
-    ~Entity();
+	Entity();
+	Entity(unsigned int x, unsigned int y);
+	~Entity();
 };
