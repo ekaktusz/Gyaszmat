@@ -1,53 +1,12 @@
 {
     "configurations": [
         {
-            "name": "(gdb) Attach",
-            "type": "cppdbg",
-            "request": "attach",
-            "program": "${workspaceFolder}/build/gyaszmat",
-            "processId": "${command:pickProcess}",
-            "justMyCode": false,
-            "MIMode": "gdb",
-            "setupCommands": [
-                {
-                    "description": "Enable pretty-printing for gdb",
-                    "text": "-enable-pretty-printing",
-                    "ignoreFailures": true
-                }
-            ]
-        },
-        {
-            "name": "(gdb) Launch",
-            "type": "cppdbg",
-            "justMyCode": false,
-            "request": "launch",
-            "program": "${workspaceFolder}/build/gyaszmat",
-            "args": [],
-            "stopAtEntry": false,
-            "cwd": "${workspaceFolder}",
-            "environment": [],
-            "externalConsole": false,
-            "MIMode": "gdb",
-            "setupCommands": [
-                {
-                    "description": "Enable pretty-printing for gdb",
-                    "text": "-enable-pretty-printing",
-                    "ignoreFailures": true
-                }
-            ]
-        },
-
-
-
-        
-        {
             "name": "Attach Debugger",
             "type": "cppdbg",
             "request": "attach",
             "program": "${workspaceFolder}/build/gyaszmat",
             "processId": "${command:pickProcess}",
-            "MIMode": "lldb",
-            "justMyCode": false
+            "MIMode": "lldb"
         },
         {
             "name": "Gyaszmat Debug",
@@ -59,8 +18,7 @@
             "cwd": "${workspaceFolder}",
             "environment": [],
             "externalConsole": false,
-            "MIMode": "lldb",
-            "justMyCode": false
+            "MIMode": "lldb"
         }
     ]
 } 
