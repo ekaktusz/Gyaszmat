@@ -43,7 +43,10 @@
 			"label": "Clean Gyaszmat",
 			"command": "bash ./build.sh clean",
 			"type": "shell",
-			"group": "build"
+			"group": {
+				"kind": "build",
+				"isDefault": true
+			}
 		}
 	]
 }
