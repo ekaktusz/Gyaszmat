@@ -4,6 +4,7 @@
     "C_Cpp.preferredPathSeparator": "Forward Slash",
     "C_Cpp.workspaceParsingPriority": "highest",
     "C_Cpp.enhancedColorization": "Disabled",
+    "debug.allowBreakpointsEverywhere": true,
     "debug.toolBarLocation": "docked",
     "editor.tabSize": 4,
     "editor.insertSpaces": false,
@@ -25,7 +26,8 @@
         "*.json": "jsonc",
         "*.stats": "cpp",
         "*.desktop": "properties",
-        ".clang-format": "yaml"
+        ".clang-format": "yaml",
+        "fstream": "cpp"
     },
     "terminal.integrated.env.windows": {
         "Path": "C:/mingw32/bin;C:/SFML-2.5.1/bin"
