@@ -10,6 +10,7 @@ private:
     // Render
     sf::Texture idleTexture;
     sf::Texture movingTexture;
+    sf::Texture jumpingTexture;
     sf::Sprite sprite;
 
     // Animation
@@ -26,9 +27,12 @@ private:
     float acceleration;
     float drag;
     float gravity;
+    float jumpSpeed;
+    bool onGround;
 
     // Methods
     void move(const float x, const float y);
+    void updateKeyboard();
     void updateAnimation();
     void updatePhysics();
 
@@ -38,10 +42,10 @@ public:
 
     bool getAnimationSwitch();
     const sf::FloatRect getGlobalBounds() const;
-    
+
     void draw(sf::RenderTarget& target, sf::RenderStates states) const;
     void update();
-    
+
     void stopFalling();
     void setPosition(const float x, const float y);
     void resetAnimationTimer();
