@@ -2,14 +2,14 @@
 	"version": "0.2.0",
 	"configurations": [
 		{
-			"name": "GDB/LLDB",
+			"name": "Debug Gyaszmat",
 			"type": "cppdbg",
 			"request": "launch",
 			"program": "${workspaceFolder}/build/${workspaceRootFolderName}.exe",
 			"args": [],
 			"stopAtEntry": false,
 			"cwd": "${workspaceFolder}/build",
-			"preLaunchTask": "Build: Debug",
+			"preLaunchTask": "Build Gyaszmat",
 			"externalConsole": false,
 			"internalConsoleOptions": "neverOpen",
 			"setupCommands": [
@@ -27,7 +27,7 @@
 				}
 			},
 			"linux": {
-				"program": "${workspaceFolder}/bin/Debug/${workspaceRootFolderName}",
+				"program": "${workspaceFolder}/build/${workspaceRootFolderName}",
 				"MIMode": "gdb",
 				"miDebuggerPath": "/usr/bin/gdb",
 				"env": {

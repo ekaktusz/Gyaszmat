@@ -31,16 +31,19 @@
 	},
 	"tasks": [
 		{
-			"label": "Build: Debug",
+			"label": "Build Gyaszmat",
 			"command": "bash ./build.sh",
 			"type": "shell",
 			"group": {
 				"kind": "build",
 				"isDefault": true
-			},
-			"problemMatcher": [
-				"$gcc"
-			]
+			}
+		},
+		{
+			"label": "Clean Gyaszmat",
+			"command": "bash ./build.sh clean",
+			"type": "shell",
+			"group": "build"
 		}
 	]
 }
