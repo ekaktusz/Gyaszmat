@@ -32,6 +32,9 @@ Player::Player()
     this->drag = 0.85f; // this is the default stopping force, the smaller the harder the drag: decceleration
     this->gravity = 1;
     this->jumpSpeed = -20.f;
+
+    this->isMovingLeft = false;
+    this->isMovingRight = false;
 }
 
 Player::~Player()
@@ -45,31 +48,48 @@ void Player::draw(sf::RenderTarget& target, sf::RenderStates states) const
 
 void Player::update()
 {
-    //this->updateKeyboard();
     this->updateAnimation();
     this->updatePhysics();
 }
 
 void Player::updateKeyboard(sf::Event event)
 {
-    if (sf::Keyboard::isKeyPressed(sf::Keyboard::Key::W) && onGround)
+    if (event.type == sf::Event::KeyPressed)
     {
-        this->onGround = false;
-        this->move(0.f, this->jumpSpeed);
+        if (event.key.code == sf::Keyboard::W && onGround)
+        {
+            this->jump();
+        }
+        if (event.key.code == sf::Keyboard::A)
+        {
+            this->isMovingLeft = true;
+            this->isMovingRight = false;
+            //this->move(-1.f, 0.f);
+        }
+        else if (event.key.code == sf::Keyboard::D)
+        {
+            this->isMovingRight = true;
+            this->isMovingLeft = false;
+            //this->move(1.f, 0.f);
+        }
     }
-    if (sf::Keyboard::isKeyPressed(sf::Keyboard::Key::A))
+    else if (event.type == sf::Event::KeyReleased)
     {
-        this->move(-1.f, 0.f);
-    }
-    else if (sf::Keyboard::isKeyPressed(sf::Keyboard::Key::D))
-    {
-        this->move(1.f, 0.f);
+        if (event.key.code == sf::Keyboard::A)
+        {
+            this->isMovingLeft = false;
+        }
+        else if (event.key.code == sf::Keyboard::D)
+        {
+            this->isMovingRight = false;
+        }
     }
 }
 
 void Player::updateAnimation()
 {   
     PlayerAnimationState prevState = this->animationState;
+
     if (this->velocity.y > 0)
         this->animationState = PlayerAnimationState::FALLING;
     else if (this->velocity.y < 0)
@@ -83,13 +103,15 @@ void Player::updateAnimation()
         else
             this->animationState = PlayerAnimationState::IDLE;
     }
+
+    // If we enter to a new state we have to reset the timer.
     if (prevState != this->animationState)
     {
         std::cout << "SANY" << std::endl;
         resetAnimationTimer();
     }
 
-    // this is for flipping the image to the right direction
+    // This is for flipping the image to the right direction
     if (this->velocity.x > 0) 
     {
         this->sprite.setScale(2, 2);
@@ -101,85 +123,52 @@ void Player::updateAnimation()
         this->sprite.setOrigin(this->sprite.getGlobalBounds().width / 2.f, 0);
     }
 
+
     if (this->animationState == PlayerAnimationState::IDLE)
     {
-        this->sprite.setTexture(this->idleTexture);
-        if (this->animationTimer.getElapsedTime().asSeconds() >= 0.2 || this->getAnimationSwitch()) // switch frame in every 0.2 seconds
-        {
-            this->currentFrame.left += 32; // size of a frame in the image
-            if (this->currentFrame.left >= 96) // there are 4 frames: 4*32 - 32 = 96
-            {
-                this->currentFrame.left = 0;
-            }
-            this->animationTimer.restart();
-            this->sprite.setTextureRect(this->currentFrame);
-            
-        }
+        setAnimation(0.2f, idleTexture);
     }
-    else if (this->animationState == PlayerAnimationState::MOVING_RIGHT)
-    { 
-        this->sprite.setTexture(this->movingTexture);
-        if (this->animationTimer.getElapsedTime().asSeconds() >= 0.1 || this->getAnimationSwitch()) // switch frame in every 0.1 seconds
-        {
-            this->currentFrame.left += 32;
-            if (this->currentFrame.left >= 160) // there are 6 frames: 6*32 - 32 = 160
-            {
-                this->currentFrame.left = 0;
-            }
-            this->animationTimer.restart();
-            this->sprite.setTextureRect(this->currentFrame);
-        }
-    }
-    else if (this->animationState == PlayerAnimationState::MOVING_LEFT)
+    else if (this->animationState == PlayerAnimationState::MOVING_RIGHT ||
+        this->animationState == PlayerAnimationState::MOVING_LEFT)
     {
-        this->sprite.setTexture(movingTexture);
-        if (this->animationTimer.getElapsedTime().asSeconds() >= 0.1 || this->getAnimationSwitch())
-        {
-            this->currentFrame.left += 32;
-            if (this->currentFrame.left >= 160)
-            {
-                this->currentFrame.left = 0;
-            }
-            this->animationTimer.restart();
-            this->sprite.setTextureRect(this->currentFrame);
-            
-        }
+        setAnimation(0.1f, movingTexture);
     }
     else if (this->animationState == PlayerAnimationState::JUMPING)
     {
-        this->sprite.setTexture(jumpingTexture);
-        // matek: v_jump + g * t = 0 egyenlet adja meg hogy mikor ér a tetejére. ebbõl g * t = -v_jump. t itt a frame számot jelenti
-        // mivel 60 fps-sel megyünk ez a képlet adja meg hogy milyen tempóba menjen az animáció. valszeg tré és ezen változtatni kéne majd
-        // bugzik is rendesen
-        if (this->animationTimer.getElapsedTime().asSeconds() >= 0.3 || this->getAnimationSwitch())
-        {
-            this->currentFrame.left += 32;
-            if (this->currentFrame.left >= 224)
-            {
-                this->currentFrame.left = 0;
-            }
-            this->animationTimer.restart();
-            this->sprite.setTextureRect(this->currentFrame);
-        }
+        setAnimation(0.3f, jumpingTexture);
     }
     else if (this->animationState == PlayerAnimationState::FALLING)
     {
-        this->sprite.setTexture(jumpingTexture);
-        if (this->animationTimer.getElapsedTime().asSeconds() >= 0.3 || this->getAnimationSwitch())
+        setAnimation(0.3f, jumpingTexture);
+    }
+}
+
+void Player::setAnimation(float timePeriod, sf::Texture& animationTexture)
+{
+    unsigned int frameSize = 32;
+    unsigned int frameNumber = animationTexture.getSize().x / frameSize;
+    this->sprite.setTexture(animationTexture);
+    if (this->animationTimer.getElapsedTime().asSeconds() >= timePeriod || this->getAnimationSwitch())
+    {
+        this->currentFrame.left += frameSize;
+        if (this->currentFrame.left >= (frameNumber - 1) * frameSize)
         {
-            this->currentFrame.left += 32;
-            if (this->currentFrame.left >= 224)
-            {
-                this->currentFrame.left = 0;
-            }
-            this->animationTimer.restart();
-            this->sprite.setTextureRect(this->currentFrame);
+            this->currentFrame.left = 0;
         }
+        this->animationTimer.restart();
+        this->sprite.setTextureRect(this->currentFrame);
     }
 }
 
 void Player::updatePhysics()
 {
+    // Movement
+    if (this->isMovingLeft)
+        this->move(-1.f, 0.f);
+    if (this->isMovingRight)
+        this->move(1.f, 0.f);
+
+    // Apply drag and gravitation
     this->velocity.y += this->gravity;
     this->velocity.x *= this->drag;
     if (!this->onGround) this->velocity.x *= this->drag; // if in air bigger drag
@@ -205,6 +194,12 @@ void Player::move(float x, float y)
 {
     this->velocity.x += x * this->acceleration;
     this->velocity.y += y;
+}
+
+void Player::jump()
+{
+    this->onGround = false;
+    this->move(0.f, this->jumpSpeed);
 }
 
 void Player::stopFalling()

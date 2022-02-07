@@ -42,7 +42,7 @@ void Game::update()
             //this->player.resetAnimationTimer();
         }
         */
-        
+        this->player.updateKeyboard(this->event);
     }
 
     this->player.update();

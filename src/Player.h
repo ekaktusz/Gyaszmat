@@ -30,13 +30,16 @@ private:
     float jumpSpeed;
     bool onGround;
 
+    bool isMovingLeft;
+    bool isMovingRight;
+
     // Methods
-    void move(const float x, const float y);
-    void updateKeyboard();
+    void resetAnimationTimer();
+    void setAnimation(float timePeriod, sf::Texture& animationTexture);
     void updateAnimation();
     void updatePhysics();
-    void resetAnimationTimer();
-
+    void jump();
+    void move(const float x, const float y);
 public:
     Player();
     ~Player();
@@ -45,7 +48,9 @@ public:
     const sf::FloatRect getGlobalBounds() const;
 
     void draw(sf::RenderTarget& target, sf::RenderStates states) const;
+
     void update();
+    void updateKeyboard(sf::Event event);
 
     void stopFalling();
     void setPosition(const float x, const float y);
