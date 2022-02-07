@@ -2,7 +2,7 @@
 
 #include "Entity.h"
 
-enum PlayerAnimationStates {IDLE = 0, MOVING_LEFT, MOVING_RIGHT, JUMPING, FALLING};
+enum class PlayerAnimationState {IDLE = 0, MOVING_LEFT, MOVING_RIGHT, JUMPING, FALLING};
 
 class Player : public Entity
 {
@@ -16,7 +16,7 @@ private:
     // Animation
     sf::IntRect currentFrame;
     sf::Clock animationTimer;
-    short animationState;
+    PlayerAnimationState animationState;
     bool animationSwitch;
 
     // Physics
@@ -30,12 +30,16 @@ private:
     float jumpSpeed;
     bool onGround;
 
+    bool isMovingLeft;
+    bool isMovingRight;
+
     // Methods
-    void move(const float x, const float y);
-    void updateKeyboard();
+    void resetAnimationTimer();
+    void setAnimation(float timePeriod, sf::Texture& animationTexture);
     void updateAnimation();
     void updatePhysics();
-
+    void jump();
+    void move(const float x, const float y);
 public:
     Player();
     ~Player();
@@ -44,9 +48,10 @@ public:
     const sf::FloatRect getGlobalBounds() const;
 
     void draw(sf::RenderTarget& target, sf::RenderStates states) const;
+
     void update();
+    void updateKeyboard(sf::Event event);
 
     void stopFalling();
     void setPosition(const float x, const float y);
-    void resetAnimationTimer();
 };
