@@ -31,7 +31,7 @@ void Game::update()
         {
             this->renderWindow.close();
         }
-        if (this->event.type == sf::Event::KeyReleased &&
+        /*if (this->event.type == sf::Event::KeyReleased &&
             (
             this->event.key.code == sf::Keyboard::A ||
             this->event.key.code == sf::Keyboard::D ||
@@ -39,8 +39,9 @@ void Game::update()
             this->event.key.code == sf::Keyboard::S
             ))
         {
-            this->player.resetAnimationTimer();
+            //this->player.resetAnimationTimer();
         }
+        */
         
     }
 

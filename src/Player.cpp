@@ -22,7 +22,7 @@ Player::Player()
     this->sprite.setScale(2, 2);
 
     this->animationTimer.restart();
-    this->animationState = PlayerAnimationStates::IDLE;
+    this->animationState = PlayerAnimationState::IDLE;
     this->animationSwitch = true;
 
     // Can be played with
@@ -45,12 +45,12 @@ void Player::draw(sf::RenderTarget& target, sf::RenderStates states) const
 
 void Player::update()
 {
-    this->updateKeyboard();
+    //this->updateKeyboard();
     this->updateAnimation();
     this->updatePhysics();
 }
 
-void Player::updateKeyboard()
+void Player::updateKeyboard(sf::Event event)
 {
     if (sf::Keyboard::isKeyPressed(sf::Keyboard::Key::W) && onGround)
     {
@@ -69,18 +69,24 @@ void Player::updateKeyboard()
 
 void Player::updateAnimation()
 {   
+    PlayerAnimationState prevState = this->animationState;
     if (this->velocity.y > 0)
-        this->animationState = PlayerAnimationStates::FALLING;
+        this->animationState = PlayerAnimationState::FALLING;
     else if (this->velocity.y < 0)
-        this->animationState = PlayerAnimationStates::JUMPING;
+        this->animationState = PlayerAnimationState::JUMPING;
     else 
     {
         if (this->velocity.x > 0)
-            this->animationState = PlayerAnimationStates::MOVING_RIGHT;
+            this->animationState = PlayerAnimationState::MOVING_RIGHT;
         else if (this->velocity.x < 0)
-            this->animationState = PlayerAnimationStates::MOVING_LEFT;
+            this->animationState = PlayerAnimationState::MOVING_LEFT;
         else
-            this->animationState = PlayerAnimationStates::IDLE;
+            this->animationState = PlayerAnimationState::IDLE;
+    }
+    if (prevState != this->animationState)
+    {
+        std::cout << "SANY" << std::endl;
+        resetAnimationTimer();
     }
 
     // this is for flipping the image to the right direction
@@ -95,7 +101,7 @@ void Player::updateAnimation()
         this->sprite.setOrigin(this->sprite.getGlobalBounds().width / 2.f, 0);
     }
 
-    if (this->animationState == PlayerAnimationStates::IDLE)
+    if (this->animationState == PlayerAnimationState::IDLE)
     {
         this->sprite.setTexture(this->idleTexture);
         if (this->animationTimer.getElapsedTime().asSeconds() >= 0.2 || this->getAnimationSwitch()) // switch frame in every 0.2 seconds
@@ -110,7 +116,7 @@ void Player::updateAnimation()
             
         }
     }
-    else if (this->animationState == PlayerAnimationStates::MOVING_RIGHT)
+    else if (this->animationState == PlayerAnimationState::MOVING_RIGHT)
     { 
         this->sprite.setTexture(this->movingTexture);
         if (this->animationTimer.getElapsedTime().asSeconds() >= 0.1 || this->getAnimationSwitch()) // switch frame in every 0.1 seconds
@@ -124,7 +130,7 @@ void Player::updateAnimation()
             this->sprite.setTextureRect(this->currentFrame);
         }
     }
-    else if (this->animationState == PlayerAnimationStates::MOVING_LEFT)
+    else if (this->animationState == PlayerAnimationState::MOVING_LEFT)
     {
         this->sprite.setTexture(movingTexture);
         if (this->animationTimer.getElapsedTime().asSeconds() >= 0.1 || this->getAnimationSwitch())
@@ -139,7 +145,7 @@ void Player::updateAnimation()
             
         }
     }
-    else if (this->animationState == PlayerAnimationStates::JUMPING)
+    else if (this->animationState == PlayerAnimationState::JUMPING)
     {
         this->sprite.setTexture(jumpingTexture);
         // matek: v_jump + g * t = 0 egyenlet adja meg hogy mikor ér a tetejére. ebbõl g * t = -v_jump. t itt a frame számot jelenti
@@ -156,7 +162,7 @@ void Player::updateAnimation()
             this->sprite.setTextureRect(this->currentFrame);
         }
     }
-    else if (this->animationState == PlayerAnimationStates::FALLING)
+    else if (this->animationState == PlayerAnimationState::FALLING)
     {
         this->sprite.setTexture(jumpingTexture);
         if (this->animationTimer.getElapsedTime().asSeconds() >= 0.3 || this->getAnimationSwitch())
