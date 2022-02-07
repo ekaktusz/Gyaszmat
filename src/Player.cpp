@@ -1,4 +1,6 @@
 #include "Player.h"
+#include <filesystem>
+#include <iostream>
 
 Player::Player()
 {
@@ -105,7 +107,6 @@ void Player::updateAnimation()
     // If we enter to a new state we have to reset the timer.
     if (prevState != this->animationState)
     {
-        std::cout << "SANY" << std::endl;
         resetAnimationTimer();
     }
 
