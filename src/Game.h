@@ -2,6 +2,7 @@
 
 #include "Enemy.h"
 #include "Player.h"
+#include "SFMLOrthogonalLayer.h"
 
 class Game
 {
@@ -12,6 +13,9 @@ private:
 
 	Player player;
 	std::vector<Enemy> enemies;
+
+	tmx::Map map;
+	MapLayer* layerZero;
 
 	sf::RenderWindow renderWindow;
 	sf::Event event;

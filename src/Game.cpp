@@ -5,15 +5,20 @@ const std::string Game::name = "Gyaszmat";
 Game::Game() :
 	renderWindow({ Game::XX, Game::YY }, Game::name)
 {
+	std::filesystem::path tmxPath = std::filesystem::current_path().parent_path() / "assets" / "tiles" / "newmaptmx.tmx";
+	this->map.load(tmxPath.string());
+	this->layerZero = new MapLayer(map, 0);
 	this->renderWindow.setFramerateLimit(60);
 }
 
 Game::~Game()
 {
+	delete layerZero;
 }
 
 void Game::run()
 {
+	//MapLayer layerZero(map, 0);
 	while (this->renderWindow.isOpen())
 	{
 		this->update();
@@ -40,7 +45,9 @@ void Game::render()
 {
 	this->renderWindow.clear();
 
-	this->renderWindow.draw(player);
+	this->renderWindow.draw(*this->layerZero);
+
+	this->renderWindow.draw(this->player);
 
 	this->renderWindow.display();
 }
