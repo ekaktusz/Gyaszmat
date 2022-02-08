@@ -23,17 +23,17 @@ void Game::run()
 
 void Game::update()
 {
-    while (this->renderWindow.pollEvent(this->event))
-    {
-        if (this->event.type == sf::Event::Closed || sf::Keyboard::isKeyPressed(sf::Keyboard::Escape))
-        {
-            this->renderWindow.close();
-        }
-        this->player.updateKeyboard(this->event);
-    }
+	while (this->renderWindow.pollEvent(this->event))
+	{
+		if (this->event.type == sf::Event::Closed || sf::Keyboard::isKeyPressed(sf::Keyboard::Escape))
+		{
+			this->renderWindow.close();
+		}
+		this->player.updateKeyboard(this->event);
+	}
 
-    this->player.update();
-    this->updateCollision();
+	this->player.update();
+	this->updateCollision();
 }
 
 void Game::render()
