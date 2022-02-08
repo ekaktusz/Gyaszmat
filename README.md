@@ -27,7 +27,8 @@ To clean the build call the build script with the `clean` parameter.
 ### Executing
 The out file can be executed directly from terminal:
 ```
-./build/gyaszmat
+cd build
+./gyaszmat
 ```
 
 ## Building on macOs
@@ -74,5 +75,4 @@ The steps are exactly the same as described in the Linux section.
 Just press the build all button in Visual Studio.
 
 ### Execution
-1. Copy all the dll-s from Gyaszmat/include/SFML/ to Gyaszmat\src\out\build\x64-Debug
-2. Copy the Gyaszmat/assets folder to Gyaszmat\src\out\build\x64-Debug
+1. Copy all the dll-s from Gyaszmat/include/SFML/ to Gyaszmat/build
