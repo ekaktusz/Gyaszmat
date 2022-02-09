@@ -25,10 +25,10 @@
 	},
 	"presentation": {
 		"echo": false,
-		"reveal": "never",
-		"focus": false,
+		"reveal": "always",
+		"focus": true,
 		"panel": "shared",
-		"clear": false,
+		"clear": true,
 		"showReuseMessage": true
 	},
 	"tasks": [
