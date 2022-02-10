@@ -1,6 +1,10 @@
 #include "Player.h"
 #include <filesystem>
 #include <iostream>
+#include <algorithm>
+#include "spdlog/spdlog.h"
+
+
 
 Player::Player()
 {
@@ -26,15 +30,20 @@ Player::Player()
 	this->animationSwitch = true;
 
 	// Can be played with
-	this->maxVelocity = sf::Vector2f(8.f, 50.f);
-	this->minVelocity = sf::Vector2f(1.f, 1.f);
-	this->acceleration = 1.7f;
-	this->drag = 0.85f; // this is the default stopping force, the smaller the harder the drag: decceleration
-	this->gravity = 1;
-	this->jumpSpeed = -20.f;
+	this->velocity = sf::Vector2f(0.f, 0.f);
+	this->maxVelocity = sf::Vector2f(1000000000000.f, 50.f);
+	this->minVelocity = sf::Vector2f(15.f, 5.f);
+	this->acceleration = 30.7f;
+	//this->deccelaration = .1f;
+	this->deccelarationInAir = .2f;
+	this->drag = 5.f;
+	this->gravity = 10;
+	this->jumpSpeed = -9.f;
+	this->movementModifier = 60;
 
 	this->isMovingLeft = false;
 	this->isMovingRight = false;
+	this->pressedJump = false;
 }
 
 Player::~Player()
@@ -46,10 +55,10 @@ void Player::draw(sf::RenderTarget& target, sf::RenderStates states) const
 	target.draw(sprite);
 }
 
-void Player::update()
+void Player::update(float deltaTime)
 {
 	this->updateAnimation();
-	this->updatePhysics();
+	this->updatePhysics(deltaTime);
 }
 
 void Player::updateKeyboard(sf::Event event)
@@ -58,7 +67,8 @@ void Player::updateKeyboard(sf::Event event)
 	{
 		if (event.key.code == sf::Keyboard::W && onGround)
 		{
-			this->jump();
+			onGround = false;
+			pressedJump = true;
 		}
 		if (event.key.code == sf::Keyboard::A)
 		{
@@ -157,47 +167,42 @@ void Player::setAnimation(float timePeriod, sf::Texture& animationTexture)
 	}
 }
 
-void Player::updatePhysics()
+void Player::updatePhysics(float deltaTime)
 {
 	// Movement
 	if (this->isMovingLeft)
-		this->move(-1.f, 0.f);
+		this->velocity.x += -1.f * this->acceleration * deltaTime;
 	if (this->isMovingRight)
-		this->move(1.f, 0.f);
-
+		this->velocity.x += 1.f * this->acceleration * deltaTime;
+	if (this->pressedJump)
+	{
+		this->velocity.y += this->jumpSpeed;
+		this->pressedJump = false;
+	}
+	
 	// Apply drag and gravitation
-	this->velocity.y += this->gravity;
-	this->velocity.x *= this->drag;
-	if (!this->onGround)
-		this->velocity.x *= this->drag; // if in air bigger drag
-
+	this->velocity.y += this->gravity * deltaTime;
+	//this->velocity.x += this->deccelaration * deltaTime * ((this->velocity.x > 0.f) ? -1.f : 1.f);
+	this->velocity.x *= (1 - drag * deltaTime);
+	//if (!this->onGround)
+		//this->velocity.x += this->deccelarationInAir * deltaTime * ((this->velocity.x > 0.f) ? -1.f : 1.f);
+	//spdlog::info("{}:::{}", velocity.x, velocity.y);
+	spdlog::info("{}", std::abs(this->velocity.x) * deltaTime);
 	// This is neccessary cause other wise it will go slower and slower but never gonna actually stop
-	if (std::abs(this->velocity.x) < this->minVelocity.x)
+	if (std::abs(this->velocity.x) < this->minVelocity.x * deltaTime)
 		this->velocity.x = 0.f;
-	if (std::abs(this->velocity.y) < this->minVelocity.y)
-		this->velocity.y = 0.f;
-
+	/* if (std::abs(this->velocity.y) < this->minVelocity.y)
+		this->velocity.y = 0.f;*/
+	
 	// Set max speed in the y dimension
 	if (std::abs(this->velocity.y) > this->maxVelocity.y)
 		this->velocity.y = this->maxVelocity.y * ((this->velocity.y < 0.f) ? -1.f : 1.f); // based on directuon
 
 	// Set max speed in the x dimension
 	if (std::abs(this->velocity.x) > this->maxVelocity.x)
-		this->velocity.x = this->maxVelocity.x * ((this->velocity.x < 0.f) ? -1.f : 1.f); // based on directuon
+		this->velocity.x = this->maxVelocity.x * deltaTime * ((this->velocity.x < 0.f) ? -1.f : 1.f); // based on directuon
 
-	this->sprite.move(this->velocity);
-}
-
-void Player::move(float x, float y)
-{
-	this->velocity.x += x * this->acceleration;
-	this->velocity.y += y;
-}
-
-void Player::jump()
-{
-	this->onGround = false;
-	this->move(0.f, this->jumpSpeed);
+	this->sprite.move(this->velocity.x * deltaTime * movementModifier, this->velocity.y * deltaTime * movementModifier);
 }
 
 void Player::stopFalling()

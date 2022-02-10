@@ -16,6 +16,9 @@ private:
 	sf::RenderWindow renderWindow;
 	sf::Event event;
 
+	sf::Clock clock;
+	float deltaTime;
+
 	void render();
 	void update();
 	void updateCollision();

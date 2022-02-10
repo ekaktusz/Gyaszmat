@@ -23,23 +23,26 @@ private:
     sf::Vector2f velocity;
     sf::Vector2f maxVelocity;
     sf::Vector2f minVelocity;
+    
 
     float acceleration;
+	float deccelaration;
+	float deccelarationInAir;
     float drag;
     float gravity;
     float jumpSpeed;
     bool onGround;
+	float movementModifier;
 
     bool isMovingLeft;
     bool isMovingRight;
+	bool pressedJump;
 
     // Methods
     void resetAnimationTimer();
     void setAnimation(float timePeriod, sf::Texture& animationTexture);
     void updateAnimation();
-    void updatePhysics();
-    void jump();
-    void move(const float x, const float y);
+    void updatePhysics(float deltaTime);
 public:
     Player();
     ~Player();
@@ -49,7 +52,7 @@ public:
 
     void draw(sf::RenderTarget& target, sf::RenderStates states) const;
 
-    void update();
+    void update(float deltaTime);
     void updateKeyboard(sf::Event event);
 
     void stopFalling();
