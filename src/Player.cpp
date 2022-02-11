@@ -36,7 +36,7 @@ Player::Player()
 	this->acceleration = 1.7f;
 	this->drag = 1 - 0.85f;
 	this->gravity = 1;
-	this->jumpSpeed = -20.f;
+	this->jumpSpeed = -17.f;
 	this->movementModifier = 1;
 	this->numberOfJumps = Player::MAX_NUMBER_OF_JUMPS;
 
@@ -175,7 +175,7 @@ void Player::updatePhysics()
 		this->velocity.x += 1.f * this->acceleration * deltaTime;
 	if (this->pressedJump)
 	{
-		this->velocity.y += this->jumpSpeed;
+		this->velocity.y = this->jumpSpeed;
 		this->pressedJump = false;
 	}
 	
