@@ -23,23 +23,23 @@ private:
     sf::Vector2f velocity;
     sf::Vector2f maxVelocity;
     sf::Vector2f minVelocity;
-
+    
     float acceleration;
     float drag;
     float gravity;
     float jumpSpeed;
     bool onGround;
+	float movementModifier;
 
     bool isMovingLeft;
     bool isMovingRight;
+	bool pressedJump;
 
     // Methods
     void resetAnimationTimer();
     void setAnimation(float timePeriod, sf::Texture& animationTexture);
     void updateAnimation();
     void updatePhysics();
-    void jump();
-    void move(const float x, const float y);
 public:
     Player();
     ~Player();
