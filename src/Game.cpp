@@ -3,7 +3,7 @@
 Game::Game() :
 	renderWindow({ Game::XX, Game::YY }, Game::name)
 {
-	this->renderWindow.setFramerateLimit(60);
+	this->renderWindow.setFramerateLimit(Game::FPS);
 }
 
 Game::~Game()
