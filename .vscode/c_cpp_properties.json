@@ -28,7 +28,8 @@
             ],
             "includePath": [
                 "${workspaceFolder}/src",
-                "/usr/local/include/**"
+                "/usr/local/include/**",
+                "${workspaceFolder}/include"
             ],
             "forcedInclude": [
                 "${workspaceFolder}/src/PCH.hpp"
