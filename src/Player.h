@@ -24,10 +24,7 @@ private:
     sf::Vector2f maxVelocity;
     sf::Vector2f minVelocity;
     
-
     float acceleration;
-	float deccelaration;
-	float deccelarationInAir;
     float drag;
     float gravity;
     float jumpSpeed;
@@ -42,7 +39,7 @@ private:
     void resetAnimationTimer();
     void setAnimation(float timePeriod, sf::Texture& animationTexture);
     void updateAnimation();
-    void updatePhysics(float deltaTime);
+    void updatePhysics();
 public:
     Player();
     ~Player();
@@ -52,7 +49,7 @@ public:
 
     void draw(sf::RenderTarget& target, sf::RenderStates states) const;
 
-    void update(float deltaTime);
+    void update();
     void updateKeyboard(sf::Event event);
 
     void stopFalling();

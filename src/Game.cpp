@@ -1,11 +1,9 @@
 #include "Game.h"
 
-const std::string Game::name = "Gyaszmat";
-
 Game::Game() :
 	renderWindow({ Game::XX, Game::YY }, Game::name)
 {
-	this->renderWindow.setFramerateLimit(220);
+	this->renderWindow.setFramerateLimit(60);
 }
 
 Game::~Game()
@@ -23,7 +21,13 @@ void Game::run()
 
 void Game::update()
 {
-	this->deltaTime = clock.restart().asSeconds();
+	this->processEvents();
+	this->player.update();
+	this->updateCollision();
+}
+
+void Game::processEvents()
+{
 	while (this->renderWindow.pollEvent(this->event))
 	{
 		if (this->event.type == sf::Event::Closed || sf::Keyboard::isKeyPressed(sf::Keyboard::Escape))
@@ -32,9 +36,6 @@ void Game::update()
 		}
 		this->player.updateKeyboard(this->event);
 	}
-
-	this->player.update(this->deltaTime);
-	this->updateCollision();
 }
 
 void Game::render()

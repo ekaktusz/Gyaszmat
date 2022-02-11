@@ -31,15 +31,13 @@ Player::Player()
 
 	// Can be played with
 	this->velocity = sf::Vector2f(0.f, 0.f);
-	this->maxVelocity = sf::Vector2f(1000000000000.f, 50.f);
-	this->minVelocity = sf::Vector2f(.1f, 5.f);
-	this->acceleration = 30.7f;
-	//this->deccelaration = .1f;
-	this->deccelarationInAir = .2f;
-	this->drag = 9.95f;
-	this->gravity = 10;
-	this->jumpSpeed = -9.f;
-	this->movementModifier = 60;
+	this->maxVelocity = sf::Vector2f(8.f, 50.f);
+	this->minVelocity = sf::Vector2f(1.f, 0.f);
+	this->acceleration = 1.7f;
+	this->drag = 1 - 0.85f;
+	this->gravity = 1;
+	this->jumpSpeed = -20.f;
+	this->movementModifier = 1;
 
 	this->isMovingLeft = false;
 	this->isMovingRight = false;
@@ -55,10 +53,10 @@ void Player::draw(sf::RenderTarget& target, sf::RenderStates states) const
 	target.draw(sprite);
 }
 
-void Player::update(float deltaTime)
+void Player::update()
 {
 	this->updateAnimation();
-	this->updatePhysics(deltaTime);
+	this->updatePhysics();
 }
 
 void Player::updateKeyboard(sf::Event event)
@@ -74,13 +72,11 @@ void Player::updateKeyboard(sf::Event event)
 		{
 			this->isMovingLeft = true;
 			this->isMovingRight = false;
-			//this->move(-1.f, 0.f);
 		}
 		else if (event.key.code == sf::Keyboard::D)
 		{
 			this->isMovingRight = true;
 			this->isMovingLeft = false;
-			//this->move(1.f, 0.f);
 		}
 	}
 	else if (event.type == sf::Event::KeyReleased)
@@ -167,9 +163,10 @@ void Player::setAnimation(float timePeriod, sf::Texture& animationTexture)
 	}
 }
 
-void Player::updatePhysics(float deltaTime)
+void Player::updatePhysics()
 {
-	this->velocity.x *= (1 - drag * deltaTime);
+	
+	float deltaTime = 1.f;
 	// Movement
 	if (this->isMovingLeft)
 		this->velocity.x += -1.f * this->acceleration * deltaTime;
@@ -183,36 +180,24 @@ void Player::updatePhysics(float deltaTime)
 	
 	// Apply drag and gravitation
 	this->velocity.y += this->gravity * deltaTime;
-	//this->velocity.x += this->deccelaration * deltaTime * ((this->velocity.x > 0.f) ? -1.f : 1.f);
+	this->velocity.x *= (1 - drag * deltaTime);
+
+	// Apply bigger drag in air
+	if (!this->onGround)
+		this->velocity.x *= (1 - drag * deltaTime);
 	
-	spdlog::info("{}", deltaTime);
-	// bigger drag in air
-	//if (!this->onGround)
-		//this->velocity.x += this->deccelarationInAir * deltaTime * ((this->velocity.x > 0.f) ? -1.f : 1.f);
-	
-	//spdlog::info("{}:::{}", velocity.x, velocity.y);
-	//spdlog::info("{}", std::abs(this->velocity.x) * deltaTime);
-	//spdlog::info("{}", std::abs(this->velocity.x));
-	// This is neccessary cause other wise it will go slower and slower but never gonna actually stop
-	/* if (std::abs(this->velocity.x) < this->minVelocity.x)
+	// Min speed is neccessary cause otherwise it will go slower and slower but never gonna actually stop (drag)
+	// Set min speed in the x dimension
+	if (std::abs(this->velocity.x) < this->minVelocity.x)
 		this->velocity.x = 0.f;
-	/* if (std::abs(this->velocity.y) < this->minVelocity.y)
-		this->velocity.y = 0.f;*/
-	
-	/*
-	// Set max speed in the y dimension
-	if (std::abs(this->velocity.y) > this->maxVelocity.y)
-		this->velocity.y = this->maxVelocity.y * ((this->velocity.y < 0.f) ? -1.f : 1.f); // based on directuon
 
 	// Set max speed in the x dimension
 	if (std::abs(this->velocity.x) > this->maxVelocity.x)
 		this->velocity.x = this->maxVelocity.x * ((this->velocity.x < 0.f) ? -1.f : 1.f); // based on directuon
 	
-	
-	float length = sqrt((velocity.x * velocity.x) + (velocity.y * velocity.y));
-	if (length != 0)
-		velocity = sf::Vector2f(velocity.x / length, velocity.y / length); 
-	*/
+	// Set max speed in the y dimension
+	if (std::abs(this->velocity.y) > this->maxVelocity.y)
+		this->velocity.y = this->maxVelocity.y * ((this->velocity.y < 0.f) ? -1.f : 1.f); // based on directuon
 
 	this->sprite.move(this->velocity.x * deltaTime * movementModifier, this->velocity.y * deltaTime * movementModifier);
 }

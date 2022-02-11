@@ -8,8 +8,9 @@ class Game
 private:
 	static const unsigned int XX = 800;
 	static const unsigned int YY = 600;
-	static const std::string name;
-
+	const std::string name = "Gyaszmat";
+	static const unsigned int FPS = 60;
+	
 	Player player;
 	std::vector<Enemy> enemies;
 
@@ -17,11 +18,12 @@ private:
 	sf::Event event;
 
 	sf::Clock clock;
-	float deltaTime;
+	sf::Time deltaTime;
 
 	void render();
 	void update();
 	void updateCollision();
+	void processEvents();
 
 public:
 	Game();
