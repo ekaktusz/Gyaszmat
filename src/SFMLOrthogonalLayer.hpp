@@ -1,26 +1,6 @@
-#ifndef SFML_ORTHO_HPP_
-#define SFML_ORTHO_HPP_
+#pragma once
 
-#include <tmxlite/Map.hpp>
-#include <tmxlite/TileLayer.hpp>
-#include <tmxlite/detail/Log.hpp>
-
-#include <SFML/Graphics/Drawable.hpp>
-#include <SFML/Graphics/RenderStates.hpp>
-#include <SFML/Graphics/RenderTarget.hpp>
-#include <SFML/Graphics/Texture.hpp>
-#include <SFML/Graphics/Transformable.hpp>
-#include <SFML/Graphics/Vertex.hpp>
-#include <SFML/System/Time.hpp>
-
-#include <array>
-#include <cmath>
-#include <iostream>
-#include <limits>
-#include <map>
-#include <memory>
-#include <string>
-#include <vector>
+#include "PCH.hpp"
 
 class MapLayer final : public sf::Drawable
 {
@@ -654,5 +634,3 @@ private:
 		}
 	}
 };
-
-#endif // SFML_ORTHO_HPP_

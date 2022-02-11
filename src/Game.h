@@ -3,13 +3,12 @@
 #include "Enemy.h"
 #include "Player.h"
 #include "SFMLOrthogonalLayer.hpp"
-#include <tmxlite/Map.hpp>
 
 class Game
 {
 private:
-	static const unsigned int XX = 800;
-	static const unsigned int YY = 600;
+	static const unsigned int XX = 2560;
+	static const unsigned int YY = 2000;
 	const std::string name = "Gyaszmat";
 	static const unsigned int FPS = 60;
 

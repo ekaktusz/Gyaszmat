@@ -1,6 +1,6 @@
 #include "Game.h"
 
-Game::Game() : renderWindow({ 2560, 2000 }, Game::name)
+Game::Game() : renderWindow({ Game::XX, Game::YY }, Game::name)
 {
 	this->renderWindow.setFramerateLimit(Game::FPS);
 }

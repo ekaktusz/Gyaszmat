@@ -1,17 +1,14 @@
 #include "Player.h"
-#include <filesystem>
-#include <iostream>
-#include <algorithm>
-#include "spdlog/spdlog.h"
-
-
 
 Player::Player()
 {
 	// Load game assets
-	std::filesystem::path idlePlayerAsset = std::filesystem::current_path().parent_path() / "assets" / "owlet_monster" / "Owlet_Monster_Idle_4.png";
-	std::filesystem::path runningPlayerAsset = std::filesystem::current_path().parent_path() / "assets" / "owlet_monster" / "Owlet_Monster_Run_6.png";
-	std::filesystem::path jumpingPlayerAsset = std::filesystem::current_path().parent_path() / "assets" / "owlet_monster" / "Owlet_Monster_Jump_8.png";
+	std::filesystem::path idlePlayerAsset = std::filesystem::current_path().parent_path() / "assets"
+		/ "owlet_monster" / "Owlet_Monster_Idle_4.png";
+	std::filesystem::path runningPlayerAsset = std::filesystem::current_path().parent_path()
+		/ "assets" / "owlet_monster" / "Owlet_Monster_Run_6.png";
+	std::filesystem::path jumpingPlayerAsset = std::filesystem::current_path().parent_path()
+		/ "assets" / "owlet_monster" / "Owlet_Monster_Jump_8.png";
 
 	this->idleTexture.loadFromFile(idlePlayerAsset.string());
 	this->movingTexture.loadFromFile(runningPlayerAsset.string());
@@ -45,8 +42,7 @@ Player::Player()
 }
 
 Player::~Player()
-{
-}
+{}
 
 void Player::draw(sf::RenderTarget& target, sf::RenderStates states) const
 {
@@ -132,7 +128,8 @@ void Player::updateAnimation()
 	{
 		setAnimation(0.2f, idleTexture);
 	}
-	else if (this->animationState == PlayerAnimationState::MOVING_RIGHT || this->animationState == PlayerAnimationState::MOVING_LEFT)
+	else if (this->animationState == PlayerAnimationState::MOVING_RIGHT
+		|| this->animationState == PlayerAnimationState::MOVING_LEFT)
 	{
 		setAnimation(0.1f, movingTexture);
 	}
@@ -151,7 +148,8 @@ void Player::setAnimation(float timePeriod, sf::Texture& animationTexture)
 	unsigned int frameSize = 32;
 	unsigned int frameNumber = animationTexture.getSize().x / frameSize;
 	this->sprite.setTexture(animationTexture);
-	if (this->animationTimer.getElapsedTime().asSeconds() >= timePeriod || this->getAnimationSwitch())
+	if (this->animationTimer.getElapsedTime().asSeconds() >= timePeriod
+		|| this->getAnimationSwitch())
 	{
 		this->currentFrame.left += frameSize;
 		if (this->currentFrame.left >= (frameNumber - 1) * frameSize)
@@ -165,7 +163,6 @@ void Player::setAnimation(float timePeriod, sf::Texture& animationTexture)
 
 void Player::updatePhysics()
 {
-	
 	float deltaTime = 1.f;
 	// Movement
 	if (this->isMovingLeft)
@@ -177,7 +174,7 @@ void Player::updatePhysics()
 		this->velocity.y += this->jumpSpeed;
 		this->pressedJump = false;
 	}
-	
+
 	// Apply drag and gravitation
 	this->velocity.y += this->gravity * deltaTime;
 	this->velocity.x *= (1 - drag * deltaTime);
@@ -185,7 +182,7 @@ void Player::updatePhysics()
 	// Apply bigger drag in air
 	if (!this->onGround)
 		this->velocity.x *= (1 - drag * deltaTime);
-	
+
 	// Min speed is neccessary cause otherwise it will go slower and slower but never gonna actually stop (drag)
 	// Set min speed in the x dimension
 	if (std::abs(this->velocity.x) < this->minVelocity.x)
@@ -193,13 +190,16 @@ void Player::updatePhysics()
 
 	// Set max speed in the x dimension
 	if (std::abs(this->velocity.x) > this->maxVelocity.x)
-		this->velocity.x = this->maxVelocity.x * ((this->velocity.x < 0.f) ? -1.f : 1.f); // based on directuon
-	
+		this->velocity.x =
+			this->maxVelocity.x * ((this->velocity.x < 0.f) ? -1.f : 1.f); // based on directuon
+
 	// Set max speed in the y dimension
 	if (std::abs(this->velocity.y) > this->maxVelocity.y)
-		this->velocity.y = this->maxVelocity.y * ((this->velocity.y < 0.f) ? -1.f : 1.f); // based on directuon
+		this->velocity.y =
+			this->maxVelocity.y * ((this->velocity.y < 0.f) ? -1.f : 1.f); // based on directuon
 
-	this->sprite.move(this->velocity.x * deltaTime * movementModifier, this->velocity.y * deltaTime * movementModifier);
+	this->sprite.move(this->velocity.x * deltaTime * movementModifier,
+		this->velocity.y * deltaTime * movementModifier);
 }
 
 void Player::stopFalling()
