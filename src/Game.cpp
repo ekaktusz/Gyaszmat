@@ -73,7 +73,7 @@ void Game::updateCollision(MapLayer& layer)
 			// here we should implement some hysic
 			this->player.stopFalling();
 
-			std::cout << "RRR ASD" << std::endl;
+			spdlog::debug("Collision detected with objectBounds");
 		}
 	}
 }

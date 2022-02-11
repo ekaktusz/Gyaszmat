@@ -24,7 +24,7 @@ public:
 			auto mapSize = map.getBounds();
 			m_globalBounds.width = mapSize.width;
 			m_globalBounds.height = mapSize.height;
-			std::cout << "RRR TileLayer: " << idx << std::endl;
+			spdlog::info("TileLayer: {}", idx);
 		}
 		else if (map.getOrientation() == tmx::Orientation::Orthogonal && idx < layers.size()
 			&& layers[idx]->getType() == tmx::Layer::Type::Object)
@@ -37,11 +37,12 @@ public:
 				tmx::FloatRect rect = object.getAABB();
 				objectBounds.push_back(sf::FloatRect(rect.left, rect.top, rect.width, rect.height));
 			}
-			std::cout << "RRR ObjectLayer: " << idx << std::endl;
+
+			spdlog::info("ObjectLayer: {}", idx);
 		}
 		else
 		{
-			std::cout << "RRR Not a valid orthogonal layer, nothing will be drawn." << std::endl;
+			spdlog::error("Not a valid orthogonal layer, nothing will be drawn.");
 		}
 	}
 

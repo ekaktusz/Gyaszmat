@@ -25,7 +25,7 @@ set(CMAKE_MODULE_PATH ${CMAKE_MODULE_PATH} "${CMAKE_CURRENT_LIST_DIR}/../cmake/m
 
 project(gyaszmat)
 
-set(CMAKE_CXX_STANDARD 20)
+set(CMAKE_CXX_STANDARD 17)
 
 find_package(tmxlite REQUIRED)
 find_package(SFML 2.5 COMPONENTS system graphics audio REQUIRED)
