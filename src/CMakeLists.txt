@@ -1,7 +1,6 @@
-cmake_minimum_required(VERSION 3.5)
+cmake_minimum_required(VERSION 3.16)
 
 set(CMAKE_DEBUG_POSTFIX d)
-
 # it can be useful to build libs later:
 #add_subdirectory("${CMAKE_CURRENT_LIST_DIR}/tmxlite-master/tmxlite")
 
@@ -39,5 +38,6 @@ file(GLOB SOURCES
 
 add_executable(gyaszmat ${SOURCES})
 set_target_properties(gyaszmat PROPERTIES DEBUG_POSTFIX ${CMAKE_DEBUG_POSTFIX})
+target_precompile_headers(gyaszmat PUBLIC "pch.h")
 
 target_link_libraries(gyaszmat PUBLIC sfml-system sfml-window sfml-graphics sfml-audio ${TMXLITE_LIBRARIES})

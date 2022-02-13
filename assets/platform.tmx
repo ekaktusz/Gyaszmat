@@ -1,5 +1,5 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<map version="1.8" tiledversion="1.8.0" orientation="orthogonal" renderorder="left-down" width="200" height="18" tilewidth="64" tileheight="64" infinite="0" nextlayerid="6" nextobjectid="51">
+<map version="1.5" tiledversion="1.7.0" orientation="orthogonal" renderorder="left-down" width="200" height="18" tilewidth="64" tileheight="64" infinite="0" nextlayerid="6" nextobjectid="53">
  <properties>
   <property name="test map property" type="float" value="12.43"/>
  </properties>
@@ -17,7 +17,7 @@
    <property name="test layer property" type="bool" value="true"/>
   </properties>
   <data encoding="base64" compression="zlib">
-   eJztmtFuAiEQRa8P+tT6CXrb+v/f6K7RuDGmhd2BmSn3JCe+kWHhEhAuEALg5PnuJaFf5l/k2bYYG8J/fltmZDf5OflR6XHxTfaLdkdg511AUAj/eW3p2chlm/+Fbzz7d3rzO/vjVl08CP/5nEExHoT/vMui8KN2n3x838yNkj0kkfcMrnyMA2G3V167r5bKRw0la/lv63cphP+YS+Wjhvlsfyp07Rmf0Bqe0exE/++WUC4ymxni7z13i7vVUgj/8ZXj5YOoW5N7Z6S2PhnXTBDr512PjGypT8Y0C8T2vrbMiEV9Mp7RIWzX5BYZoWF9MpYRIdreaVmd2x91eo+hbOcB694DW/l658aOfd+SkZ51Sl893jpEeQORpU7Z3yvPJRwc
+   eJztmkGOwjAMRT8LWAFHgD/A/c9IYRhRIQRp68T25D/piV3kNLaVkFwgBMDB48NLQn/Mv8hzbNE3hH9+W9bIanA3uJ3ofvRN1qNxe2DlHUBQCP+8tvRo5HjM/8IJz/kd3vzePLtFFw/CP58zKPqD8M+7LAo/pu6T9++HuVOyhyTynsFVH/1A2O2V5+6rZZn8YE+U9PJP/bsUwn/NZbni92x/KHTuGZ9QD89odqL/d0uoLjKbGeL7nrvG3WophP/6yv7qg5jWk1vXyNT4ZFwzQczPuxY1siQ+GdMsEMvnWrNGLOKT8YwOYduTa9QIDeOTsYwIUfdOy+rc/hen9xrKem4w7z2wla93bmw49yU10jJO6avHW4cobyCyxCnbewXW5xz8
   </data>
  </layer>
  <layer id="3" name="Near" width="200" height="18">
@@ -64,6 +64,8 @@
   <object id="44" x="6016" y="448">
    <polyline points="0,0 -64,0 -64,64 -192,64 -192,128 -320,128 -320,192 -384,192 -384,256 -512,256 -512,320 -640,320 -640,384 -704,384 -704,448 -768,448 -768,512 -896,512 -896,576 -960,576 -960,640"/>
   </object>
+  <object id="51" name="teszt" x="65" y="452" width="440" height="60"/>
+  <object id="52" x="515" y="-220"/>
  </objectgroup>
  <imagelayer id="5" name="Test Image Layer" offsetx="4224" offsety="128">
   <image source="../images/mask_test.png"/>

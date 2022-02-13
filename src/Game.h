@@ -7,8 +7,8 @@
 class Game
 {
 private:
-	static const unsigned int XX = 2560;
-	static const unsigned int YY = 2000;
+	static const unsigned int XX = 800;
+	static const unsigned int YY = 600;
 	const std::string name = "Gyaszmat";
 	static const unsigned int FPS = 60;
 
@@ -22,10 +22,12 @@ private:
 	sf::Time deltaTime;
 
 	tmx::Map map;
+	MapLayer* tileLayer;
+	MapLayer* objectLayer;
 
-	void render(MapLayer& layer);
-	void update(MapLayer& layer);
-	void updateCollision(MapLayer& layer);
+	void render();
+	void update();
+	void updateCollision();
 	void processEvents();
 
 public:

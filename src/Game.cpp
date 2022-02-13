@@ -2,33 +2,33 @@
 
 Game::Game() : renderWindow({ Game::XX, Game::YY }, Game::name)
 {
+	this->map.load(
+		(std::filesystem::current_path().parent_path() / "assets" / "platform.tmx").string());
+	this->tileLayer = new MapLayer(map, 1);
+	this->objectLayer = new MapLayer(map, 3);
 	this->renderWindow.setFramerateLimit(Game::FPS);
 }
 
 Game::~Game()
-{}
+{
+	delete tileLayer;
+	delete objectLayer;
+}
 
 void Game::run()
 {
-	this->map.load(std::filesystem::current_path().parent_path() / "assets" / "platform.tmx");
-	MapLayer layer0(map, 0);
-	MapLayer layer1(map, 1);
-	MapLayer layer2(map, 2);
-	MapLayer layer3(map, 3);
-	MapLayer layer4(map, 4);
-
 	while (this->renderWindow.isOpen())
 	{
-		this->update(layer3);
-		this->render(layer1);
+		this->update();
+		this->render();
 	}
 }
 
-void Game::update(MapLayer& layer)
+void Game::update()
 {
 	this->processEvents();
 	this->player.update();
-	this->updateCollision(layer);
+	this->updateCollision();
 }
 
 void Game::processEvents()
@@ -44,18 +44,18 @@ void Game::processEvents()
 	}
 }
 
-void Game::render(MapLayer& layer)
+void Game::render()
 {
 	this->renderWindow.clear();
-	this->renderWindow.draw(layer);
-	this->renderWindow.draw(player);
+	this->renderWindow.draw(*this->tileLayer);
+	this->renderWindow.draw(this->player);
 	this->renderWindow.display();
 }
 
-void Game::updateCollision(MapLayer& layer)
+void Game::updateCollision()
 {
 	sf::FloatRect playerBounds = this->player.getGlobalBounds();
-	std::vector<sf::FloatRect> objectBounds = layer.getObjectBounds();
+	std::vector<sf::FloatRect> objectBounds = this->objectLayer->getObjectBounds();
 
 	if (playerBounds.top + playerBounds.height > this->renderWindow.getSize().y)
 	{
@@ -65,13 +65,15 @@ void Game::updateCollision(MapLayer& layer)
 	}
 
 	// collision detection with every object on object layer
-	for (const auto& objectBound : objectBounds)
+	for (const sf::FloatRect& objectBound : objectBounds)
 	{
 		if (objectBound.intersects(playerBounds))
 		{
 			// IDK what tod do here, im just messing around
 			// here we should implement some hysic
 			this->player.stopFalling();
+			this->player.setPosition(this->player.getGlobalBounds().left,
+				objectBound.top - this->player.getGlobalBounds().height);
 
 			spdlog::debug("Collision detected with objectBounds");
 		}
