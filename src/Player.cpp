@@ -33,8 +33,9 @@ Player::Player()
 	this->acceleration = 1.7f;
 	this->drag = 1 - 0.85f;
 	this->gravity = 1;
-	this->jumpSpeed = -20.f;
+	this->jumpSpeed = -17.f;
 	this->movementModifier = 1;
+	this->numberOfJumps = Player::MAX_NUMBER_OF_JUMPS;
 
 	this->isMovingLeft = false;
 	this->isMovingRight = false;
@@ -59,9 +60,9 @@ void Player::updateKeyboard(sf::Event event)
 {
 	if (event.type == sf::Event::KeyPressed)
 	{
-		if (event.key.code == sf::Keyboard::W && onGround)
+		if (event.key.code == sf::Keyboard::W && numberOfJumps > 0)
 		{
-			onGround = false;
+			numberOfJumps--;
 			pressedJump = true;
 		}
 		if (event.key.code == sf::Keyboard::A)
@@ -171,7 +172,7 @@ void Player::updatePhysics()
 		this->velocity.x += 1.f * this->acceleration * deltaTime;
 	if (this->pressedJump)
 	{
-		this->velocity.y += this->jumpSpeed;
+		this->velocity.y = this->jumpSpeed;
 		this->pressedJump = false;
 	}
 
@@ -179,8 +180,8 @@ void Player::updatePhysics()
 	this->velocity.y += this->gravity * deltaTime;
 	this->velocity.x *= (1 - drag * deltaTime);
 
-	// Apply bigger drag in air
-	if (!this->onGround)
+	// Apply bigger drag in air TODO: better, what happens if falling?
+	if (numberOfJumps < 2)
 		this->velocity.x *= (1 - drag * deltaTime);
 
 	// Min speed is neccessary cause otherwise it will go slower and slower but never gonna actually stop (drag)
@@ -205,7 +206,7 @@ void Player::updatePhysics()
 void Player::stopFalling()
 {
 	this->velocity.y = 0.f;
-	onGround = true;
+	numberOfJumps = Player::MAX_NUMBER_OF_JUMPS;
 }
 
 void Player::setPosition(const float x, const float y)

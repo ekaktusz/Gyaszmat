@@ -7,6 +7,8 @@ enum class PlayerAnimationState {IDLE = 0, MOVING_LEFT, MOVING_RIGHT, JUMPING, F
 class Player : public Entity
 {
 private:
+	static const short MAX_NUMBER_OF_JUMPS = 2;
+
     // Render
     sf::Texture idleTexture;
     sf::Texture movingTexture;
@@ -28,7 +30,7 @@ private:
     float drag;
     float gravity;
     float jumpSpeed;
-    bool onGround;
+	short numberOfJumps;
 	float movementModifier;
 
     bool isMovingLeft;
