@@ -26,7 +26,7 @@ project(gyaszmat)
 
 set(CMAKE_CXX_STANDARD 17)
 
-find_package(tmxlite REQUIRED)
+find_package(TMXLITE REQUIRED)
 find_package(SFML 2.5 COMPONENTS system graphics audio REQUIRED)
 
 include_directories(${SFML_INCLUDE_DIR} "${CMAKE_CURRENT_LIST_DIR}/../include/")
