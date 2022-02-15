@@ -232,3 +232,8 @@ const sf::FloatRect Player::getGlobalBounds() const
 {
 	return this->sprite.getGlobalBounds();
 }
+
+const sf::Vector2f Player::getCenterPosition() const
+{
+	return this->sprite.getPosition();
+}

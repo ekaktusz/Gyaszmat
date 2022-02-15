@@ -16,6 +16,7 @@ private:
 	std::vector<Enemy> enemies;
 
 	sf::RenderWindow renderWindow;
+	sf::View view;
 	sf::Event event;
 
 	sf::Clock clock;

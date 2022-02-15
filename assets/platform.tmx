@@ -1,5 +1,5 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<map version="1.5" tiledversion="1.7.0" orientation="orthogonal" renderorder="left-down" width="200" height="18" tilewidth="64" tileheight="64" infinite="0" nextlayerid="6" nextobjectid="53">
+<map version="1.8" tiledversion="1.8.1" orientation="orthogonal" renderorder="left-down" width="200" height="18" tilewidth="64" tileheight="64" infinite="0" nextlayerid="6" nextobjectid="86">
  <properties>
   <property name="test map property" type="float" value="12.43"/>
  </properties>
@@ -31,7 +31,7 @@
    <property name="object layer property" type="bool" value="false"/>
   </properties>
   <object id="1" name="Buns" type="Floor" x="128" y="1088" width="2240" height="64"/>
-  <object id="2" name="Flaps" type="Wall" x="0" y="-1408" width="64" height="2434">
+  <object id="2" name="Flaps" type="Wall" x="0" y="4.12121" width="64" height="1021.88">
    <properties>
     <property name="Custom Object Property" type="bool" value="true"/>
    </properties>
@@ -41,9 +41,6 @@
   </object>
   <object id="4" x="2368" y="1088">
    <polyline points="0,0 0,-64 64,-64 64,-128 256,-128 256,-192 384,-192 384,-256 448,-256 448,-320 576,-320 576,-384 704,-384 704,-448 1344,-448 1344,-384 1408,-384 1408,-320 1472,-320 1472,-256 1536,-256 1536,-192 1600,-192 1600,-128 1728,-128 1728,-64 1792,-64 1792,0"/>
-  </object>
-  <object id="8" x="768" y="-256" rotation="45">
-   <polygon points="0,0 -66,98 -22,206 100,234 226,152 187,3"/>
   </object>
   <object id="23" x="4160" y="1088" width="896" height="64"/>
   <object id="24" x="4224" y="512" width="768" height="64"/>
@@ -65,7 +62,35 @@
    <polyline points="0,0 -64,0 -64,64 -192,64 -192,128 -320,128 -320,192 -384,192 -384,256 -512,256 -512,320 -640,320 -640,384 -704,384 -704,448 -768,448 -768,512 -896,512 -896,576 -960,576 -960,640"/>
   </object>
   <object id="51" name="teszt" x="65" y="452" width="440" height="60"/>
-  <object id="52" x="515" y="-220"/>
+  <object id="56" x="2368" y="1024" width="64" height="64"/>
+  <object id="57" x="2432" y="960" width="192" height="64"/>
+  <object id="58" x="2624" y="896" width="128" height="64"/>
+  <object id="59" x="2752" y="832" width="64" height="64"/>
+  <object id="60" x="2816" y="768" width="128" height="64"/>
+  <object id="61" x="2944" y="704" width="128" height="64"/>
+  <object id="62" x="3072" y="640" width="640" height="64"/>
+  <object id="63" x="3712" y="704" width="64" height="64"/>
+  <object id="64" x="3776" y="768" width="64" height="64"/>
+  <object id="65" x="3840" y="832" width="64" height="64"/>
+  <object id="66" x="3904" y="896" width="64" height="64"/>
+  <object id="67" x="3968" y="960" width="128" height="64"/>
+  <object id="68" x="4096" y="1024" width="64" height="64"/>
+  <object id="69" x="5056" y="1024" width="64" height="64"/>
+  <object id="70" x="5120" y="960" width="128" height="64"/>
+  <object id="71" x="5248" y="896" width="64" height="64"/>
+  <object id="72" x="5312" y="832" width="64" height="64"/>
+  <object id="73" x="5376" y="768" width="128" height="64"/>
+  <object id="74" x="5504" y="704" width="128" height="64"/>
+  <object id="75" x="5632" y="640" width="64" height="64"/>
+  <object id="76" x="5696" y="576" width="128" height="64"/>
+  <object id="77" x="5824" y="512" width="128" height="64"/>
+  <object id="78" x="5952" y="448" width="64" height="64"/>
+  <object id="80" x="7936" y="320" width="128" height="64"/>
+  <object id="81" x="8064" y="256" width="64" height="64"/>
+  <object id="82" x="8128" y="192" width="64" height="64"/>
+  <object id="83" x="8192" y="128" width="64" height="64"/>
+  <object id="84" x="8256" y="64" width="64" height="64"/>
+  <object id="85" x="8320" y="0" width="192" height="64"/>
  </objectgroup>
  <imagelayer id="5" name="Test Image Layer" offsetx="4224" offsety="128">
   <image source="../images/mask_test.png"/>
