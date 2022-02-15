@@ -50,7 +50,7 @@
 #include <tmxlite/detail/Log.hpp>
 
 // SPDLOG
-#include "spdlog/spdlog.h"
+#include <spdlog/spdlog.h>
 
 // Windows
 #ifdef _WIN32

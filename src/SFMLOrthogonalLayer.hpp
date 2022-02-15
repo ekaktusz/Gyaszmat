@@ -24,7 +24,7 @@ public:
 			auto mapSize = map.getBounds();
 			m_globalBounds.width = mapSize.width;
 			m_globalBounds.height = mapSize.height;
-			spdlog::info("TileLayer: {}", idx);
+			SPDLOG_INFO("TileLayer: {}", idx);
 		}
 		else if (map.getOrientation() == tmx::Orientation::Orthogonal && idx < layers.size()
 			&& layers[idx]->getType() == tmx::Layer::Type::Object)
@@ -38,11 +38,11 @@ public:
 				objectBounds.push_back(sf::FloatRect(rect.left, rect.top, rect.width, rect.height));
 			}
 
-			spdlog::info("ObjectLayer: {}", idx);
+			SPDLOG_INFO("ObjectLayer: {}", idx);
 		}
 		else
 		{
-			spdlog::error("Not a valid orthogonal layer, nothing will be drawn.");
+			SPDLOG_ERROR("Not a valid orthogonal layer, nothing will be drawn.");
 		}
 	}
 

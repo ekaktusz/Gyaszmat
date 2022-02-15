@@ -2,7 +2,10 @@
 
 int main()
 {
-    Game game;
-    game.run();
-    return 0;
+	//CUSTOM LOG FORMAT
+	spdlog::set_pattern("*** %H:%M:%S %s:%# %!(): %v");
+
+	Game game;
+	game.run();
+	return 0;
 }
