@@ -77,8 +77,6 @@ void Game::updateCollision()
 			this->player.stopFalling();
 			this->player.setPosition(this->player.getGlobalBounds().left,
 				objectBound.top - this->player.getGlobalBounds().height);
-
-			SPDLOG_DEBUG("Collision detected with objectBounds");
 		}
 	}
 }

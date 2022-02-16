@@ -2,8 +2,9 @@
 
 int main()
 {
-	//CUSTOM LOG FORMAT
-	spdlog::set_pattern("*** %H:%M:%S %s:%# %!(): %v");
+	//	CUSTOM LOG FORMAT
+	//	*** 20:34:49 [ info ] SFMLOrthogonalLayer.hpp:27 MapLayer(): TileLayer: 1
+	spdlog::set_pattern("*** %H:%M:%S [%^ %l %$] %s:%# %!(): %v");
 
 	Game game;
 	game.run();
