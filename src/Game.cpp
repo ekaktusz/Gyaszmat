@@ -69,8 +69,7 @@ void Game::updateCollision()
 			this->player.stopFalling();
 			//auto collisionNormal = o.getPosition() - getPosition();
 			auto collisionNormal =
-				//sf::Vector2f(objectBound.left, objectBound.top) - this->player.getCenterPosition();
-				objectBound - this->player.getCenterPosition();
+				sf::Vector2f(objectBound.left, objectBound.top) - this->player.getCenterPosition();
 			auto manifold = getManifold(overlap, collisionNormal);
 			resolve(manifold);
 		}
