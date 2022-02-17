@@ -64,6 +64,7 @@ public:
 
 	void stopFalling();
 	void setPosition(const float x, const float y);
+	void move(const sf::Vector2f &offset);
 
 	const sf::Vector2f getCenterPosition() const;
 };

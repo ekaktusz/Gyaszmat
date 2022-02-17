@@ -214,6 +214,11 @@ void Player::setPosition(const float x, const float y)
 	this->sprite.setPosition(x, y);
 }
 
+void Player::move(const sf::Vector2f &offset)
+{
+	this->sprite.move(offset);
+}
+
 // This animation switch mechanism is required for smoother animations: no stutter and flickering
 bool Player::getAnimationSwitch()
 {

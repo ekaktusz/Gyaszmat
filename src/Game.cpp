@@ -60,23 +60,44 @@ void Game::updateCollision()
 	sf::FloatRect playerBounds = this->player.getGlobalBounds();
 	std::vector<sf::FloatRect> objectBounds = this->objectLayer->getObjectBounds();
 
-	/*if (playerBounds.top + playerBounds.height > this->renderWindow.getSize().y)
-	{
-		this->player.stopFalling();
-		this->player.setPosition(this->player.getGlobalBounds().left,
-			this->renderWindow.getSize().y - this->player.getGlobalBounds().height);
-	}*/
-
 	// collision detection with every object on object layer
+	sf::FloatRect overlap;
 	for (const sf::FloatRect& objectBound : objectBounds)
 	{
-		if (objectBound.intersects(playerBounds))
+		if (objectBound.intersects(this->player.getGlobalBounds(), overlap))
 		{
-			// IDK what tod do here, im just messing around
-			// here we should implement some hysic
 			this->player.stopFalling();
-			this->player.setPosition(this->player.getGlobalBounds().left,
-				objectBound.top - this->player.getGlobalBounds().height);
+			//auto collisionNormal = o.getPosition() - getPosition();
+			auto collisionNormal =
+				//sf::Vector2f(objectBound.left, objectBound.top) - this->player.getCenterPosition();
+				objectBound - this->player.getCenterPosition();
+			auto manifold = getManifold(overlap, collisionNormal);
+			resolve(manifold);
 		}
 	}
+}
+
+void Game::resolve(const sf::Vector3f& manifold)
+{
+	sf::Vector2f normal(manifold.x, manifold.y);
+	this->player.move(normal * manifold.z);
+}
+
+sf::Vector3f Game::getManifold(const sf::FloatRect& overlap, const sf::Vector2f& collisionNormal)
+{
+	//the collision normal is stored in x and y, with the penetration in z
+	sf::Vector3f manifold;
+
+	if (overlap.width < overlap.height)
+	{
+		manifold.x = (collisionNormal.x < 0) ? 1.f : -1.f;
+		manifold.z = overlap.width;
+	}
+	else
+	{
+		manifold.y = (collisionNormal.y < 0) ? 1.f : -1.f;
+		manifold.z = overlap.height;
+	}
+
+	return manifold;
 }
