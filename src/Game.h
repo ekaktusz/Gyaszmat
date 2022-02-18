@@ -30,6 +30,7 @@ private:
 	void update();
 	void updateCollision();
 	void processEvents();
+	void resolveCollision(const sf::FloatRect& overlap, const sf::Vector2f& collisionNormal);
 
 public:
 	Game();
