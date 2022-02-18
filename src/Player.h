@@ -63,8 +63,13 @@ public:
 	void updateKeyboard(sf::Event event);
 
 	void stopFalling();
-	void setPosition(const float x, const float y);
 	void move(const sf::Vector2f &offset);
 
+	void setPosition(const float x, const float y);
+	void setVelocity(sf::Vector2f velocity);
+
+	const sf::Vector2f getVelocity() const;
+
+	const sf::Vector2f getPosition() const;
 	const sf::Vector2f getCenterPosition() const;
 };

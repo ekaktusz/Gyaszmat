@@ -238,7 +238,24 @@ const sf::FloatRect Player::getGlobalBounds() const
 	return this->sprite.getGlobalBounds();
 }
 
-const sf::Vector2f Player::getCenterPosition() const
+const sf::Vector2f Player::getPosition() const
 {
 	return this->sprite.getPosition();
+}
+
+const sf::Vector2f Player::getCenterPosition() const
+{
+	float x = this->sprite.getGlobalBounds().left + this->sprite.getGlobalBounds().width / 2.f;
+	float y = this->sprite.getGlobalBounds().top + this->sprite.getGlobalBounds().height / 2.f;
+	return sf::Vector2f(x, y);
+}
+
+void Player::setVelocity(sf::Vector2f velocity)
+{
+	this->velocity = velocity;
+}
+
+const sf::Vector2f Player::getVelocity() const
+{
+	return this->velocity;
 }

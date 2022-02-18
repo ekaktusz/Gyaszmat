@@ -66,37 +66,31 @@ void Game::updateCollision()
 	{
 		if (objectBound.intersects(this->player.getGlobalBounds(), overlap))
 		{
-			this->player.stopFalling();
-			//auto collisionNormal = o.getPosition() - getPosition();
 			auto collisionNormal =
-				sf::Vector2f(objectBound.left, objectBound.top) - this->player.getCenterPosition();
-			auto manifold = getManifold(overlap, collisionNormal);
-			resolve(manifold);
+				sf::Vector2f(objectBound.left, objectBound.top) - this->player.getPosition();
+			resolveCollision(overlap, collisionNormal);
 		}
 	}
 }
 
-void Game::resolve(const sf::Vector3f& manifold)
-{
-	sf::Vector2f normal(manifold.x, manifold.y);
-	this->player.move(normal * manifold.z);
-}
-
-sf::Vector3f Game::getManifold(const sf::FloatRect& overlap, const sf::Vector2f& collisionNormal)
+void Game::resolveCollision(const sf::FloatRect& overlap, const sf::Vector2f& collisionNormal)
 {
 	//the collision normal is stored in x and y, with the penetration in z
 	sf::Vector3f manifold;
 
-	if (overlap.width < overlap.height)
+	if (overlap.width < overlap.height) // collision in x direction
 	{
 		manifold.x = (collisionNormal.x < 0) ? 1.f : -1.f;
 		manifold.z = overlap.width;
+		this->player.setVelocity(sf::Vector2f(0, this->player.getVelocity().y));
 	}
-	else
+	else // collision in y direction
 	{
 		manifold.y = (collisionNormal.y < 0) ? 1.f : -1.f;
 		manifold.z = overlap.height;
+		this->player.stopFalling();
 	}
 
-	return manifold;
+	sf::Vector2f normal(manifold.x * manifold.z, manifold.y * manifold.z);
+	this->player.move(normal);
 }

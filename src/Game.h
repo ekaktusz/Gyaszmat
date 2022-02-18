@@ -30,8 +30,7 @@ private:
 	void update();
 	void updateCollision();
 	void processEvents();
-	void resolve(const sf::Vector3f& manifold);
-	sf::Vector3f getManifold(const sf::FloatRect& overlap, const sf::Vector2f& collisionNormal);
+	void resolveCollision(const sf::FloatRect& overlap, const sf::Vector2f& collisionNormal);
 
 public:
 	Game();
