@@ -13,7 +13,7 @@
                 "${workspaceFolder}/include/**"
             ],
             "forcedInclude": [
-                "${workspaceFolder}/src/PCH.hpp"
+                "${workspaceFolder}/src/pch.hpp"
             ]
         },
         {
@@ -32,7 +32,7 @@
                 "${workspaceFolder}/include"
             ],
             "forcedInclude": [
-                "${workspaceFolder}/src/PCH.hpp"
+                "${workspaceFolder}/src/pch.hpp"
             ]
         },
         {
@@ -46,7 +46,7 @@
                 "C:/SFML-2.5.1/include"
             ],
             "forcedInclude": [
-                "${workspaceFolder}/src/PCH.hpp"
+                "${workspaceFolder}/src/pch.hpp"
             ]
         }
     ],
