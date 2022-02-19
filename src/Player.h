@@ -1,6 +1,7 @@
 #pragma once
 
 #include "Entity.h"
+#include "Hitbox.h"
 
 enum class PlayerAnimationState
 {
@@ -54,6 +55,9 @@ public:
 	Player();
 	~Player();
 
+	// Hitbox
+	Hitbox hitbox;
+
 	bool getAnimationSwitch();
 	const sf::FloatRect getGlobalBounds() const;
 
@@ -63,7 +67,7 @@ public:
 	void updateKeyboard(sf::Event event);
 
 	void stopFalling();
-	void move(const sf::Vector2f &offset);
+	void move(const sf::Vector2f& offset);
 
 	void setPosition(const float x, const float y);
 	void setVelocity(sf::Vector2f velocity);

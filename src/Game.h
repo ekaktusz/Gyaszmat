@@ -23,7 +23,9 @@ private:
 	sf::Time deltaTime;
 
 	tmx::Map map;
-	MapLayer* tileLayer;
+	MapLayer* tileLayerFar;
+	MapLayer* tileLayerMiddle;
+	MapLayer* tileLayerNear;
 	MapLayer* objectLayer;
 
 	void render();

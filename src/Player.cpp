@@ -22,6 +22,11 @@ Player::Player()
 	// Default is to small
 	this->sprite.setScale(2, 2);
 
+	// Set up hitbox
+	this->hitbox.setPosition(this->getPosition());
+	this->hitbox.setSize(
+		sf::Vector2f(this->sprite.getGlobalBounds().width, this->sprite.getGlobalBounds().height));
+
 	this->animationTimer.restart();
 	this->animationState = PlayerAnimationState::IDLE;
 	this->animationSwitch = true;
@@ -54,6 +59,8 @@ void Player::update()
 {
 	this->updateAnimation();
 	this->updatePhysics();
+	this->hitbox.setPosition(this->getPosition());
+	//SPDLOG_INFO("RRR position: {}, {}", this->getPosition().x, this->getPosition().y);
 }
 
 void Player::updateKeyboard(sf::Event event)
@@ -214,7 +221,7 @@ void Player::setPosition(const float x, const float y)
 	this->sprite.setPosition(x, y);
 }
 
-void Player::move(const sf::Vector2f &offset)
+void Player::move(const sf::Vector2f& offset)
 {
 	this->sprite.move(offset);
 }
