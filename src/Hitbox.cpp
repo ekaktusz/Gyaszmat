@@ -1,47 +1,33 @@
 #include "Hitbox.h"
 
-Hitbox::Hitbox()
+Hitbox::Hitbox() 
 {}
+
+Hitbox::Hitbox(const sf::Vector2f& parentPosition, sf::Vector2f size, sf::Vector2f offset) :
+	offset(offset)
+{
+	this->hitbox = sf::RectangleShape(size);
+	this->hitbox.setPosition(parentPosition + this->offset);
+	this->hitbox.setFillColor(sf::Color(0, 0, 0, 0));
+	this->hitbox.setOutlineThickness(1.f);
+	this->hitbox.setOutlineColor(sf::Color::Red);
+}
 
 Hitbox::~Hitbox()
 {}
 
-void Hitbox::setPosition(const sf::Vector2f& topleft)
-{
-	this->position =
-		sf::Vector2f(topleft.x + this->reduceHitboxBy.x / 2.0f, topleft.y + this->reduceHitboxBy.y);
-}
-
-void Hitbox::setSize(const sf::Vector2f& size)
-{
-	this->size = sf::Vector2f(size - this->reduceHitboxBy);
-}
-
 void Hitbox::draw(sf::RenderTarget& target, sf::RenderStates states) const
 {
-	float border = 1;
-	sf::RectangleShape hitbox(this->getPosition());
-	hitbox.setPosition(this->getPosition());
-	hitbox.setSize(this->getSize() - sf::Vector2f(border, border));
-	hitbox.setFillColor(sf::Color(0, 0, 0, 0));
-	hitbox.setOutlineThickness(border);
-	hitbox.setOutlineColor(sf::Color::Red);
 	target.draw(hitbox);
 }
 
-const sf::Vector2f Hitbox::getPosition() const
+void Hitbox::update(const sf::Vector2f& parentPosition)
 {
-	return this->position;
+	this->hitbox.setPosition(parentPosition + this->offset);
 }
 
-const sf::Vector2f Hitbox::getSize() const
+sf::FloatRect Hitbox::getGlobalBounds() const
 {
-	return this->size;
+	return this->hitbox.getGlobalBounds();
 }
 
-const sf::FloatRect Hitbox::getGlobalBounds() const
-{
-	sf::FloatRect bounds = sf::FloatRect(
-		this->getPosition().x, this->getPosition().y, this->getSize().x, this->getSize().y);
-	return bounds;
-}

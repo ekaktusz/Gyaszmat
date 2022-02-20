@@ -2,7 +2,7 @@
 
 #include "Enemy.h"
 #include "Player.h"
-#include "SFMLOrthogonalLayer.hpp"
+#include "MapLayer.h"
 
 class Game
 {

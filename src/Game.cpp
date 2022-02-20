@@ -56,8 +56,6 @@ void Game::render()
 	this->renderWindow.draw(*this->tileLayerMiddle); // layer of map
 	this->renderWindow.draw(this->player);
 	this->renderWindow.draw(*this->tileLayerNear); // layer vefore player
-	// Uncomment the following row to draw the player's hitbox:
-	//this->renderWindow.draw(this->player.hitbox);
 	this->view.setCenter(this->player.getCenterPosition());
 	this->renderWindow.setView(this->view);
 	this->renderWindow.display();
@@ -65,17 +63,16 @@ void Game::render()
 
 void Game::updateCollision()
 {
-	sf::FloatRect playerBounds = this->player.hitbox.getGlobalBounds();
+	sf::FloatRect playerBound = this->player.getHitbox().getGlobalBounds();
 	std::vector<sf::FloatRect> objectBounds = this->objectLayer->getObjectBounds();
 
 	// collision detection with every object on object layer
 	sf::FloatRect overlap;
 	for (const sf::FloatRect& objectBound : objectBounds)
 	{
-		if (objectBound.intersects(playerBounds, overlap))
+		if (objectBound.intersects(playerBound, overlap))
 		{
-			auto collisionNormal =
-				sf::Vector2f(objectBound.left, objectBound.top) - this->player.getPosition();
+			auto collisionNormal = sf::Vector2f(objectBound.left, objectBound.top) - sf::Vector2f(playerBound.left, playerBound.top);
 			resolveCollision(overlap, collisionNormal);
 		}
 	}

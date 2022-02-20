@@ -17,6 +17,9 @@ class Player : public Entity
 private:
 	static const short MAX_NUMBER_OF_JUMPS = 2;
 
+	// Hitbox
+	Hitbox hitbox;
+
 	// Render
 	sf::Texture idleTexture;
 	sf::Texture movingTexture;
@@ -41,25 +44,25 @@ private:
 	short numberOfJumps;
 	float movementModifier;
 
+	// Controls
 	bool isMovingLeft;
 	bool isMovingRight;
 	bool pressedJump;
 
-	// Methods
 	void resetAnimationTimer();
 	void setAnimation(float timePeriod, sf::Texture& animationTexture);
+
+	// Update methods
 	void updateAnimation();
 	void updatePhysics();
+	void updateHitbox();
 
 public:
 	Player();
 	~Player();
 
-	// Hitbox
-	Hitbox hitbox;
-
 	bool getAnimationSwitch();
-	const sf::FloatRect getGlobalBounds() const;
+	const Hitbox& getHitbox() const;
 
 	void draw(sf::RenderTarget& target, sf::RenderStates states) const;
 
@@ -74,6 +77,5 @@ public:
 
 	const sf::Vector2f getVelocity() const;
 
-	const sf::Vector2f getPosition() const;
 	const sf::Vector2f getCenterPosition() const;
 };

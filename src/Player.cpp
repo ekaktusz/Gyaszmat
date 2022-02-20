@@ -23,10 +23,11 @@ Player::Player()
 	this->sprite.setScale(2, 2);
 
 	// Set up hitbox
-	this->hitbox.setPosition(this->getPosition());
-	this->hitbox.setSize(
-		sf::Vector2f(this->sprite.getGlobalBounds().width, this->sprite.getGlobalBounds().height));
+	sf::Vector2f hitboxSize = sf::Vector2f(this->sprite.getGlobalBounds().width - 34 , this->sprite.getGlobalBounds().height - 12);
+	sf::Vector2f hitboxOffSet = sf::Vector2f(17, 12);
+	this->hitbox = Hitbox(this->sprite.getPosition(), hitboxSize, hitboxOffSet);
 
+	// Init Animation
 	this->animationTimer.restart();
 	this->animationState = PlayerAnimationState::IDLE;
 	this->animationSwitch = true;
@@ -42,6 +43,7 @@ Player::Player()
 	this->movementModifier = 1;
 	this->numberOfJumps = Player::MAX_NUMBER_OF_JUMPS;
 
+	// For move control
 	this->isMovingLeft = false;
 	this->isMovingRight = false;
 	this->pressedJump = false;
@@ -53,14 +55,15 @@ Player::~Player()
 void Player::draw(sf::RenderTarget& target, sf::RenderStates states) const
 {
 	target.draw(sprite);
+	// Uncomment the following row to draw the player's hitbox:
+	target.draw(this->hitbox);
 }
 
 void Player::update()
 {
 	this->updateAnimation();
 	this->updatePhysics();
-	this->hitbox.setPosition(this->getPosition());
-	//SPDLOG_INFO("RRR position: {}, {}", this->getPosition().x, this->getPosition().y);
+	this->updateHitbox();
 }
 
 void Player::updateKeyboard(sf::Event event)
@@ -240,20 +243,15 @@ void Player::resetAnimationTimer()
 	this->animationSwitch = true;
 }
 
-const sf::FloatRect Player::getGlobalBounds() const
+const Hitbox& Player::getHitbox() const
 {
-	return this->sprite.getGlobalBounds();
-}
-
-const sf::Vector2f Player::getPosition() const
-{
-	return this->sprite.getPosition();
+	return this->hitbox;
 }
 
 const sf::Vector2f Player::getCenterPosition() const
 {
-	float x = this->sprite.getGlobalBounds().left + this->sprite.getGlobalBounds().width / 2.f;
-	float y = this->sprite.getGlobalBounds().top + this->sprite.getGlobalBounds().height / 2.f;
+	float x = this->hitbox.getGlobalBounds().left + this->hitbox.getGlobalBounds().width / 2.f;
+	float y = this->hitbox.getGlobalBounds().top + this->hitbox.getGlobalBounds().height / 2.f;
 	return sf::Vector2f(x, y);
 }
 
@@ -265,4 +263,9 @@ void Player::setVelocity(sf::Vector2f velocity)
 const sf::Vector2f Player::getVelocity() const
 {
 	return this->velocity;
+}
+
+void Player::updateHitbox()
+{
+	this->hitbox.update(this->sprite.getPosition());
 }
