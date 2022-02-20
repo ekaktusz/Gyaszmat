@@ -1,6 +1,7 @@
 #pragma once
 
 #include "Entity.h"
+#include "Hitbox.h"
 
 enum class PlayerAnimationState
 {
@@ -15,6 +16,9 @@ class Player : public Entity
 {
 private:
 	static const short MAX_NUMBER_OF_JUMPS = 2;
+
+	// Hitbox
+	Hitbox hitbox;
 
 	// Render
 	sf::Texture idleTexture;
@@ -40,22 +44,25 @@ private:
 	short numberOfJumps;
 	float movementModifier;
 
+	// Controls
 	bool isMovingLeft;
 	bool isMovingRight;
 	bool pressedJump;
 
-	// Methods
 	void resetAnimationTimer();
 	void setAnimation(float timePeriod, sf::Texture& animationTexture);
+
+	// Update methods
 	void updateAnimation();
 	void updatePhysics();
+	void updateHitbox();
 
 public:
 	Player();
 	~Player();
 
 	bool getAnimationSwitch();
-	const sf::FloatRect getGlobalBounds() const;
+	const Hitbox& getHitbox() const;
 
 	void draw(sf::RenderTarget& target, sf::RenderStates states) const;
 
@@ -63,13 +70,12 @@ public:
 	void updateKeyboard(sf::Event event);
 
 	void stopFalling();
-	void move(const sf::Vector2f &offset);
+	void move(const sf::Vector2f& offset);
 
 	void setPosition(const float x, const float y);
 	void setVelocity(sf::Vector2f velocity);
 
 	const sf::Vector2f getVelocity() const;
 
-	const sf::Vector2f getPosition() const;
 	const sf::Vector2f getCenterPosition() const;
 };

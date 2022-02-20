@@ -4,7 +4,9 @@ Game::Game() : renderWindow({ Game::XX, Game::YY }, Game::name)
 {
 	this->map.load(
 		(std::filesystem::current_path().parent_path() / "assets" / "platform.tmx").string());
-	this->tileLayer = new MapLayer(map, 1);
+	this->tileLayerFar = new MapLayer(map, 0);
+	this->tileLayerMiddle = new MapLayer(map, 1);
+	this->tileLayerNear = new MapLayer(map, 2);
 	this->objectLayer = new MapLayer(map, 3);
 	this->view = sf::View(sf::Vector2f(0.f, 0.f), sf::Vector2f(Game::XX, Game::YY));
 	this->renderWindow.setFramerateLimit(Game::FPS);
@@ -12,7 +14,9 @@ Game::Game() : renderWindow({ Game::XX, Game::YY }, Game::name)
 
 Game::~Game()
 {
-	delete tileLayer;
+	delete tileLayerFar;
+	delete tileLayerMiddle;
+	delete tileLayerNear;
 	delete objectLayer;
 }
 
@@ -48,8 +52,10 @@ void Game::processEvents()
 void Game::render()
 {
 	this->renderWindow.clear();
-	this->renderWindow.draw(*this->tileLayer);
+	this->renderWindow.draw(*this->tileLayerFar);	 // layer behind player
+	this->renderWindow.draw(*this->tileLayerMiddle); // layer of map
 	this->renderWindow.draw(this->player);
+	this->renderWindow.draw(*this->tileLayerNear); // layer vefore player
 	this->view.setCenter(this->player.getCenterPosition());
 	this->renderWindow.setView(this->view);
 	this->renderWindow.display();
@@ -57,17 +63,16 @@ void Game::render()
 
 void Game::updateCollision()
 {
-	sf::FloatRect playerBounds = this->player.getGlobalBounds();
+	sf::FloatRect playerBound = this->player.getHitbox().getGlobalBounds();
 	std::vector<sf::FloatRect> objectBounds = this->objectLayer->getObjectBounds();
 
 	// collision detection with every object on object layer
 	sf::FloatRect overlap;
 	for (const sf::FloatRect& objectBound : objectBounds)
 	{
-		if (objectBound.intersects(this->player.getGlobalBounds(), overlap))
+		if (objectBound.intersects(playerBound, overlap))
 		{
-			auto collisionNormal =
-				sf::Vector2f(objectBound.left, objectBound.top) - this->player.getPosition();
+			auto collisionNormal = sf::Vector2f(objectBound.left, objectBound.top) - sf::Vector2f(playerBound.left, playerBound.top);
 			resolveCollision(overlap, collisionNormal);
 		}
 	}
