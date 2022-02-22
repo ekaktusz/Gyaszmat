@@ -23,7 +23,8 @@ Player::Player()
 	this->sprite.setScale(2, 2);
 
 	// Set up hitbox
-	sf::Vector2f hitboxSize = sf::Vector2f(this->sprite.getGlobalBounds().width - 34 , this->sprite.getGlobalBounds().height - 12);
+	sf::Vector2f hitboxSize = sf::Vector2f(
+		this->sprite.getGlobalBounds().width - 34, this->sprite.getGlobalBounds().height - 12);
 	sf::Vector2f hitboxOffSet = sf::Vector2f(17, 12);
 	this->hitbox = Hitbox(this->sprite.getPosition(), hitboxSize, hitboxOffSet);
 
@@ -34,7 +35,7 @@ Player::Player()
 
 	// Can be played with
 	this->velocity = sf::Vector2f(0.f, 0.f);
-	this->maxVelocity = sf::Vector2f(8.f, 50.f);
+	this->maxVelocity = sf::Vector2f(8.f, 32.f); //should be the max of pixel size /2
 	this->minVelocity = sf::Vector2f(1.f, 0.f);
 	this->acceleration = 1.7f;
 	this->drag = 1 - 0.85f;
