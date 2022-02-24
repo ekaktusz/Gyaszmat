@@ -44,7 +44,8 @@ int Game::processEvents()
 	while (this->renderWindow.pollEvent(this->event))
 	{
 		if (this->event.type == sf::Event::Closed
-			|| sf::Keyboard::isKeyPressed(sf::Keyboard::Escape))
+			|| (this->event.type == sf::Event::KeyPressed
+				&& this->event.key.code == sf::Keyboard::Escape))
 		{
 			this->renderWindow.close();
 			return (-1);

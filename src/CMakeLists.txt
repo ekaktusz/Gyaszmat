@@ -40,4 +40,12 @@ add_executable(gyaszmat ${SOURCES})
 set_target_properties(gyaszmat PROPERTIES DEBUG_POSTFIX ${CMAKE_DEBUG_POSTFIX})
 target_precompile_headers(gyaszmat PUBLIC "pch.h")
 
+include(ProcessorCount)
+ProcessorCount(N)
+message("number of processors: "  ${N})
+#if(NOT N EQUAL 0)
+#  set(CMAKE_MAKE_PROGRAM "${CMAKE_MAKE_PROGRAM} -j ${N}")
+#endif()
+#message("cmake make program " ${CMAKE_MAKE_PROGRAM})
+
 target_link_libraries(gyaszmat PUBLIC sfml-system sfml-window sfml-graphics sfml-audio ${TMXLITE_LIBRARIES})
