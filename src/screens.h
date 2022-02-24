@@ -1,8 +1,8 @@
 #pragma once
 
 //Basic Screen Class
-#include "cScreen.hpp"
+#include "cScreen.h"
 
 //Including each screen of application
-#include "MenuScreen.hpp"
-#include "GameScreen.hpp"
+#include "MenuScreen.h"
+#include "GameScreen.h"

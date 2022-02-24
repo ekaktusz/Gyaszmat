@@ -1,5 +1,5 @@
 
-#include "GameScreen.hpp"
+#include "GameScreen.h"
 #include "Game.h"
 
 GameScreen::GameScreen()

@@ -1,6 +1,6 @@
 #pragma once 
 
-#include "cScreen.hpp"
+#include "cScreen.h"
 
 class GameScreen : public cScreen
 {
