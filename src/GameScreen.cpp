@@ -12,5 +12,6 @@ int GameScreen::Run(sf::RenderWindow& App)
 {
 	Game game;
 	game.run();
+	
 	return 0;
 }

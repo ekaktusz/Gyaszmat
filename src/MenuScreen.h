@@ -16,5 +16,10 @@ private:
 public:
 	MenuScreen();
 	~MenuScreen();
-	virtual int Run(sf::RenderWindow &App);
+
+	int render(sf::RenderWindow& App);
+	int update(sf::RenderWindow& App);
+	int processEvents(sf::RenderWindow& App);
+
+	virtual int Run(sf::RenderWindow& App);
 };
