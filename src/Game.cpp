@@ -20,23 +20,26 @@ Game::~Game()
 	delete objectLayer;
 }
 
-void Game::run()
+int Game::run()
 {
+	int returnvalue = 0;
 	while (this->renderWindow.isOpen())
 	{
-		this->update();
+		returnvalue = this->update();
 		this->render();
 	}
+	return returnvalue;
 }
 
-void Game::update()
+int Game::update()
 {
-	this->processEvents();
+	int returnvalue = this->processEvents();
 	this->player.update();
 	this->updateCollision();
+	return returnvalue;
 }
 
-void Game::processEvents()
+int Game::processEvents()
 {
 	while (this->renderWindow.pollEvent(this->event))
 	{
@@ -44,6 +47,7 @@ void Game::processEvents()
 			|| sf::Keyboard::isKeyPressed(sf::Keyboard::Escape))
 		{
 			this->renderWindow.close();
+			return (-1);
 		}
 		this->player.updateKeyboard(this->event);
 	}
@@ -55,7 +59,7 @@ void Game::render()
 	this->renderWindow.draw(*this->tileLayerFar);	 // layer behind player
 	this->renderWindow.draw(*this->tileLayerMiddle); // layer of map
 	this->renderWindow.draw(this->player);
-	this->renderWindow.draw(*this->tileLayerNear); // layer vefore player
+	this->renderWindow.draw(*this->tileLayerNear); // layer before player
 	this->view.setCenter(this->player.getCenterPosition());
 	this->renderWindow.setView(this->view);
 	this->renderWindow.display();

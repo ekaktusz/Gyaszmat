@@ -24,7 +24,7 @@ MenuScreen::MenuScreen()
 
 	this->menu3.setFont(this->font);
 	this->menu3.setCharacterSize(20);
-	this->menu3.setString("Continue");
+	this->menu3.setString("Restart");
 	this->menu3.setPosition({ 280.f, 160.f });
 }
 
@@ -102,7 +102,6 @@ int MenuScreen::processEvents(sf::RenderWindow& App)
 				case sf::Keyboard::Return:
 					if (this->menu == 0)
 					{
-						//Let's get play !
 						this->playing = true;
 						SPDLOG_INFO("Pressed PLAY / CONTINUE");
 
@@ -110,9 +109,7 @@ int MenuScreen::processEvents(sf::RenderWindow& App)
 					}
 					else
 					{
-						//Let's get work...
 						SPDLOG_INFO("Pressed EXIT");
-
 						return (-1);
 					}
 					break;

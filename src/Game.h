@@ -29,14 +29,14 @@ private:
 	MapLayer* objectLayer;
 
 	void render();
-	void update();
+	int update();
 	void updateCollision();
-	void processEvents();
+	int processEvents();
 	void resolveCollision(const sf::FloatRect& overlap, const sf::Vector2f& collisionNormal);
 
 public:
 	Game();
 	~Game();
 
-	void run();
+	int run();
 };
