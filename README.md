@@ -75,4 +75,4 @@ The steps are exactly the same as described in the Linux section.
 Just press the build all button in Visual Studio.
 
 ### Execution
-1. Copy all the dll-s from Gyaszmat/include/SFML/ to Gyaszmat/build
+1. Copy all the dll-s from Gyaszmat/include/SFML/bin to Gyaszmat/build
