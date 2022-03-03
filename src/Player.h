@@ -15,6 +15,12 @@ enum class PlayerAnimationState
 class Player : public Entity
 {
 private:
+	// Game parameters
+	unsigned int healthPoints;
+	unsigned int maxHealthPoints;
+	sf::RectangleShape healthBar;
+	sf::RectangleShape maxHealthBar;
+
 	static const short MAX_NUMBER_OF_JUMPS = 2;
 
 	// Hitbox
