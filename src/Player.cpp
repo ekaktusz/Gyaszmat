@@ -50,25 +50,26 @@ Player::Player()
 	this->pressedJump = false;
 
 	// Health kaland
-	this->maxHealthPoints = 100;
-	this->healthPoints = this->maxHealthPoints;
-	this->healthBar.setSize(sf::Vector2f(240.f, 25.f));
-	this->healthBar.setFillColor(sf::Color::Red);
-	this->healthBar.setPosition(sf::Vector2f(20.f, 20.f));
-
-	this->maxHealthBar.setSize(sf::Vector2f(300.f, 25.f));
-	this->maxHealthBar.setFillColor(sf::Color(25,25,25,200));
-	this->maxHealthBar.setPosition(sf::Vector2f(20.f, 20.f));
+	this->maxHealth = 100;
+	this->health = this->maxHealth;
 }
 
 Player::~Player()
 {}
 
+unsigned int Player::getHealth()
+{
+	return this->health;
+}
+
+unsigned int Player::getMaxHealth()
+{
+	return this->maxHealth;
+}
+
 void Player::draw(sf::RenderTarget& target, sf::RenderStates states) const
 {
 	target.draw(sprite);
-	target.draw(maxHealthBar);
-	target.draw(healthBar);
 	// Uncomment the following row to draw the player's hitbox:
 	target.draw(this->hitbox);
 }
@@ -78,8 +79,6 @@ void Player::update()
 	this->updateAnimation();
 	this->updatePhysics();
 	this->updateHitbox();
-	this->healthBar.setPosition(this->sprite.getPosition());
-	this->maxHealthBar.setPosition(this->sprite.getPosition());
 }
 
 void Player::updateKeyboard(sf::Event event)

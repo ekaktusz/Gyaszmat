@@ -16,10 +16,8 @@ class Player : public Entity
 {
 private:
 	// Game parameters
-	unsigned int healthPoints;
-	unsigned int maxHealthPoints;
-	sf::RectangleShape healthBar;
-	sf::RectangleShape maxHealthBar;
+	unsigned int health;
+	unsigned int maxHealth;
 
 	static const short MAX_NUMBER_OF_JUMPS = 2;
 
@@ -66,6 +64,9 @@ private:
 public:
 	Player();
 	~Player();
+
+	unsigned int getHealth();
+	unsigned int getMaxHealth();
 
 	bool getAnimationSwitch();
 	const Hitbox& getHitbox() const;

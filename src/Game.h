@@ -3,6 +3,7 @@
 #include "Enemy.h"
 #include "Player.h"
 #include "MapLayer.h"
+#include "HealthBar.h"
 
 class Game
 {
@@ -27,6 +28,8 @@ private:
 	MapLayer* tileLayerMiddle;
 	MapLayer* tileLayerNear;
 	MapLayer* objectLayer;
+
+	HealthBar playerHealthBar;
 
 	void render();
 	void update();
