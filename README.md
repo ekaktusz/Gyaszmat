@@ -33,7 +33,7 @@ cd build
 
 ## Building on macOs
 
-### Setup the environment
+### (1st option) Setup the environment manually
 
 Download SFML SDK from here:
 https://www.sfml-dev.org/files/SFML-2.5.1-macOS-clang.tar.gz
@@ -57,6 +57,16 @@ cp -R SFML-2.5.1-macos-clang/include /usr/local/include
 Copy the content of SFML-2.5.1-macos-clang/extlibs to /Library/Frameworks:
 ```
 cp -R SFML-2.5.1-macos-clang/extlibs /Library/Frameworks
+```
+
+### (2nd option) Setup the environment with brew
+
+Download Homebrew and install as said on the official site: https://brew.sh/
+
+Install CMake and SFML with it:
+```
+brew install cmake
+brew install sfml
 ```
 
 ### Build, clean and execute
