@@ -8,10 +8,15 @@ private:
 	unsigned int health;
 	unsigned int maxHealth;
 
+	float length;
+	float height;
+
 	sf::Vector2f offsetFromTopLeft;
 
 	sf::RectangleShape healthBar;
 	sf::RectangleShape maxHealthBar;
+	sf::Text text;
+	sf::Font font;
 
 public:
 	HealthBar();

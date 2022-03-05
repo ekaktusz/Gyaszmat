@@ -27,7 +27,7 @@ project(gyaszmat)
 set(CMAKE_CXX_STANDARD 17)
 
 find_package(TMXLITE REQUIRED)
-find_package(SFML 2.5 COMPONENTS system graphics audio REQUIRED)
+find_package(SFML 2.5 COMPONENTS system graphics audio window network REQUIRED)
 
 include_directories(${SFML_INCLUDE_DIR} "${CMAKE_CURRENT_LIST_DIR}/../include/")
 
@@ -40,4 +40,4 @@ add_executable(gyaszmat ${SOURCES} "MapLayerChunk.cpp" "HealthBar.h" "HealthBar.
 set_target_properties(gyaszmat PROPERTIES DEBUG_POSTFIX ${CMAKE_DEBUG_POSTFIX})
 target_precompile_headers(gyaszmat PUBLIC "pch.h")
 
-target_link_libraries(gyaszmat PUBLIC sfml-system sfml-window sfml-graphics sfml-audio ${TMXLITE_LIBRARIES})
+target_link_libraries(gyaszmat PUBLIC sfml-system sfml-window sfml-graphics sfml-audio sfml-system sfml-network ${TMXLITE_LIBRARIES})
