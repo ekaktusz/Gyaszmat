@@ -38,7 +38,8 @@ void Game::update()
 	this->view.setCenter(this->player.getCenterPosition() - sf::Vector2f(0.f, Game::XX / 6));
 	this->updateCollision();
 	this->playerHealthBar.update(this->player.getHealth());
-	this->playerHealthBar.setPosition(sf::Vector2f(this->view.getCenter() - sf::Vector2f(Game::XX / 2, Game::YY / 2)));
+	this->playerHealthBar.setPosition(
+		sf::Vector2f(this->view.getCenter() - sf::Vector2f(Game::XX / 2, Game::YY / 2)));
 }
 
 void Game::processEvents()
@@ -77,7 +78,8 @@ void Game::updateCollision()
 	{
 		if (objectBound.intersects(playerBound, overlap))
 		{
-			auto collisionNormal = sf::Vector2f(objectBound.left, objectBound.top) - sf::Vector2f(playerBound.left, playerBound.top);
+			auto collisionNormal = sf::Vector2f(objectBound.left, objectBound.top)
+				- sf::Vector2f(playerBound.left, playerBound.top);
 			resolveCollision(overlap, collisionNormal);
 		}
 	}
