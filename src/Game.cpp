@@ -11,7 +11,7 @@ Game::Game() : renderWindow({ Game::XX, Game::YY }, Game::name)
 	this->view = sf::View(sf::Vector2f(0.f, 0.f), sf::Vector2f(Game::XX, Game::YY));
 	this->renderWindow.setView(this->view);
 	this->renderWindow.setFramerateLimit(Game::FPS);
-	this->playerHealthBar = HealthBar(100, 100);
+	this->playerHealthBar = new HealthBar(100, 100);
 }
 
 Game::~Game()
@@ -20,6 +20,7 @@ Game::~Game()
 	delete tileLayerMiddle;
 	delete tileLayerNear;
 	delete objectLayer;
+	delete playerHealthBar;
 }
 
 void Game::run()
@@ -37,8 +38,8 @@ void Game::update()
 	this->player.update();
 	this->view.setCenter(this->player.getCenterPosition() - sf::Vector2f(0.f, Game::XX / 6));
 	this->updateCollision();
-	this->playerHealthBar.update(this->player.getHealth());
-	this->playerHealthBar.setPosition(
+	this->playerHealthBar->update(this->player.getHealth());
+	this->playerHealthBar->setPosition(
 		sf::Vector2f(this->view.getCenter() - sf::Vector2f(Game::XX / 2, Game::YY / 2)));
 }
 
@@ -63,7 +64,7 @@ void Game::render()
 	this->renderWindow.draw(*this->tileLayerMiddle); // layer of map
 	this->renderWindow.draw(this->player);
 	this->renderWindow.draw(*this->tileLayerNear); // layer vefore player
-	this->renderWindow.draw(this->playerHealthBar);
+	this->renderWindow.draw(*this->playerHealthBar);
 	this->renderWindow.display();
 }
 

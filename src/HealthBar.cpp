@@ -1,14 +1,17 @@
 #include "HealthBar.h"
 
-HealthBar::HealthBar()
+HealthBar::HealthBar() : font(*(new sf::Font()))
 {}
 
 HealthBar::~HealthBar()
-{}
+{
+	delete &font;
+}
 
 HealthBar::HealthBar(unsigned int health, unsigned int maxHealth) :
 	health(health),
-	maxHealth(maxHealth)
+	maxHealth(maxHealth),
+	font(*(new sf::Font()))
 {
 	this->offsetFromTopLeft = sf::Vector2f(25.f, 25.f);
 
@@ -34,7 +37,8 @@ HealthBar::HealthBar(unsigned int health, unsigned int maxHealth) :
 	{
 		SPDLOG_ERROR("Font loading failed!");
 	}
-	this->text.setFont(this->font);
+	this->text.setFont((this->font));
+	SPDLOG_INFO("FASSZT1");
 	// this->text.setString("[" + std::to_string(health) + "/" + std::to_string(maxHealth)
 	//	+ "]"); // can be change to std::format after we support c++20
 	this->text.setString("FASSZT");
@@ -61,6 +65,8 @@ void HealthBar::setPosition(const sf::Vector2f& position)
 
 void HealthBar::draw(sf::RenderTarget& target, sf::RenderStates states) const
 {
+	SPDLOG_INFO((this->font.getInfo().family));
+	SPDLOG_INFO((this->text.getFont()->getInfo().family));
 	target.draw(this->maxHealthBar);
 	target.draw(this->healthBar);
 	target.draw(this->text);

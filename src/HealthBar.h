@@ -16,7 +16,7 @@ private:
 	sf::RectangleShape healthBar;
 	sf::RectangleShape maxHealthBar;
 	sf::Text text;
-	sf::Font font;
+	sf::Font& font;
 
 public:
 	HealthBar();
