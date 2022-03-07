@@ -9,10 +9,13 @@ Player::Player()
 		/ "assets" / "owlet_monster" / "Owlet_Monster_Run_6.png";
 	std::filesystem::path jumpingPlayerAsset = std::filesystem::current_path().parent_path()
 		/ "assets" / "owlet_monster" / "Owlet_Monster_Jump_8.png";
+	std::filesystem::path climbingPlayerAsset = std::filesystem::current_path().parent_path()
+		/ "assets" / "owlet_monster" / "Owlet_Monster_Climb_4.png";
 
 	this->idleTexture.loadFromFile(idlePlayerAsset.string());
 	this->movingTexture.loadFromFile(runningPlayerAsset.string());
 	this->jumpingTexture.loadFromFile(jumpingPlayerAsset.string());
+	this->climbingTexture.loadFromFile(climbingPlayerAsset.string());
 
 	this->sprite.setTexture(idleTexture);
 	// Set starting frame to the first 32x32 part of the image
@@ -48,6 +51,7 @@ Player::Player()
 	this->isMovingLeft = false;
 	this->isMovingRight = false;
 	this->pressedJump = false;
+	this->isClimbing = false;
 }
 
 Player::~Player()
@@ -71,7 +75,7 @@ void Player::updateKeyboard(sf::Event event)
 {
 	if (event.type == sf::Event::KeyPressed)
 	{
-		if (event.key.code == sf::Keyboard::W && numberOfJumps > 0)
+		if (event.key.code == sf::Keyboard::W && numberOfJumps > 0 && !isClimbing)
 		{
 			numberOfJumps--;
 			pressedJump = true;
@@ -86,6 +90,14 @@ void Player::updateKeyboard(sf::Event event)
 			this->isMovingRight = true;
 			this->isMovingLeft = false;
 		}
+		if (event.key.code == sf::Keyboard::W && isClimbing)
+		{
+			this->setVelocity(sf::Vector2f(0.f, -3.f));
+		}
+		else if (event.key.code == sf::Keyboard::S && isClimbing)
+		{
+			this->setVelocity(sf::Vector2f(0.f, 3.f));
+		}
 	}
 	else if (event.type == sf::Event::KeyReleased)
 	{
@@ -97,6 +109,12 @@ void Player::updateKeyboard(sf::Event event)
 		{
 			this->isMovingRight = false;
 		}
+		else if ((event.key.code == sf::Keyboard::W
+			|| event.key.code == sf::Keyboard::S) && isClimbing)
+		{
+			this->setVelocity(sf::Vector2f(0.f, 0.f));
+		}
+
 	}
 }
 
@@ -104,10 +122,14 @@ void Player::updateAnimation()
 {
 	PlayerAnimationState prevState = this->animationState;
 
-	if (this->velocity.y > 0)
+	if (this->velocity.y > 0 && !isClimbing)
 		this->animationState = PlayerAnimationState::FALLING;
-	else if (this->velocity.y < 0)
+	else if (this->velocity.y > 0 && isClimbing)
+		this->animationState = PlayerAnimationState::CLIMBING;
+	else if (this->velocity.y < 0 && !isClimbing)
 		this->animationState = PlayerAnimationState::JUMPING;
+	else if (this->velocity.y < 0 && isClimbing)
+		this->animationState = PlayerAnimationState::CLIMBING;
 	else
 	{
 		if (this->velocity.x > 0)
@@ -153,6 +175,10 @@ void Player::updateAnimation()
 	{
 		setAnimation(0.3f, jumpingTexture);
 	}
+	else if (this->animationState == PlayerAnimationState::CLIMBING)
+	{
+		setAnimation(0.3f, climbingTexture);
+	}
 }
 
 void Player::setAnimation(float timePeriod, sf::Texture& animationTexture)
@@ -185,6 +211,19 @@ void Player::updatePhysics()
 	{
 		this->velocity.y = this->jumpSpeed;
 		this->pressedJump = false;
+	}
+
+	if (this->isClimbing)
+	{
+		this->gravity = 0.0f;
+		this->maxVelocity = sf::Vector2f(8.f, 4.f);
+		this->acceleration = 0.6f;	
+	}
+	else
+	{
+		this->gravity = 1.f;
+		this->maxVelocity = sf::Vector2f(8.f, 32.f);
+		this->acceleration = 1.7f;
 	}
 
 	// Apply drag and gravitation

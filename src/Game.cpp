@@ -8,6 +8,8 @@ Game::Game() : renderWindow({ Game::XX, Game::YY }, Game::name)
 	this->tileLayerMiddle = new MapLayer(map, 1);
 	this->tileLayerNear = new MapLayer(map, 2);
 	this->objectLayer = new MapLayer(map, 3);
+	this->ladderLayer = new MapLayer(map, 4);
+	this->ladderTopLayer = new MapLayer(map, 5);
 	this->view = sf::View(sf::Vector2f(0.f, 0.f), sf::Vector2f(Game::XX, Game::YY));
 	this->renderWindow.setFramerateLimit(Game::FPS);
 }
@@ -18,6 +20,8 @@ Game::~Game()
 	delete tileLayerMiddle;
 	delete tileLayerNear;
 	delete objectLayer;
+	delete ladderLayer;
+	delete ladderTopLayer;
 }
 
 void Game::run()
@@ -65,15 +69,45 @@ void Game::updateCollision()
 {
 	sf::FloatRect playerBound = this->player.getHitbox().getGlobalBounds();
 	std::vector<sf::FloatRect> objectBounds = this->objectLayer->getObjectBounds();
+	std::vector<sf::FloatRect> ladderBounds = this->ladderLayer->getObjectBounds();
+	std::vector<sf::FloatRect> ladderTopBounds = this->ladderTopLayer->getObjectBounds();
 
 	// collision detection with every object on object layer
 	sf::FloatRect overlap;
+
 	for (const sf::FloatRect& objectBound : objectBounds)
 	{
 		if (objectBound.intersects(playerBound, overlap))
 		{
-			auto collisionNormal = sf::Vector2f(objectBound.left, objectBound.top) - sf::Vector2f(playerBound.left, playerBound.top);
-			resolveCollision(overlap, collisionNormal);
+			//if (!this->player.isClimbing)
+			//{
+				auto collisionNormal = sf::Vector2f(objectBound.left, objectBound.top) - sf::Vector2f(playerBound.left, playerBound.top);
+				resolveCollision(overlap, collisionNormal);
+			//}
+			
+		}
+	}
+	
+	for (const sf::FloatRect& ladderBound : ladderBounds)
+	{
+		if (ladderBound.intersects(playerBound, overlap))
+		{
+			this->player.isClimbing = true;
+		}
+		else
+		{
+			this->player.isClimbing = false;
+		}
+	}
+
+	for (const sf::FloatRect& ladderTopBound : ladderTopBounds)
+	{
+		if (ladderTopBound.intersects(playerBound, overlap))
+		{
+			
+		}
+		else
+		{
 		}
 	}
 }

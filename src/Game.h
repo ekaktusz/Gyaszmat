@@ -27,6 +27,8 @@ private:
 	MapLayer* tileLayerMiddle;
 	MapLayer* tileLayerNear;
 	MapLayer* objectLayer;
+	MapLayer* ladderLayer;
+	MapLayer* ladderTopLayer;
 
 	void render();
 	void update();

@@ -9,11 +9,15 @@ enum class PlayerAnimationState
 	MOVING_LEFT,
 	MOVING_RIGHT,
 	JUMPING,
-	FALLING
+	FALLING,
+	CLIMBING
 };
 
 class Player : public Entity
 {
+public:
+	bool isClimbing;
+
 private:
 	static const short MAX_NUMBER_OF_JUMPS = 2;
 
@@ -24,6 +28,7 @@ private:
 	sf::Texture idleTexture;
 	sf::Texture movingTexture;
 	sf::Texture jumpingTexture;
+	sf::Texture climbingTexture;
 	sf::Sprite sprite;
 
 	// Animation
