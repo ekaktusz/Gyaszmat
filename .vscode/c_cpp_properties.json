@@ -32,7 +32,7 @@
                 "${workspaceFolder}/include"
             ],
             "forcedInclude": [
-                "${workspaceFolder}/src/pch.hpp"
+                "${workspaceFolder}/src/pch.h"
             ]
         },
         {

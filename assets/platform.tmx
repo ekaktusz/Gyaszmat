@@ -1,5 +1,5 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<map version="1.8" tiledversion="1.8.2" orientation="orthogonal" renderorder="left-down" width="200" height="18" tilewidth="64" tileheight="64" infinite="0" nextlayerid="9" nextobjectid="176">
+<map version="1.8" tiledversion="1.8.0" orientation="orthogonal" renderorder="left-down" width="200" height="18" tilewidth="64" tileheight="64" infinite="0" nextlayerid="9" nextobjectid="182">
  <properties>
   <property name="test map property" type="float" value="12.43"/>
  </properties>
@@ -9,7 +9,7 @@
  </tileset>
  <layer id="1" name="Far" width="200" height="18">
   <data encoding="base64" compression="zlib">
-   eJzt2DESQDAQBVB3wBlw/wsqSYbCxNgk3qs0Zn7hb2KHAVijA/DIFh3gZ5boADxinkHqfGboB6TWm2cgvQO7D9MK/8q8odfvyCznDe7McM+chWtzdACo2BgdACqmH3DId1W99aPXXRzfyHdVvfXDLo4SJf1oYTbrByXyXe5U8G6NWsgIEGkHRVAEcA==
+   eJzt2MEKgzAMAFC/ZMJ20P3/D84dBhbpQaqEZO9BqMcU2phmmoA1OgFOeUcn8GeW6AQ4RT2D1v6f4X5Aa+18A20PrB8mC29lrlD1HKnlXEHPDH3qLBw9t3hsMXfWb7zCsgMAyKHqrOqn+v64V/VZVfX9ca+R85OhNrsfjBiZ5WaYA2fIESDSByWeBSA=
   </data>
  </layer>
  <layer id="2" name="Middle" width="200" height="18">
@@ -17,7 +17,7 @@
    <property name="test layer property" type="bool" value="true"/>
   </properties>
   <data encoding="base64" compression="zlib">
-   eJztmksOwjAMRKcLWAFHgOFz/zNSEBUVQpA2Thwr86Sn7hK3iS1XCSAEwNHTy1tAz+Zf5D226BvCf39b5sgwuh/dLfQw+yab2biiXwj/fW3pycj5mKJPCP/9HEHRH4T/voui8GNpn3z4PsyTIWE+Iu4/uPKjHwi7XnltXy3T5A97IqWW/6rfqRD+ay7TFcBl9JjodeUchGp4REuS0hNHmCMHQnkR2VwetXfqb49fnjk19x/E/567xNlqKoT/+krf/PCAWFaTa+fI0vhku0aCWL/vauRITnyyTaNA5L9ryRyxiE+2Z+sQtjW5RI7QMD7Zli1ClD3Tsvpvn+L0XkNZzi3W3Qe28vPMjRXfPSdHasYpffW469DKHYgoccr63gG9+RzY
+   eJztmstOBCEURGsWutLZqFunfPz/N9oxGjvGjJem4EKok5xlw+2GInQAMAbg5uXL9wl9kX+Rn7bN2hD581uZkdPm/eZdoefdN7nZtWvWhcif10ovIvdtmjUh8ufzDJr1IPLn3SyaPEr3yee/m/nkFOiPmPcf3PlYB0K3Vz66r7YxecWViKzl19bvKET+mNu4BnjdfA76drAPwmv4jLYksieeoY8aCOdiZhU8idophfh/z93ibDUKkT++Nj8fD6J2ohBla3LvjJTWZ8dVQa98EMfnXY+M1NRnx1RBj3wQ9e/aMiOK+ux4KmiZD0K7JrfICIX12bFUoM4H0fZMS/Xf/l1n9hjadt7i2H3gvY8Vz/4+c2PHd6/JSM86ba4Zdx1GuQMxS522vx99Uxwb
   </data>
  </layer>
  <layer id="3" name="Near" width="200" height="18">
@@ -67,10 +67,11 @@
   <object id="153" x="64" y="960.941">
    <polygon points="0,0 127.059,127.059 0,127.059"/>
   </object>
-  <object id="175" x="1088" y="640" width="640" height="64"/>
+  <object id="178" x="1088" y="640" width="64" height="64"/>
+  <object id="179" x="1216" y="640" width="512" height="64"/>
+  <object id="181" x="1152" y="640" width="64" height="64"/>
  </objectgroup>
- <objectgroup id="6" name="Ladder">
+ <objectgroup id="6" name="Ladder" visible="0">
   <object id="174" x="1152" y="640" width="64" height="448"/>
  </objectgroup>
- <objectgroup id="8" name="LadderTop" locked="1"/>
 </map>

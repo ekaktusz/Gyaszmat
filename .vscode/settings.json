@@ -101,7 +101,10 @@
         "unordered_map": "cpp",
         "utility": "cpp",
         "vector": "cpp",
-        "filesystem": "cpp"
+        "filesystem": "cpp",
+        "charconv": "cpp",
+        "condition_variable": "cpp",
+        "span": "cpp"
     },
     "terminal.integrated.env.windows": {
         "Path": "C:/mingw32/bin;C:/SFML-2.5.1/bin"

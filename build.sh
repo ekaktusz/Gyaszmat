@@ -1,6 +1,6 @@
 if [ $# -eq 0 ]; then
     cmake -DCMAKE_BUILD_TYPE=Debug -Hsrc -Bbuild
-    make -C build
+    make -j 8 -C build
 fi
 
 if [[ $1 == "clean" ]]; then

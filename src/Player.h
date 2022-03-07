@@ -16,8 +16,10 @@ enum class PlayerAnimationState
 class Player : public Entity
 {
 public:
+	bool collisionWithLadder;
+	bool canClimbDown;
+	bool firstClimb;
 	bool isClimbing;
-	bool firstClimb = false;
 
 private:
 	static const short MAX_NUMBER_OF_JUMPS = 2;

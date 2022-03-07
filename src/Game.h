@@ -1,8 +1,8 @@
 #pragma once
 
 #include "Enemy.h"
-#include "Player.h"
 #include "MapLayer.h"
+#include "Player.h"
 
 class Game
 {
@@ -28,7 +28,6 @@ private:
 	MapLayer* tileLayerNear;
 	MapLayer* objectLayer;
 	MapLayer* ladderLayer;
-	MapLayer* ladderTopLayer;
 
 	void render();
 	void update();

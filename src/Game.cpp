@@ -9,7 +9,6 @@ Game::Game() : renderWindow({ Game::XX, Game::YY }, Game::name)
 	this->tileLayerNear = new MapLayer(map, 2);
 	this->objectLayer = new MapLayer(map, 3);
 	this->ladderLayer = new MapLayer(map, 4);
-	this->ladderTopLayer = new MapLayer(map, 5);
 	this->view = sf::View(sf::Vector2f(0.f, 0.f), sf::Vector2f(Game::XX, Game::YY));
 	this->renderWindow.setFramerateLimit(Game::FPS);
 }
@@ -21,7 +20,6 @@ Game::~Game()
 	delete tileLayerNear;
 	delete objectLayer;
 	delete ladderLayer;
-	delete ladderTopLayer;
 }
 
 void Game::run()
@@ -70,7 +68,6 @@ void Game::updateCollision()
 	sf::FloatRect playerBound = this->player.getHitbox().getGlobalBounds();
 	std::vector<sf::FloatRect> objectBounds = this->objectLayer->getObjectBounds();
 	std::vector<sf::FloatRect> ladderBounds = this->ladderLayer->getObjectBounds();
-	std::vector<sf::FloatRect> ladderTopBounds = this->ladderTopLayer->getObjectBounds();
 
 	// collision detection with every object on object layer
 	sf::FloatRect overlap;
@@ -79,17 +76,32 @@ void Game::updateCollision()
 	{
 		if (ladderBound.intersects(playerBound, overlap))
 		{
-			this->player.isClimbing = true;
+			this->player.collisionWithLadder = true;
+			auto collisionNormal = sf::Vector2f(playerBound.left, playerBound.top)
+				- sf::Vector2f(ladderBound.left, ladderBound.top);
+			SPDLOG_INFO("RRR {} {}", collisionNormal.y, ladderBound.height);
+			// 395, -53, 448, 12, 64
+			// collisionNormal.y az aljan, a tetejen, a letra magassaga, a hitbox offset, a player magassaga
+			if (collisionNormal.y < ladderBound.height - 64 + 12 - 1)
+			{
+				this->player.canClimbDown = true;
+			}
+			else
+			{
+				this->player.canClimbDown = false;
+				//this->player.stopFalling();
+			}
 			if (!this->player.firstClimb)
 			{
-				this->player.stopFalling();
+				//this->player.stopFalling();
 				this->player.firstClimb = true;
 			}
 		}
 		else
 		{
-			this->player.isClimbing = false;
+			this->player.collisionWithLadder = false;
 			this->player.firstClimb = false;
+			this->player.isClimbing = false;
 		}
 	}
 
@@ -99,27 +111,12 @@ void Game::updateCollision()
 		{
 			if (!this->player.isClimbing)
 			{
-				auto collisionNormal = sf::Vector2f(objectBound.left, objectBound.top) - sf::Vector2f(playerBound.left, playerBound.top);
+				auto collisionNormal = sf::Vector2f(objectBound.left, objectBound.top)
+					- sf::Vector2f(playerBound.left, playerBound.top);
 				resolveCollision(overlap, collisionNormal);
 			}
 		}
 	}
-	
-	
-
-	/*
-	for (const sf::FloatRect& ladderTopBound : ladderTopBounds)
-	{
-		if (ladderTopBound.intersects(playerBound, overlap))
-		{
-			this->player.isClimbing = true;
-		}
-		else
-		{
-			this->player.isClimbing = false;
-		}
-	}
-	*/
 }
 
 void Game::resolveCollision(const sf::FloatRect& overlap, const sf::Vector2f& collisionNormal)
