@@ -75,22 +75,42 @@ void Game::updateCollision()
 	// collision detection with every object on object layer
 	sf::FloatRect overlap;
 
+	for (const sf::FloatRect& ladderBound : ladderBounds)
+	{
+		if (ladderBound.intersects(playerBound, overlap))
+		{
+			this->player.isClimbing = true;
+			if (!this->player.firstClimb)
+			{
+				this->player.stopFalling();
+				this->player.firstClimb = true;
+			}
+		}
+		else
+		{
+			this->player.isClimbing = false;
+			this->player.firstClimb = false;
+		}
+	}
+
 	for (const sf::FloatRect& objectBound : objectBounds)
 	{
 		if (objectBound.intersects(playerBound, overlap))
 		{
-			//if (!this->player.isClimbing)
-			//{
+			if (!this->player.isClimbing)
+			{
 				auto collisionNormal = sf::Vector2f(objectBound.left, objectBound.top) - sf::Vector2f(playerBound.left, playerBound.top);
 				resolveCollision(overlap, collisionNormal);
-			//}
-			
+			}
 		}
 	}
 	
-	for (const sf::FloatRect& ladderBound : ladderBounds)
+	
+
+	/*
+	for (const sf::FloatRect& ladderTopBound : ladderTopBounds)
 	{
-		if (ladderBound.intersects(playerBound, overlap))
+		if (ladderTopBound.intersects(playerBound, overlap))
 		{
 			this->player.isClimbing = true;
 		}
@@ -99,17 +119,7 @@ void Game::updateCollision()
 			this->player.isClimbing = false;
 		}
 	}
-
-	for (const sf::FloatRect& ladderTopBound : ladderTopBounds)
-	{
-		if (ladderTopBound.intersects(playerBound, overlap))
-		{
-			
-		}
-		else
-		{
-		}
-	}
+	*/
 }
 
 void Game::resolveCollision(const sf::FloatRect& overlap, const sf::Vector2f& collisionNormal)

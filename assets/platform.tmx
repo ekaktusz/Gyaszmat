@@ -1,5 +1,5 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<map version="1.8" tiledversion="1.8.2" orientation="orthogonal" renderorder="left-down" width="200" height="18" tilewidth="64" tileheight="64" infinite="0" nextlayerid="9" nextobjectid="172">
+<map version="1.8" tiledversion="1.8.2" orientation="orthogonal" renderorder="left-down" width="200" height="18" tilewidth="64" tileheight="64" infinite="0" nextlayerid="9" nextobjectid="176">
  <properties>
   <property name="test map property" type="float" value="12.43"/>
  </properties>
@@ -67,13 +67,10 @@
   <object id="153" x="64" y="960.941">
    <polygon points="0,0 127.059,127.059 0,127.059"/>
   </object>
-  <object id="167" x="1088" y="640" width="64" height="64"/>
-  <object id="168" x="1216" y="640" width="512" height="64"/>
+  <object id="175" x="1088" y="640" width="640" height="64"/>
  </objectgroup>
  <objectgroup id="6" name="Ladder">
-  <object id="170" x="1152" y="704" width="64" height="384"/>
+  <object id="174" x="1152" y="640" width="64" height="448"/>
  </objectgroup>
- <objectgroup id="8" name="LadderTop">
-  <object id="171" x="1152" y="640" width="64" height="64"/>
- </objectgroup>
+ <objectgroup id="8" name="LadderTop" locked="1"/>
 </map>

@@ -17,6 +17,7 @@ class Player : public Entity
 {
 public:
 	bool isClimbing;
+	bool firstClimb = false;
 
 private:
 	static const short MAX_NUMBER_OF_JUMPS = 2;
