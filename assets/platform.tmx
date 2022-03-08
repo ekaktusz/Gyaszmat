@@ -1,5 +1,5 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<map version="1.8" tiledversion="1.8.2" orientation="orthogonal" renderorder="left-down" width="200" height="18" tilewidth="64" tileheight="64" infinite="0" nextlayerid="11" nextobjectid="191">
+<map version="1.8" tiledversion="1.8.2" orientation="orthogonal" renderorder="left-down" width="200" height="18" tilewidth="64" tileheight="64" infinite="0" nextlayerid="11" nextobjectid="200">
  <properties>
   <property name="test map property" type="float" value="12.43"/>
  </properties>
@@ -25,7 +25,7 @@
    eJzt2tsKhCAQAFBpF9o3Y///Y3uNiCaszOocEAQvzIMjgpMSvM8nGO+rRAHt+E/63co8uQEAwBMNQVuSd+4LwLm23NMAHMebFwAAqO17dQBQSclZj+oj4S5+wXjJWZcfPMk8R6b/Y2u1wEtysKakrqKWnNqOD6AVI9J8AtY=
   </data>
  </layer>
- <objectgroup id="4" name="Objects" offsetx="1" offsety="-2">
+ <objectgroup id="4" name="Objects">
   <properties>
    <property name="another object layer property" value="salmon"/>
    <property name="object layer property" type="bool" value="false"/>
@@ -67,14 +67,15 @@
   <object id="153" x="64" y="960.941">
    <polygon points="0,0 127.059,127.059 0,127.059"/>
   </object>
-  <object id="178" x="1088" y="640" width="64" height="64"/>
-  <object id="179" x="1216" y="640" width="512" height="64"/>
+  <object id="191" x="1280" y="640" width="448" height="64"/>
+  <object id="198" x="1088" y="640" width="64" height="64"/>
+  <object id="199" x="1216" y="640" width="64" height="64"/>
  </objectgroup>
  <objectgroup id="6" name="Ladder">
   <object id="189" x="1152" y="704" width="64" height="320"/>
  </objectgroup>
  <objectgroup id="9" name="LadderTop">
-  <object id="190" x="1152" y="640" width="64" height="64"/>
+  <object id="197" x="1152" y="640" width="64" height="64"/>
  </objectgroup>
  <objectgroup id="10" name="LadderBottom">
   <object id="185" x="1152" y="1024" width="64" height="64"/>
