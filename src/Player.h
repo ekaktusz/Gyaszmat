@@ -75,7 +75,7 @@ private:
 	bool pressedJump;
 
 	void resetAnimationTimer();
-	void setAnimation(float timePeriod, sf::Texture& animationTexture);
+	void setAnimation(float timePeriod, sf::Texture& animationTexture, bool stopped = false);
 
 	// Update methods
 	void updateAnimation();

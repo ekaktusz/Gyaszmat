@@ -143,6 +143,8 @@ void Player::updateAnimation()
 			this->animationState = PlayerAnimationState::MOVING_RIGHT;
 		else if (this->velocity.x < 0)
 			this->animationState = PlayerAnimationState::MOVING_LEFT;
+		else if (this->actualClimbingState == PlayerActualClimbingState::CLIMBED)
+			this->animationState = PlayerAnimationState::CLIMBING;
 		else
 			this->animationState = PlayerAnimationState::IDLE;
 	}
@@ -182,13 +184,17 @@ void Player::updateAnimation()
 	{
 		setAnimation(0.3f, jumpingTexture);
 	}
-	else if (this->animationState == PlayerAnimationState::CLIMBING)
+	else if (this->animationState == PlayerAnimationState::CLIMBING && this->actualClimbingState == PlayerActualClimbingState::CLIMBED)
+	{
+		setAnimation(0.3f, climbingTexture, true);
+	}
+	else if (this->animationState == PlayerAnimationState::CLIMBING	&& this->actualClimbingState != PlayerActualClimbingState::CLIMBED)
 	{
 		setAnimation(0.3f, climbingTexture);
 	}
 }
 
-void Player::setAnimation(float timePeriod, sf::Texture& animationTexture)
+void Player::setAnimation(float timePeriod, sf::Texture& animationTexture, bool stopped)
 {
 	unsigned int frameSize = 32;
 	unsigned int frameNumber = animationTexture.getSize().x / frameSize;
@@ -196,12 +202,16 @@ void Player::setAnimation(float timePeriod, sf::Texture& animationTexture)
 	if (this->animationTimer.getElapsedTime().asSeconds() >= timePeriod
 		|| this->getAnimationSwitch())
 	{
-		this->currentFrame.left += frameSize;
-		if (this->currentFrame.left >= (frameNumber - 1) * frameSize)
+		if (!stopped)
 		{
-			this->currentFrame.left = 0;
+			this->currentFrame.left += frameSize;
+			if (this->currentFrame.left >= (frameNumber - 1) * frameSize)
+			{
+				this->currentFrame.left = 0;
+			}
+			this->animationTimer.restart();
 		}
-		this->animationTimer.restart();
+		
 		this->sprite.setTextureRect(this->currentFrame);
 	}
 }
