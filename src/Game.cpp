@@ -9,6 +9,8 @@ Game::Game() : renderWindow({ Game::XX, Game::YY }, Game::name)
 	this->tileLayerNear = new MapLayer(map, 2);
 	this->objectLayer = new MapLayer(map, 3);
 	this->ladderLayer = new MapLayer(map, 4);
+	this->ladderTopLayer = new MapLayer(map, 5);
+	this->ladderBottomLayer = new MapLayer(map, 6);
 	this->view = sf::View(sf::Vector2f(0.f, 0.f), sf::Vector2f(Game::XX, Game::YY));
 	this->renderWindow.setFramerateLimit(Game::FPS);
 }
@@ -20,6 +22,8 @@ Game::~Game()
 	delete tileLayerNear;
 	delete objectLayer;
 	delete ladderLayer;
+	delete ladderTopLayer;
+	delete ladderBottomLayer;
 }
 
 void Game::run()
@@ -68,55 +72,64 @@ void Game::updateCollision()
 	sf::FloatRect playerBound = this->player.getHitbox().getGlobalBounds();
 	std::vector<sf::FloatRect> objectBounds = this->objectLayer->getObjectBounds();
 	std::vector<sf::FloatRect> ladderBounds = this->ladderLayer->getObjectBounds();
+	std::vector<sf::FloatRect> ladderTopBounds = this->ladderTopLayer->getObjectBounds();
+	std::vector<sf::FloatRect> ladderBottomBounds = this->ladderBottomLayer->getObjectBounds();
+
+	this->player.canClimbUp = false;
+	this->player.canClimbDown = false;
+	this->player.collisionWithLadder = false;
 
 	// collision detection with every object on object layer
 	sf::FloatRect overlap;
-
-	for (const sf::FloatRect& ladderBound : ladderBounds)
-	{
-		if (ladderBound.intersects(playerBound, overlap))
-		{
-			this->player.collisionWithLadder = true;
-			auto collisionNormal = sf::Vector2f(playerBound.left, playerBound.top)
-				- sf::Vector2f(ladderBound.left, ladderBound.top);
-			SPDLOG_INFO("RRR {} {}", collisionNormal.y, ladderBound.height);
-			// 395, -53, 448, 12, 64
-			// collisionNormal.y az aljan, a tetejen, a letra magassaga, a hitbox offset, a player magassaga
-			if (collisionNormal.y < ladderBound.height - 64 + 12 - 1)
-			{
-				this->player.canClimbDown = true;
-			}
-			else
-			{
-				this->player.canClimbDown = false;
-				//this->player.stopFalling();
-			}
-			if (!this->player.firstClimb)
-			{
-				//this->player.stopFalling();
-				this->player.firstClimb = true;
-			}
-		}
-		else
-		{
-			this->player.collisionWithLadder = false;
-			this->player.firstClimb = false;
-			this->player.isClimbing = false;
-		}
-	}
 
 	for (const sf::FloatRect& objectBound : objectBounds)
 	{
 		if (objectBound.intersects(playerBound, overlap))
 		{
-			if (!this->player.isClimbing)
-			{
-				auto collisionNormal = sf::Vector2f(objectBound.left, objectBound.top)
-					- sf::Vector2f(playerBound.left, playerBound.top);
-				resolveCollision(overlap, collisionNormal);
-			}
+
+			auto collisionNormal = sf::Vector2f(objectBound.left, objectBound.top)
+				- sf::Vector2f(playerBound.left, playerBound.top);
+			resolveCollision(overlap, collisionNormal);
 		}
 	}
+
+	for (const sf::FloatRect& ladderBottomBound : ladderBottomBounds)
+	{
+		if (ladderBottomBound.intersects(playerBound, overlap))
+		{
+			this->player.canClimbUp = true;
+			this->player.canClimbDown = false;
+			this->player.collisionWithLadder = true;
+		}
+	}
+
+	for (const sf::FloatRect& ladderTopBound : ladderTopBounds)
+	{
+		if (ladderTopBound.intersects(playerBound, overlap))
+		{
+			this->player.canClimbUp = true;
+			this->player.canClimbDown = true;
+			this->player.collisionWithLadder = true;
+		}
+	}
+
+	for (const sf::FloatRect& ladderBound : ladderBounds)
+	{
+		if (ladderBound.intersects(playerBound, overlap))
+		{
+			this->player.canClimbUp = true;
+			this->player.canClimbDown = true;
+			this->player.collisionWithLadder = true;
+		}
+		
+	}
+
+	
+
+	SPDLOG_INFO("RRR {} {} {}",
+		this->player.collisionWithLadder,
+		this->player.canClimbUp,
+		this->player.canClimbDown);
 }
 
 void Game::resolveCollision(const sf::FloatRect& overlap, const sf::Vector2f& collisionNormal)

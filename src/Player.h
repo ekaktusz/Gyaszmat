@@ -18,6 +18,7 @@ class Player : public Entity
 public:
 	bool collisionWithLadder;
 	bool canClimbDown;
+	bool canClimbUp;
 	bool firstClimb;
 	bool isClimbing;
 

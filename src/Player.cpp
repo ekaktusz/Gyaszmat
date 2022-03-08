@@ -53,6 +53,7 @@ Player::Player()
 	this->pressedJump = false;
 	this->collisionWithLadder = false;
 	this->canClimbDown = false;
+	this->canClimbUp = false;
 	this->firstClimb = false;
 	this->isClimbing = false;
 }
@@ -78,10 +79,11 @@ void Player::updateKeyboard(sf::Event event)
 {
 	if (event.type == sf::Event::KeyPressed)
 	{
-		if (event.key.code == sf::Keyboard::W && numberOfJumps > 0 && !collisionWithLadder)
+		if (event.key.code == sf::Keyboard::W && this->numberOfJumps > 0
+			&& !this->collisionWithLadder)
 		{
-			numberOfJumps--;
-			pressedJump = true;
+			this->numberOfJumps--;
+			this->pressedJump = true;
 		}
 		if (event.key.code == sf::Keyboard::A)
 		{
@@ -93,12 +95,13 @@ void Player::updateKeyboard(sf::Event event)
 			this->isMovingRight = true;
 			this->isMovingLeft = false;
 		}
-		if (event.key.code == sf::Keyboard::W && collisionWithLadder)
+		if (event.key.code == sf::Keyboard::W && this->collisionWithLadder && this->canClimbUp)
 		{
 			this->isClimbing = true;
 			this->setVelocity(sf::Vector2f(0.f, -3.f));
 		}
-		else if (event.key.code == sf::Keyboard::S && collisionWithLadder && canClimbDown)
+		else if (event.key.code == sf::Keyboard::S && this->collisionWithLadder
+			&& this->canClimbDown)
 		{
 			this->isClimbing = true;
 			this->setVelocity(sf::Vector2f(0.f, 3.f));
@@ -115,9 +118,11 @@ void Player::updateKeyboard(sf::Event event)
 			this->isMovingRight = false;
 		}
 		else if ((event.key.code == sf::Keyboard::W || event.key.code == sf::Keyboard::S)
-			&& collisionWithLadder)
+			&& this->collisionWithLadder)
 		{
+			this->isClimbing = false;
 			this->setVelocity(sf::Vector2f(0.f, 0.f));
+			stopFalling();
 		}
 	}
 }
@@ -126,13 +131,13 @@ void Player::updateAnimation()
 {
 	PlayerAnimationState prevState = this->animationState;
 
-	if (this->velocity.y > 0 && !collisionWithLadder)
+	if (this->velocity.y > 0 && !this->collisionWithLadder)
 		this->animationState = PlayerAnimationState::FALLING;
-	else if (this->velocity.y > 0 && collisionWithLadder)
+	else if (this->velocity.y > 0 && this->collisionWithLadder)
 		this->animationState = PlayerAnimationState::CLIMBING;
-	else if (this->velocity.y < 0 && !collisionWithLadder)
+	else if (this->velocity.y < 0 && !this->collisionWithLadder)
 		this->animationState = PlayerAnimationState::JUMPING;
-	else if (this->velocity.y < 0 && collisionWithLadder)
+	else if (this->velocity.y < 0 && this->collisionWithLadder)
 		this->animationState = PlayerAnimationState::CLIMBING;
 	else
 	{
@@ -217,7 +222,7 @@ void Player::updatePhysics()
 		this->pressedJump = false;
 	}
 
-	if (this->isClimbing)
+	if (this->collisionWithLadder && !this->isMovingLeft && !this->isMovingRight)
 	{
 		this->gravity = 0.0f;
 		this->maxVelocity = sf::Vector2f(3.f, 3.f);
