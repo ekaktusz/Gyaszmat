@@ -51,11 +51,6 @@ Player::Player()
 	this->isMovingLeft = false;
 	this->isMovingRight = false;
 	this->pressedJump = false;
-	this->collisionWithLadder = false;
-	this->canClimbDown = false;
-	this->canClimbUp = false;
-	this->firstClimb = false;
-	this->isClimbing = false;
 }
 
 Player::~Player()
@@ -95,15 +90,18 @@ void Player::updateKeyboard(sf::Event event)
 			this->isMovingRight = true;
 			this->isMovingLeft = false;
 		}
-		if (event.key.code == sf::Keyboard::W && this->collisionWithLadder && this->canClimbUp)
+		if (event.key.code == sf::Keyboard::W && this->collisionWithLadder
+			&& (this->possibleClimbingDirection == PlayerPossibleClimbingDir::BOTH
+				|| this->possibleClimbingDirection == PlayerPossibleClimbingDir::UP))
 		{
-			this->isClimbing = true;
+			this->actualClimbingState = PlayerActualClimbingState::CLIMBINGUP;
 			this->setVelocity(sf::Vector2f(0.f, -3.f));
 		}
-		else if (event.key.code == sf::Keyboard::S && this->collisionWithLadder
-			&& this->canClimbDown)
+		else if (event.key.code == sf::Keyboard::S && this->collisionWithLadder 
+			&& (this->possibleClimbingDirection == PlayerPossibleClimbingDir::BOTH
+				|| this->possibleClimbingDirection == PlayerPossibleClimbingDir::DOWN))
 		{
-			this->isClimbing = true;
+			this->actualClimbingState = PlayerActualClimbingState::CLIMBINGDOWN;
 			this->setVelocity(sf::Vector2f(0.f, 3.f));
 		}
 	}
@@ -117,10 +115,10 @@ void Player::updateKeyboard(sf::Event event)
 		{
 			this->isMovingRight = false;
 		}
-		else if ((event.key.code == sf::Keyboard::W || event.key.code == sf::Keyboard::S)
-			&& this->collisionWithLadder)
+		else if ((event.key.code == sf::Keyboard::W || event.key.code == sf::Keyboard::S) && (this->actualClimbingState == PlayerActualClimbingState::CLIMBINGUP
+				|| this->actualClimbingState == PlayerActualClimbingState::CLIMBINGDOWN))
 		{
-			this->isClimbing = false;
+			this->actualClimbingState = PlayerActualClimbingState::CLIMBED;
 			this->setVelocity(sf::Vector2f(0.f, 0.f));
 			stopFalling();
 		}

@@ -13,14 +13,30 @@ enum class PlayerAnimationState
 	CLIMBING
 };
 
+enum class PlayerPossibleClimbingDir
+{
+	NONE = 0,
+	UP,
+	DOWN,
+	BOTH
+};
+
+enum class PlayerActualClimbingState
+{
+	NONE = 0,
+	CLIMBINGUP,
+	CLIMBINGDOWN,
+	CLIMBED
+};
+
 class Player : public Entity
 {
 public:
-	bool collisionWithLadder;
-	bool canClimbDown;
-	bool canClimbUp;
-	bool firstClimb;
-	bool isClimbing;
+
+	bool isResolved = false;
+	PlayerPossibleClimbingDir possibleClimbingDirection = PlayerPossibleClimbingDir::NONE;
+	PlayerActualClimbingState actualClimbingState = PlayerActualClimbingState::NONE;
+	bool collisionWithLadder = false;
 
 private:
 	static const short MAX_NUMBER_OF_JUMPS = 2;
