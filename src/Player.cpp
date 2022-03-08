@@ -51,6 +51,13 @@ Player::Player()
 	this->isMovingLeft = false;
 	this->isMovingRight = false;
 	this->pressedJump = false;
+
+	// Ladder
+	this->collisionWithLadder = false;
+	this->resolved = false;
+
+	this->possibleClimbingDirection = PlayerPossibleClimbingDir::NONE;
+	this->actualClimbingState = PlayerActualClimbingState::NONE;
 }
 
 Player::~Player()
@@ -80,6 +87,7 @@ void Player::updateKeyboard(sf::Event event)
 			this->numberOfJumps--;
 			this->pressedJump = true;
 		}
+
 		if (event.key.code == sf::Keyboard::A)
 		{
 			this->isMovingLeft = true;
@@ -90,6 +98,7 @@ void Player::updateKeyboard(sf::Event event)
 			this->isMovingRight = true;
 			this->isMovingLeft = false;
 		}
+
 		if (event.key.code == sf::Keyboard::W && this->collisionWithLadder
 			&& (this->possibleClimbingDirection == PlayerPossibleClimbingDir::BOTH
 				|| this->possibleClimbingDirection == PlayerPossibleClimbingDir::UP))
@@ -97,7 +106,7 @@ void Player::updateKeyboard(sf::Event event)
 			this->actualClimbingState = PlayerActualClimbingState::CLIMBINGUP;
 			this->setVelocity(sf::Vector2f(0.f, -3.f));
 		}
-		else if (event.key.code == sf::Keyboard::S && this->collisionWithLadder 
+		else if (event.key.code == sf::Keyboard::S && this->collisionWithLadder
 			&& (this->possibleClimbingDirection == PlayerPossibleClimbingDir::BOTH
 				|| this->possibleClimbingDirection == PlayerPossibleClimbingDir::DOWN))
 		{
@@ -115,7 +124,8 @@ void Player::updateKeyboard(sf::Event event)
 		{
 			this->isMovingRight = false;
 		}
-		else if ((event.key.code == sf::Keyboard::W || event.key.code == sf::Keyboard::S) && (this->actualClimbingState == PlayerActualClimbingState::CLIMBINGUP
+		else if ((event.key.code == sf::Keyboard::W || event.key.code == sf::Keyboard::S)
+			&& (this->actualClimbingState == PlayerActualClimbingState::CLIMBINGUP
 				|| this->actualClimbingState == PlayerActualClimbingState::CLIMBINGDOWN))
 		{
 			this->actualClimbingState = PlayerActualClimbingState::CLIMBED;
@@ -184,11 +194,13 @@ void Player::updateAnimation()
 	{
 		setAnimation(0.3f, jumpingTexture);
 	}
-	else if (this->animationState == PlayerAnimationState::CLIMBING && this->actualClimbingState == PlayerActualClimbingState::CLIMBED)
+	else if (this->animationState == PlayerAnimationState::CLIMBING
+		&& this->actualClimbingState == PlayerActualClimbingState::CLIMBED)
 	{
 		setAnimation(0.3f, climbingTexture, true);
 	}
-	else if (this->animationState == PlayerAnimationState::CLIMBING	&& this->actualClimbingState != PlayerActualClimbingState::CLIMBED)
+	else if (this->animationState == PlayerAnimationState::CLIMBING
+		&& this->actualClimbingState != PlayerActualClimbingState::CLIMBED)
 	{
 		setAnimation(0.3f, climbingTexture);
 	}
@@ -211,7 +223,7 @@ void Player::setAnimation(float timePeriod, sf::Texture& animationTexture, bool 
 			}
 			this->animationTimer.restart();
 		}
-		
+
 		this->sprite.setTextureRect(this->currentFrame);
 	}
 }
@@ -230,7 +242,8 @@ void Player::updatePhysics()
 		this->pressedJump = false;
 	}
 
-	if (this->collisionWithLadder && !this->isMovingLeft && !this->isMovingRight)
+	//if (this->collisionWithLadder && !this->isMovingLeft && !this->isMovingRight)
+	if (this->actualClimbingState != PlayerActualClimbingState::NONE)
 	{
 		this->gravity = 0.0f;
 		this->maxVelocity = sf::Vector2f(3.f, 3.f);
@@ -323,4 +336,44 @@ const sf::Vector2f Player::getVelocity() const
 void Player::updateHitbox()
 {
 	this->hitbox.update(this->sprite.getPosition());
+}
+
+const bool Player::isCollidingWithLadder() const
+{
+	return this->collisionWithLadder;
+}
+
+const bool Player::isResolved() const
+{
+	return this->resolved;
+}
+
+const PlayerPossibleClimbingDir Player::getPossibleClimbingDirections() const
+{
+	return this->possibleClimbingDirection;
+}
+
+const PlayerActualClimbingState Player::getActualClimbingState() const
+{
+	return this->actualClimbingState;
+}
+
+void Player::setCollisionWithLadder(bool newCollisionWithLaddertate)
+{
+	this->collisionWithLadder = newCollisionWithLaddertate;
+}
+
+void Player::setResolved(bool newResolvedState)
+{
+	this->resolved = newResolvedState;
+}
+
+void Player::setPossibleClimbingDirections(PlayerPossibleClimbingDir directionToSet)
+{
+	this->possibleClimbingDirection = directionToSet;
+}
+
+void Player::setActualClimbingState(PlayerActualClimbingState stateToSet)
+{
+	this->actualClimbingState = stateToSet;
 }

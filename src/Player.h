@@ -31,15 +31,6 @@ enum class PlayerActualClimbingState
 
 class Player : public Entity
 {
-public:
-
-	bool isResolved = false;
-	PlayerPossibleClimbingDir possibleClimbingDirection = PlayerPossibleClimbingDir::NONE;
-	PlayerActualClimbingState actualClimbingState = PlayerActualClimbingState::NONE;
-	bool collisionWithLadder = false;
-	float gravity;
-
-
 private:
 	static const short MAX_NUMBER_OF_JUMPS = 2;
 
@@ -66,6 +57,7 @@ private:
 
 	float acceleration;
 	float drag;
+	float gravity;
 	float jumpSpeed;
 	short numberOfJumps;
 	float movementModifier;
@@ -74,6 +66,12 @@ private:
 	bool isMovingLeft;
 	bool isMovingRight;
 	bool pressedJump;
+
+	// Ladder
+	bool collisionWithLadder;
+	bool resolved;
+	PlayerPossibleClimbingDir possibleClimbingDirection;
+	PlayerActualClimbingState actualClimbingState;
 
 	void resetAnimationTimer();
 	void setAnimation(float timePeriod, sf::Texture& animationTexture, bool stopped = false);
@@ -104,4 +102,15 @@ public:
 	const sf::Vector2f getVelocity() const;
 
 	const sf::Vector2f getCenterPosition() const;
+
+	// Ladder:
+	const bool isCollidingWithLadder() const;
+	const bool isResolved() const;
+	const PlayerPossibleClimbingDir getPossibleClimbingDirections() const;
+	const PlayerActualClimbingState getActualClimbingState() const;
+
+	void setCollisionWithLadder(bool newCollisionWithLaddertate);
+	void setResolved(bool newResolvedState);
+	void setPossibleClimbingDirections(PlayerPossibleClimbingDir directionToSet);
+	void setActualClimbingState(PlayerActualClimbingState stateToSet);
 };

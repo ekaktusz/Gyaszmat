@@ -75,9 +75,9 @@ void Game::updateCollision()
 	std::vector<sf::FloatRect> ladderTopBounds = this->ladderTopLayer->getObjectBounds();
 	std::vector<sf::FloatRect> ladderBottomBounds = this->ladderBottomLayer->getObjectBounds();
 
-	this->player.isResolved = false;
-	this->player.collisionWithLadder = false;
-	this->player.possibleClimbingDirection = PlayerPossibleClimbingDir::NONE;
+	this->player.setResolved(false);
+	this->player.setCollisionWithLadder(false);
+	this->player.setPossibleClimbingDirections(PlayerPossibleClimbingDir::NONE);
 
 	sf::FloatRect overlap;
 
@@ -86,7 +86,7 @@ void Game::updateCollision()
 	{
 		if (objectBound.intersects(playerBound, overlap))
 		{
-			if (!this->player.isResolved)
+			if (!this->player.isResolved())
 			{
 				auto collisionNormal = sf::Vector2f(objectBound.left, objectBound.top)
 					- sf::Vector2f(playerBound.left, playerBound.top);
@@ -101,8 +101,8 @@ void Game::updateCollision()
 		if (ladderBottomBound.intersects(playerBound, overlap))
 		{
 			// a letra aljan allsz, csak felfele mehetsz, nem kell resolve
-			this->player.possibleClimbingDirection = PlayerPossibleClimbingDir::UP;
-			this->player.collisionWithLadder = true;
+			this->player.setPossibleClimbingDirections(PlayerPossibleClimbingDir::UP);
+			this->player.setCollisionWithLadder(true);
 			//SPDLOG_INFO("BOTTOM");
 		}
 	}
@@ -112,8 +112,8 @@ void Game::updateCollision()
 		if (ladderBound.intersects(playerBound, overlap))
 		{
 			// a letra kozepen allsz, barmerre mehetsz, nem kell resolve
-			this->player.possibleClimbingDirection = PlayerPossibleClimbingDir::BOTH;
-			this->player.collisionWithLadder = true;
+			this->player.setPossibleClimbingDirections(PlayerPossibleClimbingDir::BOTH);
+			this->player.setCollisionWithLadder(true);
 			//SPDLOG_INFO("MID");
 		}
 	}
@@ -124,33 +124,33 @@ void Game::updateCollision()
 		if (ladderTopBound.intersects(playerBound, overlap))
 		{
 			// a letra tetejen allsz, barmerre mehetsz, kell resolve ha felette vagy es nem nyomod lefele
-			this->player.possibleClimbingDirection = PlayerPossibleClimbingDir::BOTH;
-			this->player.collisionWithLadder = true;
+			this->player.setPossibleClimbingDirections(PlayerPossibleClimbingDir::BOTH);
+			this->player.setCollisionWithLadder(true);
 
-			if (this->player.actualClimbingState == PlayerActualClimbingState::NONE && !this->player.isResolved)
+			if (this->player.getActualClimbingState() == PlayerActualClimbingState::NONE
+				&& !this->player.isResolved())
 			{
 				auto collisionNormal = sf::Vector2f(ladderTopBound.left, ladderTopBound.top)
 					- sf::Vector2f(playerBound.left, playerBound.top);
 				resolveCollision(overlap, collisionNormal);
-				this->player.possibleClimbingDirection = PlayerPossibleClimbingDir::DOWN;
-				this->player.actualClimbingState = PlayerActualClimbingState::NONE;
+				this->player.setPossibleClimbingDirections(PlayerPossibleClimbingDir::DOWN);
+				this->player.setActualClimbingState(PlayerActualClimbingState::NONE);
 				//SPDLOG_INFO("TOP");
 			}
-
 		}
 	}
 
-	if (!this->player.collisionWithLadder)
+	if (!this->player.isCollidingWithLadder())
 	{
-		this->player.actualClimbingState = PlayerActualClimbingState::NONE;
+		this->player.setActualClimbingState(PlayerActualClimbingState::NONE);
 	}
 
-	SPDLOG_INFO("{}", this->player.gravity);
+	//SPDLOG_INFO("RRR {} {}", this->player.gravity, this->player.actualClimbingState);
 }
 
 void Game::resolveCollision(const sf::FloatRect& overlap, const sf::Vector2f& collisionNormal)
 {
-	this->player.isResolved = true;
+	this->player.setResolved(true);
 
 	//the collision normal is stored in x and y, with the penetration in z
 	sf::Vector3f manifold;
