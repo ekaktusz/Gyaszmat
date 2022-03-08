@@ -37,6 +37,8 @@ public:
 	PlayerPossibleClimbingDir possibleClimbingDirection = PlayerPossibleClimbingDir::NONE;
 	PlayerActualClimbingState actualClimbingState = PlayerActualClimbingState::NONE;
 	bool collisionWithLadder = false;
+	float gravity;
+
 
 private:
 	static const short MAX_NUMBER_OF_JUMPS = 2;
@@ -64,7 +66,6 @@ private:
 
 	float acceleration;
 	float drag;
-	float gravity;
 	float jumpSpeed;
 	short numberOfJumps;
 	float movementModifier;
