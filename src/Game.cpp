@@ -10,7 +10,7 @@ Game::Game() : renderWindow({ Game::XX, Game::YY }, Game::name)
 	this->objectLayer = new MapLayer(map, 3);
 	this->view = sf::View(sf::Vector2f(0.f, 0.f), sf::Vector2f(Game::XX, Game::YY));
 	this->renderWindow.setView(this->view);
-	this->renderWindow.setFramerateLimit(Game::FPS);
+	this->renderWindow.setFramerateLimit(Game::MAX_FPS);
 	this->playerHealthBar = new HealthBar(100, 100);
 }
 
@@ -27,6 +27,8 @@ void Game::run()
 {
 	while (this->renderWindow.isOpen())
 	{
+		this->deltaTime = this->clock.restart().asSeconds();
+		this->currentFPS = std::round(1 / deltaTime);
 		this->update();
 		this->render();
 	}

@@ -11,7 +11,7 @@ private:
 	static const unsigned int XX = 800;
 	static const unsigned int YY = 600;
 	const std::string name = "Gyaszmat";
-	static const unsigned int FPS = 60;
+	static const unsigned int MAX_FPS = 60;
 
 	Player player;
 	std::vector<Enemy> enemies;
@@ -21,7 +21,8 @@ private:
 	sf::Event event;
 
 	sf::Clock clock;
-	sf::Time deltaTime;
+	float deltaTime;
+	int currentFPS;
 
 	tmx::Map map;
 	MapLayer* tileLayerFar;
@@ -30,6 +31,7 @@ private:
 	MapLayer* objectLayer;
 
 	HealthBar* playerHealthBar;
+
 
 	void render();
 	void update();

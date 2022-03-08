@@ -18,8 +18,10 @@ private:
 	sf::Text text;
 	sf::Font& font;
 
+	void alignTextToMid();
+
 public:
-	HealthBar();
+	HealthBar() = delete;
 	HealthBar(unsigned int health, unsigned int maxHealth);
 	~HealthBar();
 	void setOffset(const sf::Vector2f& offsetFromTopLeft);

@@ -1,7 +1,5 @@
 #include "HealthBar.h"
 
-HealthBar::HealthBar() : font(*(new sf::Font()))
-{}
 
 HealthBar::~HealthBar()
 {
@@ -38,16 +36,10 @@ HealthBar::HealthBar(unsigned int health, unsigned int maxHealth) :
 		SPDLOG_ERROR("Font loading failed!");
 	}
 	this->text.setFont((this->font));
-	SPDLOG_INFO("FASSZT1");
-	// this->text.setString("[" + std::to_string(health) + "/" + std::to_string(maxHealth)
-	//	+ "]"); // can be change to std::format after we support c++20
-	this->text.setString("FASSZT");
-	// this->text.setColor(sf::Color::Blue);
-	// this->text.setFillColor(sf::Color::Blue);
-	// this->text.setCharacterSize(this->height - 2);
-	// this->text.setPosition(this->maxHealthBar.getPosition().x + this->length / 2,
-	//	this->maxHealthBar.getPosition().y + 1);
-	// this->text.setStyle(sf::Text::Bold | sf::Text::Underlined);
+	this->text.setString("[" + std::to_string(health) + "/" + std::to_string(maxHealth) + "]"); // can be change to std::format after we support c++20
+	this->text.setFillColor(sf::Color::White);
+	this->text.setCharacterSize(this->height - 4);
+	this->alignTextToMid();
 }
 
 void HealthBar::setOffset(const sf::Vector2f& offsetFromTopLeft)
@@ -59,14 +51,11 @@ void HealthBar::setPosition(const sf::Vector2f& position)
 {
 	this->healthBar.setPosition(position + this->offsetFromTopLeft);
 	this->maxHealthBar.setPosition(position + this->offsetFromTopLeft);
-	//this->text.setPosition(this->maxHealthBar.getPosition().x + this->length / 2,
-	//	this->maxHealthBar.getPosition().y + 1);
+	this->alignTextToMid();
 }
 
 void HealthBar::draw(sf::RenderTarget& target, sf::RenderStates states) const
 {
-	SPDLOG_INFO((this->font.getInfo().family));
-	SPDLOG_INFO((this->text.getFont()->getInfo().family));
 	target.draw(this->maxHealthBar);
 	target.draw(this->healthBar);
 	target.draw(this->text);
@@ -75,4 +64,11 @@ void HealthBar::draw(sf::RenderTarget& target, sf::RenderStates states) const
 void HealthBar::update(unsigned int health)
 {
 	this->health = health;
+}
+
+void HealthBar::alignTextToMid()
+{
+	this->text.setPosition(
+		this->maxHealthBar.getPosition().x + this->length / 2 - this->text.getGlobalBounds().width / 2,
+		this->maxHealthBar.getPosition().y);
 }
