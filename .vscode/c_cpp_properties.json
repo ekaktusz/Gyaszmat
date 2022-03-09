@@ -37,16 +37,17 @@
         },
         {
             "name": "Win32",
-            "intelliSenseMode": "windows-gcc-x86",
-            "cStandard": "c11",
+            "intelliSenseMode": "windows-msvc-x64",
+            "cStandard": "c17",
             "cppStandard": "c++17",
-            "compilerPath": "C:/mingw32/bin/gcc.exe",
+            "compilerPath": "C:/Program Files/Microsoft Visual Studio/2022/Community/VC/Tools/MSVC/14.30.30705/bin/Hostx64/x64/cl.exe",
             "includePath": [
                 "${workspaceFolder}/src",
-                "C:/SFML-2.5.1/include"
+                "${workspaceFolder}/include/SFML/include",
+                "${workspaceFolder}/include"
             ],
             "forcedInclude": [
-                "${workspaceFolder}/src/pch.hpp"
+                "${workspaceFolder}/src/pch.h"
             ]
         }
     ],

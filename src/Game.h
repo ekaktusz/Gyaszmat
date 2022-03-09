@@ -1,8 +1,9 @@
 #pragma once
 
 #include "Enemy.h"
-#include "Player.h"
+#include "HealthBar.h"
 #include "MapLayer.h"
+#include "Player.h"
 
 class Game
 {
@@ -10,7 +11,7 @@ private:
 	static const unsigned int XX = 800;
 	static const unsigned int YY = 600;
 	const std::string name = "Gyaszmat";
-	static const unsigned int FPS = 60;
+	static const unsigned int MAX_FPS = 60;
 
 	Player player;
 	std::vector<Enemy> enemies;
@@ -20,13 +21,17 @@ private:
 	sf::Event event;
 
 	sf::Clock clock;
-	sf::Time deltaTime;
+	float deltaTime;
+	int currentFPS;
 
 	tmx::Map map;
 	MapLayer* tileLayerFar;
 	MapLayer* tileLayerMiddle;
 	MapLayer* tileLayerNear;
 	MapLayer* objectLayer;
+
+	HealthBar* playerHealthBar;
+
 
 	void render();
 	void update();

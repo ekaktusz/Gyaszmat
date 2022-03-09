@@ -15,6 +15,10 @@ enum class PlayerAnimationState
 class Player : public Entity
 {
 private:
+	// Game parameters
+	unsigned int health;
+	unsigned int maxHealth;
+
 	static const short MAX_NUMBER_OF_JUMPS = 2;
 
 	// Hitbox
@@ -60,6 +64,9 @@ private:
 public:
 	Player();
 	~Player();
+
+	unsigned int getHealth();
+	unsigned int getMaxHealth();
 
 	bool getAnimationSwitch();
 	const Hitbox& getHitbox() const;

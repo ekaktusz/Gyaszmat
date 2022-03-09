@@ -9,7 +9,9 @@ Game::Game() : renderWindow({ Game::XX, Game::YY }, Game::name)
 	this->tileLayerNear = new MapLayer(map, 2);
 	this->objectLayer = new MapLayer(map, 3);
 	this->view = sf::View(sf::Vector2f(0.f, 0.f), sf::Vector2f(Game::XX, Game::YY));
-	this->renderWindow.setFramerateLimit(Game::FPS);
+	this->renderWindow.setView(this->view);
+	this->renderWindow.setFramerateLimit(Game::MAX_FPS);
+	this->playerHealthBar = new HealthBar(100, 100);
 }
 
 Game::~Game()
@@ -18,12 +20,15 @@ Game::~Game()
 	delete tileLayerMiddle;
 	delete tileLayerNear;
 	delete objectLayer;
+	delete playerHealthBar;
 }
 
 void Game::run()
 {
 	while (this->renderWindow.isOpen())
 	{
+		this->deltaTime = this->clock.restart().asSeconds();
+		this->currentFPS = std::round(1 / deltaTime);
 		this->update();
 		this->render();
 	}
@@ -33,7 +38,11 @@ void Game::update()
 {
 	this->processEvents();
 	this->player.update();
+	this->view.setCenter(this->player.getCenterPosition() - sf::Vector2f(0.f, Game::XX / 6));
 	this->updateCollision();
+	this->playerHealthBar->update(this->player.getHealth());
+	this->playerHealthBar->setPosition(
+		sf::Vector2f(this->view.getCenter() - sf::Vector2f(Game::XX / 2, Game::YY / 2)));
 }
 
 void Game::processEvents()
@@ -52,12 +61,12 @@ void Game::processEvents()
 void Game::render()
 {
 	this->renderWindow.clear();
+	this->renderWindow.setView(this->view);
 	this->renderWindow.draw(*this->tileLayerFar);	 // layer behind player
 	this->renderWindow.draw(*this->tileLayerMiddle); // layer of map
 	this->renderWindow.draw(this->player);
 	this->renderWindow.draw(*this->tileLayerNear); // layer vefore player
-	this->view.setCenter(this->player.getCenterPosition());
-	this->renderWindow.setView(this->view);
+	this->renderWindow.draw(*this->playerHealthBar);
 	this->renderWindow.display();
 }
 
@@ -72,7 +81,8 @@ void Game::updateCollision()
 	{
 		if (objectBound.intersects(playerBound, overlap))
 		{
-			auto collisionNormal = sf::Vector2f(objectBound.left, objectBound.top) - sf::Vector2f(playerBound.left, playerBound.top);
+			auto collisionNormal = sf::Vector2f(objectBound.left, objectBound.top)
+				- sf::Vector2f(playerBound.left, playerBound.top);
 			resolveCollision(overlap, collisionNormal);
 		}
 	}

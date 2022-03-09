@@ -48,10 +48,24 @@ Player::Player()
 	this->isMovingLeft = false;
 	this->isMovingRight = false;
 	this->pressedJump = false;
+
+	// Health kaland
+	this->maxHealth = 100;
+	this->health = this->maxHealth;
 }
 
 Player::~Player()
 {}
+
+unsigned int Player::getHealth()
+{
+	return this->health;
+}
+
+unsigned int Player::getMaxHealth()
+{
+	return this->maxHealth;
+}
 
 void Player::draw(sf::RenderTarget& target, sf::RenderStates states) const
 {
