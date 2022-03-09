@@ -38,7 +38,10 @@ void Game::update()
 {
 	this->processEvents();
 	this->player.update();
-	this->view.setCenter(this->player.getCenterPosition() - sf::Vector2f(0.f, Game::XX / 6));
+	sf::Vector2f movement =
+		player.getCenterPosition() - view.getCenter() - sf::Vector2f(0.f, Game::XX / 10);
+	this->view.move(movement * this->deltaTime * 10.f);
+	//this->view.setCenter(this->player.getCenterPosition() - sf::Vector2f(0.f, Game::XX / 6));
 	this->updateCollision();
 	this->playerHealthBar->update(this->player.getHealth());
 	this->playerHealthBar->setPosition(
