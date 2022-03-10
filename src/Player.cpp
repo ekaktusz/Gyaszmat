@@ -242,7 +242,6 @@ void Player::updatePhysics()
 		this->pressedJump = false;
 	}
 
-	//if (this->collisionWithLadder && !this->isMovingLeft && !this->isMovingRight)
 	if (this->actualClimbingState != PlayerActualClimbingState::NONE)
 	{
 		this->gravity = 0.0f;

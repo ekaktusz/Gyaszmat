@@ -86,13 +86,9 @@ void Game::updateCollision()
 	{
 		if (objectBound.intersects(playerBound, overlap))
 		{
-			if (!this->player.isResolved())
-			{
-				auto collisionNormal = sf::Vector2f(objectBound.left, objectBound.top)
-					- sf::Vector2f(playerBound.left, playerBound.top);
-				resolveCollision(overlap, collisionNormal);
-				//SPDLOG_INFO("PLATFORM");
-			}
+			sf::Vector2<float> collisionNormal = sf::Vector2f(objectBound.left, objectBound.top)
+				- sf::Vector2f(playerBound.left, playerBound.top);
+			resolveCollision(overlap, collisionNormal);
 		}
 	}
 
@@ -103,7 +99,6 @@ void Game::updateCollision()
 			// a letra aljan allsz, csak felfele mehetsz, nem kell resolve
 			this->player.setPossibleClimbingDirections(PlayerPossibleClimbingDir::UP);
 			this->player.setCollisionWithLadder(true);
-			//SPDLOG_INFO("BOTTOM");
 		}
 	}
 
@@ -114,7 +109,6 @@ void Game::updateCollision()
 			// a letra kozepen allsz, barmerre mehetsz, nem kell resolve
 			this->player.setPossibleClimbingDirections(PlayerPossibleClimbingDir::BOTH);
 			this->player.setCollisionWithLadder(true);
-			//SPDLOG_INFO("MID");
 		}
 	}
 
@@ -130,12 +124,12 @@ void Game::updateCollision()
 			if (this->player.getActualClimbingState() == PlayerActualClimbingState::NONE
 				&& !this->player.isResolved())
 			{
-				auto collisionNormal = sf::Vector2f(ladderTopBound.left, ladderTopBound.top)
+				sf::Vector2<float> collisionNormal =
+					sf::Vector2f(ladderTopBound.left, ladderTopBound.top)
 					- sf::Vector2f(playerBound.left, playerBound.top);
 				resolveCollision(overlap, collisionNormal);
 				this->player.setPossibleClimbingDirections(PlayerPossibleClimbingDir::DOWN);
 				this->player.setActualClimbingState(PlayerActualClimbingState::NONE);
-				//SPDLOG_INFO("TOP");
 			}
 		}
 	}
