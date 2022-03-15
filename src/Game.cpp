@@ -26,7 +26,7 @@ void Game::run()
 {
 	sf::Clock clock;
 	sf::Time timeSinceLastUpdate = sf::Time::Zero;
-	sf::Time timePerFrame = sf::seconds(1.f / 60.f);
+	sf::Time timePerFrame = sf::seconds(1.f / Game::MAX_FPS);
 	while (this->renderWindow.isOpen())
 	{
 		sf::Time elapsedTime = clock.restart();
