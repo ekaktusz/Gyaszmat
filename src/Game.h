@@ -21,8 +21,6 @@ private:
 	sf::Event event;
 
 	sf::Clock clock;
-	float deltaTime;
-	int currentFPS;
 
 	tmx::Map map;
 	MapLayer* tileLayerFar;
@@ -34,7 +32,7 @@ private:
 
 
 	void render();
-	void update();
+	void update(sf::Time deltaTime);
 	void updateCollision();
 	void processEvents();
 	void resolveCollision(const sf::FloatRect& overlap, const sf::Vector2f& collisionNormal);

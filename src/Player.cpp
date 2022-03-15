@@ -81,7 +81,7 @@ void Player::update()
 	this->updateHitbox();
 }
 
-void Player::updateKeyboard(sf::Event event)
+void Player::handleKeyboardInput(sf::Event event)
 {
 	if (event.type == sf::Event::KeyPressed)
 	{
