@@ -10,7 +10,6 @@ Game::Game() : renderWindow({ Game::XX, Game::YY }, Game::name)
 	this->objectLayer = new MapLayer(map, 3);
 	this->view = sf::View(sf::Vector2f(0.f, 0.f), sf::Vector2f(Game::XX, Game::YY));
 	this->renderWindow.setView(this->view);
-	this->renderWindow.setFramerateLimit(Game::MAX_FPS);
 	this->playerHealthBar = new HealthBar(100, 100);
 }
 
@@ -25,22 +24,29 @@ Game::~Game()
 
 void Game::run()
 {
+	sf::Clock clock;
+	sf::Time timeSinceLastUpdate = sf::Time::Zero;
+	sf::Time timePerFrame = sf::seconds(1.f / Game::MAX_FPS);
 	while (this->renderWindow.isOpen())
 	{
-		this->deltaTime = this->clock.restart().asSeconds();
-		this->currentFPS = std::round(1 / deltaTime);
-		this->update();
+		sf::Time elapsedTime = clock.restart();
+		timeSinceLastUpdate += elapsedTime;
+		while (timeSinceLastUpdate > timePerFrame)
+		{
+			timeSinceLastUpdate -= timePerFrame;
+			processEvents();
+			this->update(timePerFrame);
+		}
 		this->render();
 	}
 }
 
-void Game::update()
+void Game::update(sf::Time deltaTime)
 {
-	this->processEvents();
 	this->player.update();
 	sf::Vector2f movement =
 		player.getCenterPosition() - view.getCenter() - sf::Vector2f(0.f, Game::XX / 10);
-	this->view.move(movement * this->deltaTime * 10.f);
+	this->view.move(movement * deltaTime.asSeconds() * 10.f);
 	//this->view.setCenter(this->player.getCenterPosition() - sf::Vector2f(0.f, Game::XX / 6));
 	this->updateCollision();
 	this->playerHealthBar->update(this->player.getHealth());
@@ -57,7 +63,7 @@ void Game::processEvents()
 		{
 			this->renderWindow.close();
 		}
-		this->player.updateKeyboard(this->event);
+		this->player.handleKeyboardInput(this->event);
 	}
 }
 

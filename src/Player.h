@@ -74,7 +74,7 @@ public:
 	void draw(sf::RenderTarget& target, sf::RenderStates states) const;
 
 	void update();
-	void updateKeyboard(sf::Event event);
+	void handleKeyboardInput(sf::Event event);
 
 	void stopFalling();
 	void move(const sf::Vector2f& offset);
