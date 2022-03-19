@@ -9,7 +9,24 @@ enum class PlayerAnimationState
 	MOVING_LEFT,
 	MOVING_RIGHT,
 	JUMPING,
-	FALLING
+	FALLING,
+	CLIMBING
+};
+
+enum class PlayerPossibleClimbingDir
+{
+	NONE = 0,
+	UP,
+	DOWN,
+	BOTH
+};
+
+enum class PlayerActualClimbingState
+{
+	NONE = 0,
+	CLIMBINGUP,
+	CLIMBINGDOWN,
+	CLIMBED
 };
 
 class Player : public Entity
@@ -28,6 +45,7 @@ private:
 	sf::Texture idleTexture;
 	sf::Texture movingTexture;
 	sf::Texture jumpingTexture;
+	sf::Texture climbingTexture;
 	sf::Sprite sprite;
 
 	// Animation
@@ -53,8 +71,14 @@ private:
 	bool isMovingRight;
 	bool pressedJump;
 
+	// Ladder
+	bool collisionWithLadder;
+	bool resolved;
+	PlayerPossibleClimbingDir possibleClimbingDirection;
+	PlayerActualClimbingState actualClimbingState;
+
 	void resetAnimationTimer();
-	void setAnimation(float timePeriod, sf::Texture& animationTexture);
+	void setAnimation(float timePeriod, sf::Texture& animationTexture, bool stopped = false);
 
 	// Update methods
 	void updateAnimation();
@@ -85,4 +109,15 @@ public:
 	const sf::Vector2f getVelocity() const;
 
 	const sf::Vector2f getCenterPosition() const;
+
+	// Ladder:
+	const bool isCollidingWithLadder() const;
+	const bool isResolved() const;
+	const PlayerPossibleClimbingDir getPossibleClimbingDirections() const;
+	const PlayerActualClimbingState getActualClimbingState() const;
+
+	void setCollisionWithLadder(bool newCollisionWithLaddertate);
+	void setResolved(bool newResolvedState);
+	void setPossibleClimbingDirections(PlayerPossibleClimbingDir directionToSet);
+	void setActualClimbingState(PlayerActualClimbingState stateToSet);
 };
