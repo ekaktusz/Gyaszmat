@@ -7,8 +7,9 @@ class MapLayer final : public sf::Drawable
 public:
 	MapLayer(const MapLayer&) = delete;
 	MapLayer(const tmx::Map& map, std::size_t idx);
+	MapLayer(const tmx::Map& map, const std::string& name);
 	~MapLayer() = default;
-	
+
 	MapLayer& operator=(const MapLayer&) = delete;
 
 	const sf::FloatRect& getGlobalBounds() const;
@@ -50,14 +51,14 @@ private:
 	public:
 		using Ptr = std::unique_ptr<Chunk>;
 
-		// the Android OpenGL driver isn't capable of rendering quads,
-		// so we need to use two triangles per tile instead
-		#ifdef __ANDROID__
+// the Android OpenGL driver isn't capable of rendering quads,
+// so we need to use two triangles per tile instead
+#ifdef __ANDROID__
 		using Tile = std::array<sf::Vertex, 6u>;
-		#endif
-		#ifndef __ANDROID__
+#endif
+#ifndef __ANDROID__
 		using Tile = std::array<sf::Vertex, 4u>;
-		#endif
+#endif
 
 		Chunk(const Chunk&) = delete;
 		Chunk(const tmx::TileLayer& layer, std::vector<const tmx::Tileset*> tilesets,
@@ -133,17 +134,17 @@ private:
 			void draw(sf::RenderTarget& rt, sf::RenderStates states) const override
 			{
 				states.texture = &m_texture;
-				#ifndef __ANDROID__
+#ifndef __ANDROID__
 				rt.draw(m_vertices.data(), m_vertices.size(), sf::Quads, states);
-				#endif
-				#ifdef __ANDROID__
+#endif
+#ifdef __ANDROID__
 				rt.draw(m_vertices.data(), m_vertices.size(), sf::Triangles, states);
-				#endif
+#endif
 			}
 		};
 
-		sf::Uint8 layerOpacity;		 // opacity of the layer
-		sf::Vector2f layerOffset;	 // Layer offset
+		sf::Uint8 layerOpacity;	  // opacity of the layer
+		sf::Vector2f layerOffset; // Layer offset
 
 		sf::Vector2u mapTileSize;	 // general Tilesize of Map
 		sf::Vector2f chunkTileCount; // chunk tilecount
@@ -160,14 +161,16 @@ private:
 
 	std::vector<Chunk::Ptr> m_chunks;
 	mutable std::vector<Chunk*> m_visibleChunks;
-	
+
 	Chunk::Ptr& getChunkAndTransform(int x, int y, sf::Vector2u& chunkRelative)
 	{
 		uint32_t chunkX = floor((x * m_MapTileSize.x) / m_chunkSize.x);
 		uint32_t chunkY = floor((y * m_MapTileSize.y) / m_chunkSize.y);
 		chunkRelative.x = ((x * m_MapTileSize.x) - chunkX * m_chunkSize.x) / m_MapTileSize.x;
 		chunkRelative.y = ((y * m_MapTileSize.y) - chunkY * m_chunkSize.y) / m_MapTileSize.y;
-		return m_chunks[chunkX + static_cast<std::vector<Chunk::Ptr, std::allocator<Chunk::Ptr>>::size_type>(chunkY) * m_chunkCount.x];
+		return m_chunks[chunkX
+			+ static_cast<std::vector<Chunk::Ptr, std::allocator<Chunk::Ptr>>::size_type>(chunkY)
+				* m_chunkCount.x];
 	}
 
 	void createChunks(const tmx::Map& map, const tmx::TileLayer& layer);

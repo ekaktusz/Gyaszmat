@@ -1,5 +1,29 @@
 #include "MapLayer.h"
 
+//by name
+MapLayer::MapLayer(const tmx::Map& map, const std::string& name)
+{
+	const auto& layers = map.getLayers();
+	for (size_t i = 0; i < layers.size(); i++)
+	{
+		if (layers[i]->getName() == name && map.getOrientation() == tmx::Orientation::Orthogonal
+			&& layers[i]->getType() == tmx::Layer::Type::Object)
+		{
+			const auto& objectLayer = layers[i]->getLayerAs<tmx::ObjectGroup>();
+			const auto& objects = objectLayer.getObjects();
+
+			for (const auto& object : objects)
+			{
+				tmx::FloatRect rect = object.getAABB();
+				objectBounds.push_back(sf::FloatRect(rect.left, rect.top, rect.width, rect.height));
+			}
+			SPDLOG_INFO("ObjectLayer: {}", name);
+			return;
+		}
+	}
+	SPDLOG_ERROR("Not a valid orthogonal layer, nothing will be drawn.");
+}
+
 MapLayer::MapLayer(const tmx::Map& map, std::size_t idx)
 {
 	const auto& layers = map.getLayers();
@@ -228,4 +252,3 @@ void MapLayer::draw(sf::RenderTarget& rt, sf::RenderStates states) const
 		rt.draw(*c, states);
 	}
 }
-

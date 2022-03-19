@@ -8,6 +8,7 @@ Game::Game() : renderWindow({ Game::XX, Game::YY }, Game::name)
 	this->tileLayerMiddle = new MapLayer(map, 1);
 	this->tileLayerNear = new MapLayer(map, 2);
 	this->objectLayer = new MapLayer(map, 3);
+	this->ladderLayer = new MapLayer(map, "ladder");
 	this->view = sf::View(sf::Vector2f(0.f, 0.f), sf::Vector2f(Game::XX, Game::YY));
 	this->renderWindow.setView(this->view);
 	this->playerHealthBar = new HealthBar(100, 100);
@@ -19,6 +20,7 @@ Game::~Game()
 	delete tileLayerMiddle;
 	delete tileLayerNear;
 	delete objectLayer;
+	delete ladderLayer;
 	delete playerHealthBar;
 }
 
@@ -83,6 +85,7 @@ void Game::updateCollision()
 {
 	sf::FloatRect playerBound = this->player.getHitbox().getGlobalBounds();
 	std::vector<sf::FloatRect> objectBounds = this->objectLayer->getObjectBounds();
+	std::vector<sf::FloatRect> ladderBounds = this->ladderLayer->getObjectBounds();
 
 	// collision detection with every object on object layer
 	sf::FloatRect overlap;
@@ -94,6 +97,18 @@ void Game::updateCollision()
 				- sf::Vector2f(playerBound.left, playerBound.top);
 			resolveCollision(overlap, collisionNormal);
 		}
+	}
+
+	for (const sf::FloatRect& objectBound : ladderBounds)
+	{
+		if (objectBound.intersects(playerBound, overlap))
+		{
+			//hit ladder
+			this->player.onLadder = true;
+			break;
+		}
+		this->player.onLadder = false;
+		this->player.isClimbing = false;
 	}
 }
 

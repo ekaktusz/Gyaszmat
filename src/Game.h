@@ -27,9 +27,9 @@ private:
 	MapLayer* tileLayerMiddle;
 	MapLayer* tileLayerNear;
 	MapLayer* objectLayer;
+	MapLayer* ladderLayer;
 
 	HealthBar* playerHealthBar;
-
 
 	void render();
 	void update(sf::Time deltaTime);

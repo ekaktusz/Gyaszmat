@@ -62,6 +62,9 @@ private:
 	void updateHitbox();
 
 public:
+	bool onLadder;
+	bool isClimbing;
+
 	Player();
 	~Player();
 

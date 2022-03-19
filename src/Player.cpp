@@ -85,11 +85,28 @@ void Player::handleKeyboardInput(sf::Event event)
 {
 	if (event.type == sf::Event::KeyPressed)
 	{
-		if (event.key.code == sf::Keyboard::W && numberOfJumps > 0)
+		if (event.key.code == sf::Keyboard::W)
 		{
-			numberOfJumps--;
-			pressedJump = true;
+			if (this->onLadder)
+			{
+				this->numberOfJumps = 0;
+				this->isClimbing = true;
+			}
+			else if (numberOfJumps > 0)
+			{
+				numberOfJumps--;
+				pressedJump = true;
+			}
 		}
+
+		if (event.key.code == sf::Keyboard::S)
+		{
+			if (this->onLadder)
+			{
+				this->isClimbing = true;
+			}
+		}
+
 		if (event.key.code == sf::Keyboard::A)
 		{
 			this->isMovingLeft = true;
@@ -189,6 +206,15 @@ void Player::setAnimation(float timePeriod, sf::Texture& animationTexture)
 
 void Player::updatePhysics()
 {
+
+	if (this->isClimbing)
+	{
+		this->gravity = 0.f;
+	}
+	else
+	{
+		this->gravity = 1.f;
+	}
 	float deltaTime = 1.f;
 	// Movement
 	if (this->isMovingLeft)
