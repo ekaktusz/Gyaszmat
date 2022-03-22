@@ -12,7 +12,6 @@ Game::Game() : renderWindow({ Game::XX, Game::YY }, Game::name)
 	this->view = sf::View(sf::Vector2f(0.f, 0.f), sf::Vector2f(Game::XX, Game::YY));
 	this->renderWindow.setView(this->view);
 	this->playerHealthBar = new HealthBar(100, 100);
-	ResourceManager::getInstance().loadAssets();
 }
 
 Game::~Game()

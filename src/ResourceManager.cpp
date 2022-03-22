@@ -2,19 +2,12 @@
 
 ResourceManager::ResourceManager()
 {
-
+	loadAssets();
 }
 
 void ResourceManager::loadAssets()
 {
-	loadFonts();
 	loadTextures();
-}
-
-void ResourceManager::loadFonts()
-{
-	std::filesystem::path fontPath = assetPath / "fonts";
-	this->fontHolder.load(res::Font::Roboto, fontPath / "roboto" / "Roboto-Regular.ttf");
 }
 
 void ResourceManager::loadTextures()
@@ -28,9 +21,4 @@ void ResourceManager::loadTextures()
 const ResourceHolder<sf::Texture, res::Texture>& ResourceManager::getTextureHolder() const
 {
 	return textureHolder;
-}
-
-const ResourceHolder<sf::Font, res::Font>& ResourceManager::getFontHolder() const
-{
-	return fontHolder;
 }
