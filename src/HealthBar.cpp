@@ -29,8 +29,8 @@ HealthBar::HealthBar(unsigned int health, unsigned int maxHealth) :
 	this->maxHealthBar.setPosition(this->offsetFromTopLeft);
 
 	// text
-	std::filesystem::path fontAsset =
-		std::filesystem::current_path().parent_path() / "assets" / "fonts" / "Roboto-Regular.ttf";
+	std::filesystem::path fontAsset = std::filesystem::current_path().parent_path() / "assets"
+		/ "fonts" / "roboto" / "Roboto-Regular.ttf";
 	if (!this->font.loadFromFile(fontAsset.string()))
 	{
 		SPDLOG_ERROR("Font loading failed!");

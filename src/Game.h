@@ -30,7 +30,6 @@ private:
 
 	HealthBar* playerHealthBar;
 
-
 	void render();
 	void update(sf::Time deltaTime);
 	void updateCollision();

@@ -1,9 +1,10 @@
 #include "Game.h"
+#include "ResourceManager.h"
 
 Game::Game() : renderWindow({ Game::XX, Game::YY }, Game::name)
 {
 	this->map.load(
-		(std::filesystem::current_path().parent_path() / "assets" / "platform.tmx").string());
+		(std::filesystem::current_path().parent_path() / "assets" / "tiled_mapdata" / "platform.tmx").string());
 	this->tileLayerFar = new MapLayer(map, 0);
 	this->tileLayerMiddle = new MapLayer(map, 1);
 	this->tileLayerNear = new MapLayer(map, 2);
@@ -11,6 +12,7 @@ Game::Game() : renderWindow({ Game::XX, Game::YY }, Game::name)
 	this->view = sf::View(sf::Vector2f(0.f, 0.f), sf::Vector2f(Game::XX, Game::YY));
 	this->renderWindow.setView(this->view);
 	this->playerHealthBar = new HealthBar(100, 100);
+	ResourceManager::getInstance().loadAssets();
 }
 
 Game::~Game()

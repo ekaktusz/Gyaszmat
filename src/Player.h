@@ -26,7 +26,7 @@ private:
 
 	// Render
 	sf::Texture idleTexture;
-	sf::Texture movingTexture;
+	sf::Texture runningTexture;
 	sf::Texture jumpingTexture;
 	sf::Sprite sprite;
 

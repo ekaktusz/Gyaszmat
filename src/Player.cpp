@@ -1,18 +1,11 @@
 #include "Player.h"
+#include "ResourceManager.h"
 
 Player::Player()
 {
-	// Load game assets
-	std::filesystem::path idlePlayerAsset = std::filesystem::current_path().parent_path() / "assets"
-		/ "owlet_monster" / "Owlet_Monster_Idle_4.png";
-	std::filesystem::path runningPlayerAsset = std::filesystem::current_path().parent_path()
-		/ "assets" / "owlet_monster" / "Owlet_Monster_Run_6.png";
-	std::filesystem::path jumpingPlayerAsset = std::filesystem::current_path().parent_path()
-		/ "assets" / "owlet_monster" / "Owlet_Monster_Jump_8.png";
-
-	this->idleTexture.loadFromFile(idlePlayerAsset.string());
-	this->movingTexture.loadFromFile(runningPlayerAsset.string());
-	this->jumpingTexture.loadFromFile(jumpingPlayerAsset.string());
+	this->idleTexture = ResourceManager::getInstance().getTextureHolder().get(res::Texture::PlayerIdle);
+	this->runningTexture = ResourceManager::getInstance().getTextureHolder().get(res::Texture::PlayerRun);
+	this->jumpingTexture = ResourceManager::getInstance().getTextureHolder().get(res::Texture::PlayerJump);
 
 	this->sprite.setTexture(idleTexture);
 	// Set starting frame to the first 32x32 part of the image
@@ -157,7 +150,7 @@ void Player::updateAnimation()
 	else if (this->animationState == PlayerAnimationState::MOVING_RIGHT
 		|| this->animationState == PlayerAnimationState::MOVING_LEFT)
 	{
-		setAnimation(0.1f, movingTexture);
+		setAnimation(0.1f, runningTexture);
 	}
 	else if (this->animationState == PlayerAnimationState::JUMPING)
 	{
