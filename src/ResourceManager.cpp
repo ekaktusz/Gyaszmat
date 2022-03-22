@@ -4,12 +4,19 @@ ResourceManager::ResourceManager()
 {
 	loadTextures();
 	loadFonts();
+	loadMaps();
 }
 
 void ResourceManager::loadFonts()
 {
 	std::filesystem::path fontPath = assetPath / "fonts";
 	this->fontHolder.load(res::Font::Roboto, fontPath / "roboto" / "Roboto-Regular.ttf");
+}
+
+void ResourceManager::loadMaps()
+{
+	std::filesystem::path mapPath = assetPath / "maps";
+	this->mapHolder.load(res::Map::TestMap, mapPath / "platform.tmx");
 }
 
 void ResourceManager::loadTextures()
@@ -28,4 +35,9 @@ const sf::Texture& ResourceManager::getTexture(res::Texture id)
 const sf::Font& ResourceManager::getFont(res::Font id)
 {
 	return fontHolder.get(id);
+}
+
+const tmx::Map& ResourceManager::getMap(res::Map id)
+{
+	return mapHolder.get(id);
 }

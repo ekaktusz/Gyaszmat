@@ -1,16 +1,9 @@
 #include "HealthBar.h"
 #include "ResourceManager.h"
 
-
-HealthBar::~HealthBar()
-{
-	delete &font;
-}
-
 HealthBar::HealthBar(unsigned int health, unsigned int maxHealth) :
 	health(health),
-	maxHealth(maxHealth),
-	font(*(new sf::Font()))
+	maxHealth(maxHealth)
 {
 	this->offsetFromTopLeft = sf::Vector2f(25.f, 25.f);
 
@@ -30,8 +23,7 @@ HealthBar::HealthBar(unsigned int health, unsigned int maxHealth) :
 	this->maxHealthBar.setPosition(this->offsetFromTopLeft);
 
 	// text
-	this->font = ResourceManager::getInstance().getFont(res::Font::Roboto);
-	this->text.setFont((this->font));
+	this->text.setFont(ResourceManager::getInstance().getFont(res::Font::Roboto));
 	this->text.setString("[" + std::to_string(health) + "/" + std::to_string(maxHealth) + "]"); // can be change to std::format after we support c++20
 	this->text.setFillColor(sf::Color::White);
 	this->text.setCharacterSize(this->height - 4);

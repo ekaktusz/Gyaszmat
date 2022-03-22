@@ -19,11 +19,8 @@ namespace res
 		PeacefulGameplay
 	};
 
-	enum class MapLayer
+	enum class Map
 	{
-		TerrainObjectLayer,
-		TileLayerFar,
-		tileLayerMiddle,
-		tileLayerNear
+		TestMap
 	};
 	}
