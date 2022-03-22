@@ -3,9 +3,9 @@
 
 Player::Player()
 {
-	this->idleTexture = ResourceManager::getInstance().getTextureHolder().get(res::Texture::PlayerIdle);
-	this->runningTexture = ResourceManager::getInstance().getTextureHolder().get(res::Texture::PlayerRun);
-	this->jumpingTexture = ResourceManager::getInstance().getTextureHolder().get(res::Texture::PlayerJump);
+	this->idleTexture = ResourceManager::getInstance().getTexture(res::Texture::PlayerIdle);
+	this->runningTexture = ResourceManager::getInstance().getTexture(res::Texture::PlayerRun);
+	this->jumpingTexture = ResourceManager::getInstance().getTexture(res::Texture::PlayerJump);
 
 	this->sprite.setTexture(idleTexture);
 	// Set starting frame to the first 32x32 part of the image

@@ -1,4 +1,5 @@
 #include "HealthBar.h"
+#include "ResourceManager.h"
 
 
 HealthBar::~HealthBar()
@@ -29,12 +30,7 @@ HealthBar::HealthBar(unsigned int health, unsigned int maxHealth) :
 	this->maxHealthBar.setPosition(this->offsetFromTopLeft);
 
 	// text
-	std::filesystem::path fontAsset = std::filesystem::current_path().parent_path() / "assets"
-		/ "fonts" / "roboto" / "Roboto-Regular.ttf";
-	if (!this->font.loadFromFile(fontAsset.string()))
-	{
-		SPDLOG_ERROR("Font loading failed!");
-	}
+	this->font = ResourceManager::getInstance().getFont(res::Font::Roboto);
 	this->text.setFont((this->font));
 	this->text.setString("[" + std::to_string(health) + "/" + std::to_string(maxHealth) + "]"); // can be change to std::format after we support c++20
 	this->text.setFillColor(sf::Color::White);

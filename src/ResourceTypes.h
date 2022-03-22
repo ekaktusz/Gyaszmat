@@ -1,3 +1,5 @@
+#pragma once
+
 namespace res
 {
 	enum class Texture

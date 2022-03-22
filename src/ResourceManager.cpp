@@ -2,12 +2,14 @@
 
 ResourceManager::ResourceManager()
 {
-	loadAssets();
+	loadTextures();
+	loadFonts();
 }
 
-void ResourceManager::loadAssets()
+void ResourceManager::loadFonts()
 {
-	loadTextures();
+	std::filesystem::path fontPath = assetPath / "fonts";
+	this->fontHolder.load(res::Font::Roboto, fontPath / "roboto" / "Roboto-Regular.ttf");
 }
 
 void ResourceManager::loadTextures()
@@ -18,7 +20,12 @@ void ResourceManager::loadTextures()
 	this->textureHolder.load(res::Texture::PlayerJump, texturePath / "owlet_monster" / "Owlet_Monster_Jump_8.png");
 }
 
-const ResourceHolder<sf::Texture, res::Texture>& ResourceManager::getTextureHolder() const
+const sf::Texture& ResourceManager::getTexture(res::Texture id)
 {
-	return textureHolder;
+	return textureHolder.get(id);
+}
+
+const sf::Font& ResourceManager::getFont(res::Font id)
+{
+	return fontHolder.get(id);
 }

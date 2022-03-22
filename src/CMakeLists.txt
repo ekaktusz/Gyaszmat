@@ -36,7 +36,7 @@ file(GLOB SOURCES
     *.cpp
 )
 
-add_executable(gyaszmat ${SOURCES} "TextureHolder.h" )
+add_executable(gyaszmat ${SOURCES} "TextureHolder.h"  "FontHolder.h")
 set_target_properties(gyaszmat PROPERTIES DEBUG_POSTFIX ${CMAKE_DEBUG_POSTFIX})
 target_precompile_headers(gyaszmat PUBLIC "pch.h")
 

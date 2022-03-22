@@ -3,7 +3,6 @@
 #include "ResourceHolder.h"
 #include "ResourceTypes.h"
 
-//template <typename Resource = sf::Texture, typename Identifier = res::Texture>
 class TextureHolder : public ResourceHolder<sf::Texture, res::Texture>
 {
 public:
@@ -12,7 +11,7 @@ public:
 		sf::Texture* texture = new sf::Texture();
 		if (!texture->loadFromFile(filePath.string()))
 		{
-			SPDLOG_ERROR("Failed to load " + filePath.string());
+			SPDLOG_ERROR("Failed to load texture: " + filePath.string());
 			return;
 		}
 		SPDLOG_INFO("SUCCESS READ:" + filePath.string());
