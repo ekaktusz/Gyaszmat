@@ -6,6 +6,9 @@
 #include "MapHolder.h"
 #include "MapLayer.h"
 
+// Singleton for accessing resources in all classes. Loads everything in it's constructor, in the first time it accessed.
+// Everytime we want to add a new asset we have to append it's methods.
+
 class ResourceManager
 {
 public:

@@ -2,12 +2,16 @@
 
 #include "pch.h"
 
+// Class for holding resources based on the SFML book (highly modified tho)
+// Abstract, we should inherit from it. Load resource into a map and stores it.
+// In theory it should be memory safe. If asset not found will produce runtime error.
+
 template <typename Resource, typename Identifier>
 class ResourceHolder
 {
 public:
 	ResourceHolder() = default;
-	virtual void load(Identifier id, const std::filesystem::path& filePath)=0;
+	virtual void load(Identifier id, const std::filesystem::path& filePath) = 0;
 	const Resource& get(Identifier id) const;
 protected:
 	void insert(Identifier id, Resource* resource);
