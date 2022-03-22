@@ -16,14 +16,11 @@ private:
 	sf::RectangleShape healthBar;
 	sf::RectangleShape maxHealthBar;
 	sf::Text text;
-	sf::Font& font;
 
 	void alignTextToMid();
 
 public:
-	HealthBar() = delete;
-	HealthBar(unsigned int health, unsigned int maxHealth);
-	~HealthBar();
+	HealthBar(unsigned int health = 100, unsigned int maxHealth = 100);
 	void setOffset(const sf::Vector2f& offsetFromTopLeft);
 	void setPosition(const sf::Vector2f& position);
 	void draw(sf::RenderTarget& target, sf::RenderStates states) const;

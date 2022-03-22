@@ -22,14 +22,13 @@ private:
 
 	sf::Clock clock;
 
-	tmx::Map map;
+	const tmx::Map* map;
 	MapLayer* tileLayerFar;
 	MapLayer* tileLayerMiddle;
 	MapLayer* tileLayerNear;
 	MapLayer* objectLayer;
 
-	HealthBar* playerHealthBar;
-
+	HealthBar playerHealthBar;
 
 	void render();
 	void update(sf::Time deltaTime);
