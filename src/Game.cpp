@@ -5,10 +5,10 @@ Game::Game() :
 	renderWindow({ Game::XX, Game::YY }, Game::name)
 {
 	this->map = &ResourceManager::getInstance().getMap(res::Map::TestMap);
-	this->tileLayerFar = new MapLayer(*map, 0);
-	this->tileLayerMiddle = new MapLayer(*map, 1);
-	this->tileLayerNear = new MapLayer(*map, 2);
-	this->objectLayer = new MapLayer(*map, 3);
+	this->tileLayerFar = new MapLayer(*this->map, 0);
+	this->tileLayerMiddle = new MapLayer(*this->map, 1);
+	this->tileLayerNear = new MapLayer(*this->map, 2);
+	this->objectLayer = new MapLayer(*this->map, 3);
 	this->view = sf::View(sf::Vector2f(0.f, 0.f), sf::Vector2f(Game::XX, Game::YY));
 	this->renderWindow.setView(this->view);
 	this->playerHealthBar = HealthBar(100, 100);
@@ -20,6 +20,7 @@ Game::~Game()
 	delete tileLayerMiddle;
 	delete tileLayerNear;
 	delete objectLayer;
+	delete map;
 }
 
 void Game::run()
