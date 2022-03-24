@@ -1,44 +1,30 @@
 #pragma once
+#include "pch.h"
 
-#include "Enemy.h"
-#include "HealthBar.h"
-#include "MapLayer.h"
-#include "Player.h"
+class State;
 
 class Game
 {
-private:
+public:
+
 	static const unsigned int XX = 800;
 	static const unsigned int YY = 600;
 	const std::string name = "Gyaszmat";
 	static const unsigned int MAX_FPS = 60;
 
-	Player player;
-	std::vector<Enemy> enemies;
 
-	sf::RenderWindow renderWindow;
-	sf::View view;
-	sf::Event event;
+	void pushState(State* state);
+	void popState();
+	void changeState(State* state);
+	State* peekState();
 
-	sf::Clock clock;
+	void run();
 
-	const tmx::Map* map;
-	MapLayer* tileLayerFar;
-	MapLayer* tileLayerMiddle;
-	MapLayer* tileLayerNear;
-	MapLayer* objectLayer;
-
-	HealthBar playerHealthBar;
-
-	void render();
-	void update(sf::Time deltaTime);
-	void updateCollision();
-	void processEvents();
-	void resolveCollision(const sf::FloatRect& overlap, const sf::Vector2f& collisionNormal);
-
-public:
 	Game();
 	~Game();
 
-	void run();
+	sf::RenderWindow renderWindow;	
+private:
+
+	std::stack<State*> states;
 };
