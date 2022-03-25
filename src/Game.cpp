@@ -1,5 +1,6 @@
 #include "Game.h"
 #include "GameState.h"
+#include "MenuState.h"
 
 void Game::pushState(State* state)
 {
@@ -51,7 +52,7 @@ void Game::run()
 
 Game::Game() : renderWindow({ Game::XX, Game::YY }, Game::name)
 {
-	this->pushState(new GameState(this));
+	this->pushState(new MenuState(this));
 }
 
 Game::~Game()

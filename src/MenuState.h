@@ -5,8 +5,10 @@
 class MenuState : public State
 {
 public:
-	MenuState();
+	MenuState(Game* game);
 
+	sf::Texture backgroundTexture;
+	sf::Sprite background;
 
 private:
 	void render() override;

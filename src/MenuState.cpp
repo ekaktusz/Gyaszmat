@@ -1,9 +1,13 @@
 #include "MenuState.h"
+#include "ResourceManager.h"
 
 
-MenuState::MenuState()
+MenuState::MenuState(Game* game)
 {
-
+	this->game = game;
+	this->backgroundTexture =
+		ResourceManager::getInstance().getTexture(res::Texture::MenuBackground);
+	this->background.setTexture(this->backgroundTexture);
 }
 
 void MenuState::update(sf::Time deltaTime)
@@ -14,6 +18,7 @@ void MenuState::update(sf::Time deltaTime)
 void MenuState::render()
 {
 	this->game->renderWindow.clear();
+	this->game->renderWindow.draw(background);
 	this->game->renderWindow.display();
 }
 
