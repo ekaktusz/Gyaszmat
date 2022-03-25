@@ -29,6 +29,7 @@ State* Game::peekState()
 
 void Game::run()
 {
+	sf::Event event;
 	sf::Clock clock;
 	sf::Time timeSinceLastUpdate = sf::Time::Zero;
 	sf::Time timePerFrame = sf::seconds(1.f / Game::MAX_FPS);
@@ -39,7 +40,9 @@ void Game::run()
 		while (timeSinceLastUpdate > timePerFrame)
 		{
 			timeSinceLastUpdate -= timePerFrame;
-			this->peekState()->handleEvents();
+
+			while (this->renderWindow.pollEvent(event))
+				this->peekState()->handleEvent(event);
 			this->peekState()->update(timePerFrame);
 		}
 		this->peekState()->render();

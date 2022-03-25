@@ -14,7 +14,6 @@ private:
 	std::vector<Enemy> enemies;
 
 	sf::View view;
-	sf::Event event;
 
 	sf::Clock clock;
 
@@ -28,7 +27,7 @@ private:
 
 	void render() override;
 	void update(sf::Time deltaTime) override;
-	void handleEvents() override;
+	void handleEvent(const sf::Event& event) override;
 	
 	void updateCollision();
 	void resolveCollision(const sf::FloatRect& overlap, const sf::Vector2f& collisionNormal);

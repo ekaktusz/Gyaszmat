@@ -36,17 +36,14 @@ void GameState::update(sf::Time deltaTime)
 		sf::Vector2f(this->view.getCenter() - sf::Vector2f(Game::XX / 2, Game::YY / 2)));
 }
 
-void GameState::handleEvents()
+void GameState::handleEvent(const sf::Event& event)
 {
-	while (this->game->renderWindow.pollEvent(this->event))
+	if (event.type == sf::Event::Closed
+		|| sf::Keyboard::isKeyPressed(sf::Keyboard::Escape))
 	{
-		if (this->event.type == sf::Event::Closed
-			|| sf::Keyboard::isKeyPressed(sf::Keyboard::Escape))
-		{
-			this->game->renderWindow.close();
-		}
-		this->player.handleKeyboardInput(this->event);
+		this->game->renderWindow.close();
 	}
+	this->player.handleKeyboardInput(event);
 }
 
 void GameState::render()

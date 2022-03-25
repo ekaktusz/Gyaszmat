@@ -10,5 +10,5 @@ public:
 	Game* game;
 	virtual void render() = 0;
 	virtual void update(sf::Time deltaTime) = 0;
-	virtual void handleEvents() = 0;
+	virtual void handleEvent(const sf::Event& event) = 0;
 };
