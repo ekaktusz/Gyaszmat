@@ -277,3 +277,10 @@ void Player::updateHitbox()
 {
 	this->hitbox.update(this->sprite.getPosition());
 }
+
+// This is needed, to stop a player if a state change happens while pressing down a key
+void Player::stop()
+{
+	this->isMovingLeft = false;
+	this->isMovingRight = false;
+}

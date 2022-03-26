@@ -47,8 +47,8 @@ void GameState::handleEvent(const sf::Event& event)
 	{
 		if (event.key.code == sf::Keyboard::Escape)
 		{
-			SPDLOG_INFO("HELLO");
-			//this->game->popState();
+			SPDLOG_INFO("Switch to PauseState...");
+			this->player.stop();
 			this->game->pushState(new PauseState(this->game));
 		}
 	}

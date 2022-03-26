@@ -26,7 +26,7 @@ PauseState::PauseState(Game* game)
 			- this->continueButton.getGlobalBounds().width / 2.f,
 		100));
 	this->continueButton.setAction([&]() {
-		SPDLOG_INFO("BUTTON CLICKED YEAH");
+		SPDLOG_INFO("Switch back to GameState : Continue the game");
 		this->game->popState();
 	});
 
@@ -48,10 +48,15 @@ void PauseState::update(sf::Time deltaTime)
 
 void PauseState::handleEvent(const sf::Event& event)
 {
+	if (event.type == sf::Event::Closed)
+	{
+		this->game->renderWindow.close();
+	}
 	if (event.type == sf::Event::KeyPressed)
 	{
 		if (event.key.code == sf::Keyboard::Escape)
 		{
+			SPDLOG_INFO("Switch back to GameState : Continue the game");
 			this->game->popState();
 			return;
 		}

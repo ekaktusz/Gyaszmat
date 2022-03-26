@@ -6,16 +6,15 @@
 class Button : public Widget
 {
 public:
-
 	Button();
 
+	// Text alignment in button
 	enum class Alignment
 	{
 		Center,
 		Left,
 		Right
 	};
-
 
 	void draw(sf::RenderTarget& target, sf::RenderStates states) const override;
 	void handleEvent(const sf::Event& event) override;
@@ -33,7 +32,7 @@ public:
 
 private:
 	Alignment alignment;
-	float outerLineSize = 2; 
+	float outerLineSize = 2;
 	float offsetFromEdge = 5;
 	sf::RectangleShape innerButton;
 	sf::RectangleShape outerButton;

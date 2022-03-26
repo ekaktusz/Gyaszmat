@@ -1,7 +1,7 @@
 #pragma once
 
 #include "pch.h"
-#include "Label.h"
+#include "Button.h"
 
 class HealthBar : public sf::Drawable
 {

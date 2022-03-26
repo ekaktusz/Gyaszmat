@@ -27,7 +27,7 @@ MenuState::MenuState(Game* game)
 	this->startButton.setSize(sf::Vector2f(200, 30));
 	this->startButton.setAction([&]() 
 		{ 
-			SPDLOG_INFO("BUTTON CLICKED YEAH");
+			SPDLOG_INFO("Switch to GameState: Starting the game");
 			this->game->pushState(new GameState(this->game));
 		}
 	);
