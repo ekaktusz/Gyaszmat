@@ -27,6 +27,7 @@ void Button::setAction(std::function<void()> actionToDo)
 
 void Button::setPosition(sf::Vector2f position)
 {
+	SPDLOG_INFO(std::to_string(this->label.getText().getGlobalBounds().height));
 	this->outerButton.setPosition(position);
 	this->innerButton.setPosition(position.x + outerLineSize,  position.y + outerLineSize);
 	if (alignment == Alignment::Center)

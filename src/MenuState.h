@@ -10,7 +10,8 @@ public:
 
 	sf::Texture backgroundTexture;
 	sf::Sprite background;
-	Button button;
+	Button startButton;
+	Label titleLabel;
 
 private:
 	void render() override;
