@@ -1,6 +1,7 @@
 #pragma once
 
 #include "pch.h"
+#include "Label.h"
 
 class HealthBar : public sf::Drawable
 {
@@ -15,7 +16,7 @@ private:
 
 	sf::RectangleShape healthBar;
 	sf::RectangleShape maxHealthBar;
-	sf::Text text;
+	Label label;
 
 	void alignTextToMid();
 

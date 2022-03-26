@@ -46,7 +46,7 @@ void HealthBar::draw(sf::RenderTarget& target, sf::RenderStates states) const
 {
 	target.draw(this->maxHealthBar);
 	target.draw(this->healthBar);
-	target.draw(this->text);
+	target.draw(this->label);
 }
 
 void HealthBar::update(unsigned int health)
