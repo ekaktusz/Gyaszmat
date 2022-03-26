@@ -1,6 +1,7 @@
 #pragma once
 #include "pch.h"
 #include "State.h"
+#include "Button.h"
 
 class MenuState : public State
 {
@@ -9,6 +10,7 @@ public:
 
 	sf::Texture backgroundTexture;
 	sf::Sprite background;
+	Button button;
 
 private:
 	void render() override;

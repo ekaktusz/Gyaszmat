@@ -11,6 +11,7 @@ void ResourceManager::loadFonts()
 {
 	std::filesystem::path fontPath = assetPath / "fonts";
 	this->fontHolder.load(res::Font::Roboto, fontPath / "roboto" / "Roboto-Regular.ttf");
+	this->fontHolder.load(res::Font::Pixel, fontPath / "pixel_art_font.ttf");
 }
 
 void ResourceManager::loadMaps()

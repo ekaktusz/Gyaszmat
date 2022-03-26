@@ -23,10 +23,12 @@ HealthBar::HealthBar(unsigned int health, unsigned int maxHealth) :
 	this->maxHealthBar.setPosition(this->offsetFromTopLeft);
 
 	// text
-	this->text.setFont(ResourceManager::getInstance().getFont(res::Font::Roboto));
-	this->text.setString("[" + std::to_string(health) + "/" + std::to_string(maxHealth) + "]"); // can be change to std::format after we support c++20
-	this->text.setFillColor(sf::Color::White);
-	this->text.setCharacterSize(this->height - 4);
+	this->label.getText().setFont(ResourceManager::getInstance().getFont(res::Font::Roboto));
+	this->label.getText().setString("[" + std::to_string(health) + "/" + std::to_string(maxHealth)
+		+ "]"); // can be change to std::format after we support c++20
+	this->label.getText().setFillColor(sf::Color::White);
+	this->label.getText().setCharacterSize(this->height - 4);
+	
 	this->alignTextToMid();
 }
 
@@ -56,7 +58,7 @@ void HealthBar::update(unsigned int health)
 
 void HealthBar::alignTextToMid()
 {
-	this->text.setPosition(
-		this->maxHealthBar.getPosition().x + this->length / 2 - this->text.getGlobalBounds().width / 2,
+	this->label.getText().setPosition(this->maxHealthBar.getPosition().x + this->length / 2
+			- this->label.getText().getGlobalBounds().width / 2,
 		this->maxHealthBar.getPosition().y);
 }

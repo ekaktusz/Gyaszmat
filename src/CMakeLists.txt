@@ -36,7 +36,7 @@ file(GLOB SOURCES
     *.cpp
 )
 
-add_executable(gyaszmat ${SOURCES} "Label.h" "Label.cpp")
+add_executable(gyaszmat ${SOURCES})
 set_target_properties(gyaszmat PROPERTIES DEBUG_POSTFIX ${CMAKE_DEBUG_POSTFIX})
 target_precompile_headers(gyaszmat PUBLIC "pch.h")
 

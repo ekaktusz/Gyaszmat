@@ -15,7 +15,8 @@ namespace res
 
 	enum class Font
 	{
-		Roboto
+		Roboto,
+		Pixel
 	};
 
 	enum class Music
