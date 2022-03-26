@@ -18,6 +18,8 @@ MenuState::MenuState(Game* game)
 	this->backgroundTexture =
 		ResourceManager::getInstance().getTexture(res::Texture::MenuBackground);
 	this->background.setTexture(this->backgroundTexture);
+
+
 	this->startButton.setText("new game");
 	this->startButton.setFont(res::Font::Roboto);
 	this->startButton.setAlignment(Button::Alignment::Center);
@@ -29,11 +31,21 @@ MenuState::MenuState(Game* game)
 			this->game->pushState(new GameState(this->game));
 		}
 	);
+
+	this->exitButton.setText("exitame");
+	this->exitButton.setFont(res::Font::Roboto);
+	this->exitButton.setAlignment(Button::Alignment::Center);
+	this->exitButton.setPosition(sf::Vector2f(30, 200));
+	this->exitButton.setSize(sf::Vector2f(200, 30));
+	this->exitButton.setAction([&]() {
+		SPDLOG_INFO("BUTTON CLICKED YEAH");
+		this->game->renderWindow.close();
+	});
 }
 
 void MenuState::update(sf::Time deltaTime)
 {
-	
+	this->game->renderWindow.setView(this->game->renderWindow.getDefaultView());
 }
 
 void MenuState::render()
@@ -41,15 +53,17 @@ void MenuState::render()
 	this->game->renderWindow.clear();
 	this->game->renderWindow.draw(background);
 	this->game->renderWindow.draw(startButton);
+	this->game->renderWindow.draw(exitButton);
 	this->game->renderWindow.draw(titleLabel);
 	this->game->renderWindow.display();
 }
 
 void MenuState::handleEvent(const sf::Event& event)
 {
-	if (event.type == sf::Event::Closed || sf::Keyboard::isKeyPressed(sf::Keyboard::Escape))
+	if (event.type == sf::Event::Closed)
 	{
 		this->game->renderWindow.close();
 	}
 	this->startButton.handleEvent(event);
+	this->exitButton.handleEvent(event);
 }

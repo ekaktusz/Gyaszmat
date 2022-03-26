@@ -1,5 +1,6 @@
 #include "GameState.h"
 #include "ResourceManager.h"
+#include "MenuState.h"
 
 GameState::GameState(Game* game)
 {
@@ -38,10 +39,17 @@ void GameState::update(sf::Time deltaTime)
 
 void GameState::handleEvent(const sf::Event& event)
 {
-	if (event.type == sf::Event::Closed
-		|| sf::Keyboard::isKeyPressed(sf::Keyboard::Escape))
+	if (event.type == sf::Event::Closed)
 	{
 		this->game->renderWindow.close();
+	}
+	else if (event.type == sf::Event::KeyPressed)
+	{
+		if (event.key.code == sf::Keyboard::Escape)
+		{
+			SPDLOG_INFO("HELLO");
+			this->game->changeState(new MenuState(this->game));
+		}
 	}
 	this->player.handleKeyboardInput(event);
 }

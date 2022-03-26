@@ -8,9 +8,14 @@ class MenuState : public State
 public:
 	MenuState(Game* game);
 
+	sf::View view;
+
 	sf::Texture backgroundTexture;
 	sf::Sprite background;
+
 	Button startButton;
+	Button exitButton;
+
 	Label titleLabel;
 
 private:
