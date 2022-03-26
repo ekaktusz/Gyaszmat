@@ -1,6 +1,6 @@
 #include "GameState.h"
 #include "ResourceManager.h"
-#include "MenuState.h"
+#include "PauseState.h"
 
 GameState::GameState(Game* game)
 {
@@ -48,7 +48,8 @@ void GameState::handleEvent(const sf::Event& event)
 		if (event.key.code == sf::Keyboard::Escape)
 		{
 			SPDLOG_INFO("HELLO");
-			this->game->changeState(new MenuState(this->game));
+			//this->game->popState();
+			this->game->pushState(new PauseState(this->game));
 		}
 	}
 	this->player.handleKeyboardInput(event);

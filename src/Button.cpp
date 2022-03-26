@@ -119,3 +119,8 @@ void Button::setTextColor(sf::Color color)
 {
 	this->label.getText().setFillColor(color);
 }
+
+const sf::FloatRect& Button::getGlobalBounds()
+{
+	return this->outerButton.getGlobalBounds();
+}

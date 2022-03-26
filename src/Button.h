@@ -29,6 +29,7 @@ public:
 	void setColor(sf::Color color);
 	void setOutlineColor(sf::Color color);
 	void setTextColor(sf::Color color);
+	const sf::FloatRect& getGlobalBounds();
 
 private:
 	Alignment alignment;
