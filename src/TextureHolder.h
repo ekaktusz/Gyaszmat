@@ -14,7 +14,7 @@ public:
 			SPDLOG_ERROR("Failed to load texture: " + filePath.string());
 			return;
 		}
-		SPDLOG_INFO("SUCCESS READ:" + filePath.string());
+		SPDLOG_INFO("Texture loaded succesfully: " + filePath.string());
 		this->insert(id, texture);
 	}
 };

@@ -9,7 +9,8 @@ namespace res
 	{
 		PlayerIdle,
 		PlayerRun,
-		PlayerJump
+		PlayerJump,
+		MenuBackground
 	};
 
 	enum class Font

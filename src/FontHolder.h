@@ -14,7 +14,7 @@ public:
 			SPDLOG_ERROR("Failed to load font: " + filePath.string());
 			return;
 		}
-		SPDLOG_INFO("SUCCESS READ:" + filePath.string());
+		SPDLOG_INFO("Font loaded successfully: " + filePath.string());
 		this->insert(id, font);
 	}
 };
