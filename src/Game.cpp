@@ -52,7 +52,7 @@ void Game::run()
 
 Game::Game() : renderWindow({ Game::XX, Game::YY }, Game::name)
 {
-	this->pushState(new MenuState(this));
+	this->pushState(new GameState(this));
 }
 
 Game::~Game()
