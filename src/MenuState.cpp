@@ -9,6 +9,9 @@ MenuState::MenuState(Game* game)
 		ResourceManager::getInstance().getTexture(res::Texture::MenuBackground);
 	this->background.setTexture(this->backgroundTexture);
 	this->button.setText("teszt");
+	this->button.setAlignment(Button::Alignment::Center);
+	this->button.setPosition(sf::Vector2f(30, 100));
+	this->button.setSize(sf::Vector2f(100, 30));
 	this->button.setAction([&]() 
 		{ 
 			SPDLOG_INFO("BUTTON CLICKED YEAH");

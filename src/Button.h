@@ -1,16 +1,13 @@
 #pragma once
 #include "Widget.h"
 #include "Label.h"
+#include "ResourceTypes.h"
 
 class Button : public Widget
 {
 public:
 
 	Button();
-	Button(std::string segg)
-	{
-		
-	}
 
 	enum class Alignment
 	{
@@ -28,6 +25,10 @@ public:
 	void setSize(sf::Vector2f size);
 	void setAlignment(Alignment alignment);
 	void setText(std::string text);
+	void setFont(res::Font font);
+	void setColor(sf::Color color);
+	void setOutlineColor(sf::Color color);
+	void setTextColor(sf::Color color);
 
 private:
 	Alignment alignment;

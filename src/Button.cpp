@@ -1,14 +1,22 @@
 #include "Button.h"
 #include "ResourceManager.h"
-Button::Button()
+Button::Button() //just for setting default values
 {
+	//set default color
 	this->innerButton.setFillColor(sf::Color(175, 28, 122));
 	this->outerButton.setFillColor(sf::Color(237, 255, 104));
 
+	//set default font
 	this->label.getText().setFont(ResourceManager::getInstance().getFont(res::Font::Roboto));
+
+	//set default text color
 	this->label.getText().setFillColor(sf::Color::White);
+
+	//set default size
 	this->setSize(sf::Vector2f(300, 50));
+
 	this->alignment = Alignment::Center;
+
 	this->setPosition(sf::Vector2f(50, 50));
 }
 
@@ -43,7 +51,6 @@ void Button::setPosition(sf::Vector2f position)
 			this->innerButton.getPosition().y + this->innerButton.getGlobalBounds().height / 2
 				- this->label.getText().getGlobalBounds().height);
 	}
-	
 }
 
 void Button::setSize(sf::Vector2f size)
@@ -51,6 +58,7 @@ void Button::setSize(sf::Vector2f size)
 	this->outerButton.setSize(size);
 	this->innerButton.setSize(size - sf::Vector2f(this->outerLineSize * 2 , this->outerLineSize * 2));
 	this->label.getText().setCharacterSize(innerButton.getSize().y - 2);
+	this->setPosition(outerButton.getPosition());
 }
 
 void Button::setAlignment(Button::Alignment alignment)
@@ -89,4 +97,24 @@ void Button::handleEvent(const sf::Event& event)
 			}
 		}
 	}
+}
+
+void Button::setColor(sf::Color color)
+{
+	this->innerButton.setFillColor(color);
+}
+
+void Button::setOutlineColor(sf::Color color)
+{
+	this->outerButton.setFillColor(color);
+}
+
+void Button::setFont(res::Font font)
+{
+	this->label.getText().setFont(ResourceManager::getInstance().getFont(font));
+}
+
+void Button::setTextColor(sf::Color color)
+{
+	this->label.getText().setFillColor(color);
 }
