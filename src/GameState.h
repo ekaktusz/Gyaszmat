@@ -22,6 +22,9 @@ private:
 	MapLayer* tileLayerMiddle;
 	MapLayer* tileLayerNear;
 	MapLayer* objectLayer;
+	MapLayer* ladderLayer;
+	MapLayer* ladderTopLayer;
+	MapLayer* ladderBottomLayer;
 
 	HealthBar playerHealthBar;
 

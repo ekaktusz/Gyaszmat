@@ -10,6 +10,7 @@ namespace res
 		PlayerIdle,
 		PlayerRun,
 		PlayerJump,
+		PlayerClimb,
 		MenuBackground,
 		PauseBackground
 	};

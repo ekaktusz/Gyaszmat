@@ -1,5 +1,5 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<map version="1.8" tiledversion="1.8.0" orientation="orthogonal" renderorder="left-down" width="200" height="18" tilewidth="64" tileheight="64" infinite="0" nextlayerid="6" nextobjectid="154">
+<map version="1.8" tiledversion="1.8.0" orientation="orthogonal" renderorder="left-down" width="200" height="18" tilewidth="64" tileheight="64" infinite="0" nextlayerid="11" nextobjectid="201">
  <properties>
   <property name="test map property" type="float" value="12.43"/>
  </properties>
@@ -9,7 +9,7 @@
  </tileset>
  <layer id="1" name="Far" width="200" height="18">
   <data encoding="base64" compression="zlib">
-   eJzt2TESgCAMBEB/I/7/g7ZaUCEwF3crymSGQCDHUdO1OwCitN0BLJaer/pe69wdwGLp+abXN3zteWeoD3hrnTXw7gnT+0P+w1sZ+pzlAAAAAHmq/3lWz4+5qs93q+fHXCP7J+FsVh+MGJmZJczbEmIE2OkGFK4D6A==
+   eJzt2MEKgzAMAFC/ZMJ20P3/D84dBhbpQaqEZO9BqMcU2phmmoA1OgFOeUcn8GeW6AQ4RT2D1v6f4X5Aa+18A20PrB8mC29lrlD1HKnlXEHPDH3qLBw9t3hsMXfWb7zCsgMAyKHqrOqn+v64V/VZVfX9ca+R85OhNrsfjBiZ5WaYA2fIESDSByWeBSA=
   </data>
  </layer>
  <layer id="2" name="Middle" width="200" height="18">
@@ -17,15 +17,15 @@
    <property name="test layer property" type="bool" value="true"/>
   </properties>
   <data encoding="base64" compression="zlib">
-   eJztmkuOAjEMRIvFsAKOAAXD/c84zU+0EGLS3U5sk3rSE7vI6dhWQgIIAXDwcPec0KP5F3mOLfqG8M9vyxpZDW4HNxPdjb7Jz2jcHlh5BxAUwj+vLT0YOR7zWzjhOb/9m9+Lv27RxYPwz+cMiv4g/PMui8KPqfvk3fthrpTsIYm8Z3DVRz8QdnvluftqWSY/2BMlvfxT/y6F8F9zWa64ne33hc494xPq4RnNTvT/bgnVRWYzQ/y/565xt1oK4b++sr/6IKb15NY1MjU+GddMEPPzrkWNLIlPxjQLxPK51qwRi/hkPKND2PbkGjVCw/hkLCNC1L3Tsjq3P+L0XkNZzzXmvQe28vXOjQ3nvqRGWsYpffV46xDlDUSWOGV7/wDtbxzY
+   eJztmstOBCEURGsWutLZqFunfPz/N9oxGjvGjJem4EKok5xlw+2GInQAMAbg5uXL9wl9kX+Rn7bN2hD581uZkdPm/eZdoefdN7nZtWvWhcif10ovIvdtmjUh8ufzDJr1IPLn3SyaPEr3yee/m/nkFOiPmPcf3PlYB0K3Vz66r7YxecWViKzl19bvKET+mNu4BnjdfA76drAPwmv4jLYksieeoY8aCOdiZhU8idophfh/z93ibDUKkT++Nj8fD6J2ohBla3LvjJTWZ8dVQa98EMfnXY+M1NRnx1RBj3wQ9e/aMiOK+ux4KmiZD0K7JrfICIX12bFUoM4H0fZMS/Xf/l1n9hjadt7i2H3gvY8Vz/4+c2PHd6/JSM86ba4Zdx1GuQMxS522vx99Uxwb
   </data>
  </layer>
  <layer id="3" name="Near" width="200" height="18">
   <data encoding="base64" compression="zlib">
-   eJzt2ssKgzAQBdDQFtqdpY///9VuJVjTF2bSOQcEQ0RmcyXMWArks2/sHzepAuK4zO53K89lyMZ54YLs7r0LgMCuvQuAwEbKx9IZsHUenL58L7nV+Th0qQJiqvPR6uM988p3Gkbzq3zAP7pV67U+NwAAAIzEDIHMTo19PVKyqzMyn4+92yNtzdY++a9iK1OJXR9AFA8GoANe
+   eJzt2tsKhCAQAFBpF9o3Y///Y3uNiCaszOocEAQvzIMjgpMSvM8nGO+rRAHt+E/63co8uQEAwBMNQVuSd+4LwLm23NMAHMebFwAAqO17dQBQSclZj+oj4S5+wXjJWZcfPMk8R6b/Y2u1wEtysKakrqKWnNqOD6AVI9J8AtY=
   </data>
  </layer>
- <objectgroup id="4" name="Objects" offsetx="1" offsety="-2">
+ <objectgroup id="4" name="Objects">
   <properties>
    <property name="another object layer property" value="salmon"/>
    <property name="object layer property" type="bool" value="false"/>
@@ -57,7 +57,6 @@
   <object id="142" x="2624" y="896" width="128" height="64"/>
   <object id="143" x="4160" y="1088" width="896" height="64"/>
   <object id="144" x="4224" y="512" width="768" height="64"/>
-  <object id="145" x="3264" y="192" width="640" height="64"/>
   <object id="146" x="3072" y="640" width="640" height="64"/>
   <object id="147" x="2752" y="832" width="64" height="64"/>
   <object id="148" x="2368" y="1024" width="64" height="64"/>
@@ -68,5 +67,16 @@
   <object id="153" x="64" y="960.941">
    <polygon points="0,0 127.059,127.059 0,127.059"/>
   </object>
+  <object id="198" x="1088" y="640" width="64" height="64"/>
+  <object id="200" x="1216" y="640" width="512" height="64"/>
+ </objectgroup>
+ <objectgroup id="6" name="Ladder">
+  <object id="189" x="1152" y="704" width="64" height="320"/>
+ </objectgroup>
+ <objectgroup id="9" name="LadderTop">
+  <object id="197" x="1152" y="640" width="64" height="64"/>
+ </objectgroup>
+ <objectgroup id="10" name="LadderBottom">
+  <object id="185" x="1152" y="1024" width="64" height="64"/>
  </objectgroup>
 </map>

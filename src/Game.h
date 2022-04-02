@@ -12,7 +12,6 @@ public:
 	const std::string name = "Gyaszmat";
 	static const unsigned int MAX_FPS = 60;
 
-
 	void pushState(State* state);
 	void popState();
 	void changeState(State* state);

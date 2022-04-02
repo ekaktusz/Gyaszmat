@@ -29,6 +29,7 @@ void ResourceManager::loadTextures()
 	this->textureHolder.load(res::Texture::PlayerIdle, texturePath / "owlet_monster" / "Owlet_Monster_Idle_4.png");
 	this->textureHolder.load(res::Texture::PlayerRun, texturePath / "owlet_monster" / "Owlet_Monster_Run_6.png");
 	this->textureHolder.load(res::Texture::PlayerJump, texturePath / "owlet_monster" / "Owlet_Monster_Jump_8.png");
+	this->textureHolder.load(res::Texture::PlayerClimb, texturePath / "owlet_monster" / "Owlet_Monster_Climb_4.png");
 	this->textureHolder.load(res::Texture::MenuBackground, texturePath / "menu_background.jpg");
 	this->textureHolder.load(res::Texture::PauseBackground, texturePath / "pause_background.png");
 }
