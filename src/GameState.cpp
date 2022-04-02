@@ -1,21 +1,24 @@
 #include "GameState.h"
 #include "ResourceManager.h"
 #include "PauseState.h"
+#include "MapLayerNames.h"
 
 GameState::GameState(Game* game)
 {
 	this->game = game;
+
 	this->map = &ResourceManager::getInstance().getMap(res::Map::TestMap);
-	this->tileLayerFar = new MapLayer(*this->map, 0);
-	this->tileLayerMiddle = new MapLayer(*this->map, 1);
-	this->tileLayerNear = new MapLayer(*this->map, 2);
-	this->objectLayer = new MapLayer(*this->map, 3);
-	this->ladderLayer = new MapLayer(*this->map, 4);
-	this->ladderTopLayer = new MapLayer(*this->map, 5);
-	this->ladderBottomLayer = new MapLayer(*this->map, 6);
+	this->tileLayerFar = new TileLayer(*this->map, MapLayerNames::TileLayerName::BackLayer);
+	this->tileLayerMiddle = new TileLayer(*this->map, MapLayerNames::TileLayerName::MidLayer);
+	this->tileLayerNear = new TileLayer(*this->map, MapLayerNames::TileLayerName::FrontLayer);
+	this->objectLayer = new ObjectLayer(*this->map, MapLayerNames::ObjectLayerName::ObjectLayer);
+	this->ladder = new Ladder(map);
+
 	this->view = sf::View(sf::Vector2f(0.f, 0.f), sf::Vector2f(Game::XX, Game::YY));
 	this->game->renderWindow.setView(this->view);
-	this->playerHealthBar = HealthBar(100, 100);
+	
+	this->playerHealthBar.setHealth(100);
+	this->playerHealthBar.setMaxHealth(100);
 }
 
 GameState::~GameState()
@@ -24,9 +27,7 @@ GameState::~GameState()
 	delete tileLayerMiddle;
 	delete tileLayerNear;
 	delete objectLayer;
-	delete ladderLayer;
-	delete ladderTopLayer;
-	delete ladderBottomLayer;
+	delete ladder;
 	delete map;
 }
 
@@ -77,9 +78,6 @@ void GameState::updateCollision()
 {
 	sf::FloatRect playerBound = this->player.getHitbox().getGlobalBounds();
 	std::vector<sf::FloatRect> objectBounds = this->objectLayer->getObjectBounds();
-	std::vector<sf::FloatRect> ladderBounds = this->ladderLayer->getObjectBounds();
-	std::vector<sf::FloatRect> ladderTopBounds = this->ladderTopLayer->getObjectBounds();
-	std::vector<sf::FloatRect> ladderBottomBounds = this->ladderBottomLayer->getObjectBounds();
 
 	this->player.setResolved(false);
 	this->player.setCollisionWithLadder(false);
@@ -97,52 +95,7 @@ void GameState::updateCollision()
 		}
 	}
 
-	for (const sf::FloatRect& ladderBottomBound : ladderBottomBounds)
-	{
-		if (ladderBottomBound.intersects(playerBound, overlap))
-		{
-			// a letra aljan allsz, csak felfele mehetsz, nem kell resolve
-			this->player.setPossibleClimbingDirections(PlayerPossibleClimbingDir::UP);
-			this->player.setCollisionWithLadder(true);
-		}
-	}
-
-	for (const sf::FloatRect& ladderBound : ladderBounds)
-	{
-		if (ladderBound.intersects(playerBound, overlap))
-		{
-			// a letra kozepen allsz, barmerre mehetsz, nem kell resolve
-			this->player.setPossibleClimbingDirections(PlayerPossibleClimbingDir::BOTH);
-			this->player.setCollisionWithLadder(true);
-		}
-	}
-
-	// collision detection with ladderTop layer
-	for (const sf::FloatRect& ladderTopBound : ladderTopBounds)
-	{
-		if (ladderTopBound.intersects(playerBound, overlap))
-		{
-			// a letra tetejen allsz, barmerre mehetsz, kell resolve ha felette vagy es nem nyomod lefele
-			this->player.setPossibleClimbingDirections(PlayerPossibleClimbingDir::BOTH);
-			this->player.setCollisionWithLadder(true);
-
-			if (this->player.getActualClimbingState() == PlayerActualClimbingState::NONE
-				&& !this->player.isResolved())
-			{
-				sf::Vector2<float> collisionNormal =
-					sf::Vector2f(ladderTopBound.left, ladderTopBound.top)
-					- sf::Vector2f(playerBound.left, playerBound.top);
-				resolveCollision(overlap, collisionNormal);
-				this->player.setPossibleClimbingDirections(PlayerPossibleClimbingDir::DOWN);
-				this->player.setActualClimbingState(PlayerActualClimbingState::NONE);
-			}
-		}
-	}
-
-	if (!this->player.isCollidingWithLadder())
-	{
-		this->player.setActualClimbingState(PlayerActualClimbingState::NONE);
-	}
+	this->ladder->collide(this->player);
 }
 
 void GameState::resolveCollision(const sf::FloatRect& overlap, const sf::Vector2f& collisionNormal)

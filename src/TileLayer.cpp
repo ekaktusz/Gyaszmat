@@ -1,7 +1,8 @@
-#include "MapLayer.h"
+#include "TileLayer.h"
 
-MapLayer::MapLayer(const tmx::Map& map, std::size_t idx)
+TileLayer::TileLayer(const tmx::Map& map, MapLayerNames::TileLayerName name)
 {
+	int idx = static_cast<int>(name);
 	const auto& layers = map.getLayers();
 	if (map.getOrientation() == tmx::Orientation::Orthogonal && idx < layers.size()
 		&& layers[idx]->getType() == tmx::Layer::Type::Tile)
@@ -21,65 +22,46 @@ MapLayer::MapLayer(const tmx::Map& map, std::size_t idx)
 		m_globalBounds.height = mapSize.height;
 		SPDLOG_INFO("TileLayer: {}", idx);
 	}
-	else if (map.getOrientation() == tmx::Orientation::Orthogonal && idx < layers.size()
-		&& layers[idx]->getType() == tmx::Layer::Type::Object)
-	{
-		const auto& objectLayer = layers[idx]->getLayerAs<tmx::ObjectGroup>();
-		const auto& objects = objectLayer.getObjects();
-
-		for (const auto& object : objects)
-		{
-			tmx::FloatRect rect = object.getAABB();
-			objectBounds.push_back(sf::FloatRect(rect.left, rect.top, rect.width, rect.height));
-		}
-
-		SPDLOG_INFO("ObjectLayer: {}", idx);
-	}
 	else
 	{
 		SPDLOG_ERROR("Not a valid orthogonal layer, nothing will be drawn.");
 	}
 }
 
-const sf::FloatRect& MapLayer::getGlobalBounds() const
+const sf::FloatRect& TileLayer::getGlobalBounds() const
 {
 	return m_globalBounds;
 }
 
-const std::vector<sf::FloatRect>& MapLayer::getObjectBounds() const
-{
-	return objectBounds;
-}
-
-void MapLayer::setTile(int tileX, int tileY, tmx::TileLayer::Tile tile, bool refresh)
+void TileLayer::setTile(int tileX, int tileY, tmx::TileLayer::Tile tile, bool refresh)
 {
 	sf::Vector2u chunkLocale;
 	const auto& selectedChunk = getChunkAndTransform(tileX, tileY, chunkLocale);
 	selectedChunk->setTile(chunkLocale.x, chunkLocale.y, tile, refresh);
 }
 
-tmx::TileLayer::Tile MapLayer::getTile(int tileX, int tileY)
+tmx::TileLayer::Tile TileLayer::getTile(int tileX, int tileY)
 {
 	sf::Vector2u chunkLocale;
 	const auto& selectedChunk = getChunkAndTransform(tileX, tileY, chunkLocale);
 	return selectedChunk->getTile(chunkLocale.x, chunkLocale.y);
 }
 
-void MapLayer::setColor(int tileX, int tileY, sf::Color color, bool refresh)
+void TileLayer::setColor(int tileX, int tileY, sf::Color color, bool refresh)
 {
 	sf::Vector2u chunkLocale;
 	const auto& selectedChunk = getChunkAndTransform(tileX, tileY, chunkLocale);
 	selectedChunk->setColor(chunkLocale.x, chunkLocale.y, color, refresh);
 }
 
-sf::Color MapLayer::getColor(int tileX, int tileY)
+sf::Color TileLayer::getColor(int tileX, int tileY)
 {
 	sf::Vector2u chunkLocale;
 	const auto& selectedChunk = getChunkAndTransform(tileX, tileY, chunkLocale);
 	return selectedChunk->getColor(chunkLocale.x, chunkLocale.y);
 }
 
-void MapLayer::update(sf::Time elapsed)
+void TileLayer::update(sf::Time elapsed)
 {
 	for (auto& c : m_visibleChunks)
 	{
@@ -110,7 +92,7 @@ void MapLayer::update(sf::Time elapsed)
 	}
 }
 
-void MapLayer::createChunks(const tmx::Map& map, const tmx::TileLayer& layer)
+void TileLayer::createChunks(const tmx::Map& map, const tmx::TileLayer& layer)
 {
 	// look up all the tile sets and load the textures
 	const auto& tileSets = map.getTilesets();
@@ -193,7 +175,7 @@ void MapLayer::createChunks(const tmx::Map& map, const tmx::TileLayer& layer)
 	}
 }
 
-void MapLayer::updateVisibility(const sf::View& view) const
+void TileLayer::updateVisibility(const sf::View& view) const
 {
 	sf::Vector2f viewCorner = view.getCenter();
 	viewCorner -= view.getSize() / 2.f;
@@ -219,7 +201,7 @@ void MapLayer::updateVisibility(const sf::View& view) const
 	std::swap(m_visibleChunks, visible);
 }
 
-void MapLayer::draw(sf::RenderTarget& rt, sf::RenderStates states) const
+void TileLayer::draw(sf::RenderTarget& rt, sf::RenderStates states) const
 {
 	// calc view coverage and draw nearest chunks
 	updateVisibility(rt.getView());

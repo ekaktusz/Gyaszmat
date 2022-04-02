@@ -2,10 +2,12 @@
 
 #include "Enemy.h"
 #include "HealthBar.h"
-#include "MapLayer.h"
+#include "TileLayer.h"
+#include "ObjectLayer.h"
 #include "Player.h"
 #include "State.h"
 #include "pch.h"
+#include "Ladder.h"
 
 class GameState : public State
 {
@@ -18,13 +20,11 @@ private:
 	sf::Clock clock;
 
 	const tmx::Map* map;
-	MapLayer* tileLayerFar;
-	MapLayer* tileLayerMiddle;
-	MapLayer* tileLayerNear;
-	MapLayer* objectLayer;
-	MapLayer* ladderLayer;
-	MapLayer* ladderTopLayer;
-	MapLayer* ladderBottomLayer;
+	TileLayer* tileLayerFar;
+	TileLayer* tileLayerMiddle;
+	TileLayer* tileLayerNear;
+	ObjectLayer* objectLayer;
+	Ladder* ladder;
 
 	HealthBar playerHealthBar;
 
@@ -38,6 +38,4 @@ private:
 public:
 	GameState(Game* game);
 	~GameState();
-
-	void run();
 };

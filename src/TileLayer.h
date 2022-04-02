@@ -1,18 +1,18 @@
 #pragma once
 
 #include "pch.h"
+#include "MapLayerNames.h"
 
-class MapLayer final : public sf::Drawable
+class TileLayer final : public sf::Drawable
 {
 public:
-	MapLayer(const MapLayer&) = delete;
-	MapLayer(const tmx::Map& map, std::size_t idx);
-	~MapLayer() = default;
+	TileLayer(const TileLayer&) = delete;
+	TileLayer(const tmx::Map& map, MapLayerNames::TileLayerName idx);
+	~TileLayer() = default;
 	
-	MapLayer& operator=(const MapLayer&) = delete;
+	TileLayer& operator=(const TileLayer&) = delete;
 
 	const sf::FloatRect& getGlobalBounds() const;
-	const std::vector<sf::FloatRect>& getObjectBounds() const;
 
 	void setTile(int tileX, int tileY, tmx::TileLayer::Tile tile, bool refresh = true);
 
@@ -30,8 +30,6 @@ private:
 	sf::Vector2u m_chunkCount;
 	sf::Vector2u m_MapTileSize; // general Tilesize of Map
 	sf::FloatRect m_globalBounds;
-
-	std::vector<sf::FloatRect> objectBounds;
 
 	using TextureResource = std::map<std::string, std::unique_ptr<sf::Texture>>;
 	TextureResource m_textureResource;
