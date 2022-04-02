@@ -14,7 +14,7 @@ Ladder::~Ladder()
 	delete this->botLadderLayer;
 }
 
-void Ladder::collide(Player& player)
+void Ladder::updateCollision(Player& player)
 {
 	sf::FloatRect playerBound = player.getHitbox().getGlobalBounds();
 	std::vector<sf::FloatRect> midLadderBounds = this->midladderLayer->getObjectBounds();
@@ -58,23 +58,7 @@ void Ladder::collide(Player& player)
 				sf::Vector2<float> collisionNormal =
 					sf::Vector2f(ladderTopBound.left, ladderTopBound.top)
 					- sf::Vector2f(playerBound.left, playerBound.top);
-				sf::Vector3f manifold;
-
-				if (overlap.width < overlap.height) // collision in x direction
-				{
-					manifold.x = (collisionNormal.x < 0) ? 1.f : -1.f;
-					manifold.z = overlap.width;
-					player.setVelocity(sf::Vector2f(0, player.getVelocity().y));
-				}
-				else // collision in y direction
-				{
-					manifold.y = (collisionNormal.y < 0) ? 1.f : -1.f;
-					manifold.z = overlap.height;
-					player.stopFalling();
-				}
-
-				sf::Vector2f normal(manifold.x * manifold.z, manifold.y * manifold.z);
-				player.move(normal);
+				player.resolveCollision(overlap, collisionNormal);
 				player.setPossibleClimbingDirections(PlayerPossibleClimbingDir::DOWN);
 				player.setActualClimbingState(PlayerActualClimbingState::NONE);
 				player.stopFalling();

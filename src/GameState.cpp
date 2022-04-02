@@ -91,31 +91,9 @@ void GameState::updateCollision()
 		{
 			auto collisionNormal = sf::Vector2f(objectBound.left, objectBound.top)
 				- sf::Vector2f(playerBound.left, playerBound.top);
-			resolveCollision(overlap, collisionNormal);
+			this->player.resolveCollision(overlap, collisionNormal);
 		}
 	}
 
-	this->ladder->collide(this->player);
-}
-
-void GameState::resolveCollision(const sf::FloatRect& overlap, const sf::Vector2f& collisionNormal)
-{
-	//the collision normal is stored in x and y, with the penetration in z
-	sf::Vector3f manifold;
-
-	if (overlap.width < overlap.height) // collision in x direction
-	{
-		manifold.x = (collisionNormal.x < 0) ? 1.f : -1.f;
-		manifold.z = overlap.width;
-		this->player.setVelocity(sf::Vector2f(0, this->player.getVelocity().y));
-	}
-	else // collision in y direction
-	{
-		manifold.y = (collisionNormal.y < 0) ? 1.f : -1.f;
-		manifold.z = overlap.height;
-		this->player.stopFalling();
-	}
-
-	sf::Vector2f normal(manifold.x * manifold.z, manifold.y * manifold.z);
-	this->player.move(normal);
+	this->ladder->updateCollision(this->player);
 }
