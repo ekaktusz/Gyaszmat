@@ -21,6 +21,10 @@ void Ladder::updateCollision(Player& player)
 	std::vector<sf::FloatRect> topLadderBounds = this->topLadderLayer->getObjectBounds();
 	std::vector<sf::FloatRect> botLadderBounds = this->botLadderLayer->getObjectBounds();
 
+	player.setResolved(false);
+	player.setCollisionWithLadder(false);
+	player.setPossibleClimbingDirections(PlayerPossibleClimbingDir::NONE);
+
 	sf::FloatRect overlap;
 
 	for (const sf::FloatRect& ladderBottomBound : botLadderBounds)

@@ -11,8 +11,8 @@ GameState::GameState(Game* game)
 	this->tileLayerFar = new TileLayer(*this->map, MapLayerNames::TileLayerName::BackLayer);
 	this->tileLayerMiddle = new TileLayer(*this->map, MapLayerNames::TileLayerName::MidLayer);
 	this->tileLayerNear = new TileLayer(*this->map, MapLayerNames::TileLayerName::FrontLayer);
-	this->objectLayer = new ObjectLayer(*this->map, MapLayerNames::ObjectLayerName::ObjectLayer);
 	this->ladder = new Ladder(map);
+	this->terrain = new Terrain(map);
 
 	this->view = sf::View(sf::Vector2f(0.f, 0.f), sf::Vector2f(Game::XX, Game::YY));
 	this->game->renderWindow.setView(this->view);
@@ -26,8 +26,8 @@ GameState::~GameState()
 	delete tileLayerFar;
 	delete tileLayerMiddle;
 	delete tileLayerNear;
-	delete objectLayer;
 	delete ladder;
+	delete terrain;
 	delete map;
 }
 
@@ -76,24 +76,6 @@ void GameState::render()
 
 void GameState::updateCollision()
 {
-	sf::FloatRect playerBound = this->player.getHitbox().getGlobalBounds();
-	std::vector<sf::FloatRect> objectBounds = this->objectLayer->getObjectBounds();
-
-	this->player.setResolved(false);
-	this->player.setCollisionWithLadder(false);
-	this->player.setPossibleClimbingDirections(PlayerPossibleClimbingDir::NONE);
-
-	// collision detection with every object on object layer
-	sf::FloatRect overlap;
-	for (const sf::FloatRect& objectBound : objectBounds)
-	{
-		if (objectBound.intersects(playerBound, overlap))
-		{
-			auto collisionNormal = sf::Vector2f(objectBound.left, objectBound.top)
-				- sf::Vector2f(playerBound.left, playerBound.top);
-			this->player.resolveCollision(overlap, collisionNormal);
-		}
-	}
-
+	this->terrain->updateCollision(this->player);
 	this->ladder->updateCollision(this->player);
 }

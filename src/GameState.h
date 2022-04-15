@@ -8,6 +8,7 @@
 #include "State.h"
 #include "pch.h"
 #include "Ladder.h"
+#include "Terrain.h"
 
 class GameState : public State
 {
@@ -23,8 +24,8 @@ private:
 	TileLayer* tileLayerFar;
 	TileLayer* tileLayerMiddle;
 	TileLayer* tileLayerNear;
-	ObjectLayer* objectLayer;
 	Ladder* ladder;
+	Terrain* terrain;
 
 	HealthBar playerHealthBar;
 
@@ -33,7 +34,6 @@ private:
 	void handleEvent(const sf::Event& event) override;
 
 	void updateCollision();
-	void resolveCollision(const sf::FloatRect& overlap, const sf::Vector2f& collisionNormal);
 
 public:
 	GameState(Game* game);
