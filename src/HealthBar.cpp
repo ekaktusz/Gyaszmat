@@ -56,6 +56,16 @@ void HealthBar::update(unsigned int health)
 	this->health = health;
 }
 
+void HealthBar::setHealth(unsigned int health)
+{
+	this->health = health;
+}
+
+void HealthBar::setMaxHealth(unsigned int maxHealth)
+{
+	this->maxHealth = maxHealth;
+}
+
 void HealthBar::alignTextToMid()
 {
 	this->label.getText().setPosition(this->maxHealthBar.getPosition().x + this->length / 2

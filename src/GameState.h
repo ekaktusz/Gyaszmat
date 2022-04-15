@@ -2,10 +2,13 @@
 
 #include "Enemy.h"
 #include "HealthBar.h"
-#include "MapLayer.h"
+#include "TileLayer.h"
+#include "ObjectLayer.h"
 #include "Player.h"
 #include "State.h"
 #include "pch.h"
+#include "Ladder.h"
+#include "Terrain.h"
 
 class GameState : public State
 {
@@ -18,13 +21,11 @@ private:
 	sf::Clock clock;
 
 	const tmx::Map* map;
-	MapLayer* tileLayerFar;
-	MapLayer* tileLayerMiddle;
-	MapLayer* tileLayerNear;
-	MapLayer* objectLayer;
-	MapLayer* ladderLayer;
-	MapLayer* ladderTopLayer;
-	MapLayer* ladderBottomLayer;
+	TileLayer* tileLayerFar;
+	TileLayer* tileLayerMiddle;
+	TileLayer* tileLayerNear;
+	Ladder* ladder;
+	Terrain* terrain;
 
 	HealthBar playerHealthBar;
 
@@ -33,11 +34,8 @@ private:
 	void handleEvent(const sf::Event& event) override;
 
 	void updateCollision();
-	void resolveCollision(const sf::FloatRect& overlap, const sf::Vector2f& collisionNormal);
 
 public:
 	GameState(Game* game);
 	~GameState();
-
-	void run();
 };
