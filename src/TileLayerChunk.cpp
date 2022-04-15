@@ -1,6 +1,6 @@
-#include "MapLayer.h"
+#include "TileLayer.h"
 
-MapLayer::Chunk::Chunk(const tmx::TileLayer& layer, std::vector<const tmx::Tileset*> tilesets,
+TileLayer::Chunk::Chunk(const tmx::TileLayer& layer, std::vector<const tmx::Tileset*> tilesets,
 	const sf::Vector2f& position, const sf::Vector2f& tileCount, const sf::Vector2u& tileSize,
 	std::size_t rowSize, TextureResource& tr,
 	const std::map<std::uint32_t, tmx::Tileset::Tile>& animTiles) :
@@ -45,7 +45,7 @@ MapLayer::Chunk::Chunk(const tmx::TileLayer& layer, std::vector<const tmx::Tiles
 	generateTiles(true);
 }
 
-void MapLayer::Chunk::generateTiles(bool registerAnimation)
+void TileLayer::Chunk::generateTiles(bool registerAnimation)
 {
 	if (registerAnimation)
 	{
@@ -131,34 +131,34 @@ void MapLayer::Chunk::generateTiles(bool registerAnimation)
 	}
 }
 
-std::vector<MapLayer::AnimationState>& MapLayer::Chunk::getActiveAnimations()
+std::vector<TileLayer::AnimationState>& TileLayer::Chunk::getActiveAnimations()
 {
 	return this->m_activeAnimations;
 }
 
-tmx::TileLayer::Tile MapLayer::Chunk::getTile(int x, int y) const
+tmx::TileLayer::Tile TileLayer::Chunk::getTile(int x, int y) const
 {
 	return m_chunkTileIDs[calcIndexFrom(x, y)];
 }
 
-void MapLayer::Chunk::setTile(int x, int y, tmx::TileLayer::Tile tile, bool refresh)
+void TileLayer::Chunk::setTile(int x, int y, tmx::TileLayer::Tile tile, bool refresh)
 {
 	m_chunkTileIDs[calcIndexFrom(x, y)] = tile;
 	maybeRegenerate(refresh);
 }
 
-sf::Color MapLayer::Chunk::getColor(int x, int y) const
+sf::Color TileLayer::Chunk::getColor(int x, int y) const
 {
 	return m_chunkColors[calcIndexFrom(x, y)];
 }
 
-void MapLayer::Chunk::setColor(int x, int y, sf::Color color, bool refresh)
+void TileLayer::Chunk::setColor(int x, int y, sf::Color color, bool refresh)
 {
 	m_chunkColors[calcIndexFrom(x, y)] = color;
 	maybeRegenerate(refresh);
 }
 
-void MapLayer::Chunk::maybeRegenerate(bool refresh)
+void TileLayer::Chunk::maybeRegenerate(bool refresh)
 {
 	if (refresh)
 	{
@@ -170,17 +170,17 @@ void MapLayer::Chunk::maybeRegenerate(bool refresh)
 	}
 }
 
-int MapLayer::Chunk::calcIndexFrom(int x, int y) const
+int TileLayer::Chunk::calcIndexFrom(int x, int y) const
 {
 	return x + y * chunkTileCount.x;
 }
 
-bool MapLayer::Chunk::empty() const
+bool TileLayer::Chunk::empty() const
 {
 	return m_chunkArrays.empty();
 }
 
-void MapLayer::Chunk::flipY(sf::Vector2f* v0, sf::Vector2f* v1, sf::Vector2f* v2, sf::Vector2f* v3)
+void TileLayer::Chunk::flipY(sf::Vector2f* v0, sf::Vector2f* v1, sf::Vector2f* v2, sf::Vector2f* v3)
 {
 	// Flip Y
 	sf::Vector2f tmp = *v0;
@@ -190,7 +190,7 @@ void MapLayer::Chunk::flipY(sf::Vector2f* v0, sf::Vector2f* v1, sf::Vector2f* v2
 	v3->y = v2->y;
 }
 
-void MapLayer::Chunk::flipX(sf::Vector2f* v0, sf::Vector2f* v1, sf::Vector2f* v2, sf::Vector2f* v3)
+void TileLayer::Chunk::flipX(sf::Vector2f* v0, sf::Vector2f* v1, sf::Vector2f* v2, sf::Vector2f* v3)
 {
 	// Flip X
 	sf::Vector2f tmp = *v0;
@@ -200,7 +200,7 @@ void MapLayer::Chunk::flipX(sf::Vector2f* v0, sf::Vector2f* v1, sf::Vector2f* v2
 	v3->x = v0->x;
 }
 
-void MapLayer::Chunk::flipD(sf::Vector2f* v0, sf::Vector2f* v1, sf::Vector2f* v2, sf::Vector2f* v3)
+void TileLayer::Chunk::flipD(sf::Vector2f* v0, sf::Vector2f* v1, sf::Vector2f* v2, sf::Vector2f* v3)
 {
 	// Diagonal flip
 	sf::Vector2f tmp = *v1;
@@ -210,7 +210,7 @@ void MapLayer::Chunk::flipD(sf::Vector2f* v0, sf::Vector2f* v1, sf::Vector2f* v2
 	v3->y = tmp.y;
 }
 
-void MapLayer::Chunk::doFlips(
+void TileLayer::Chunk::doFlips(
 	std::uint8_t bits, sf::Vector2f* v0, sf::Vector2f* v1, sf::Vector2f* v2, sf::Vector2f* v3)
 {
 	// 0000 = no change
@@ -284,7 +284,7 @@ void MapLayer::Chunk::doFlips(
 	}
 }
 
-void MapLayer::Chunk::draw(sf::RenderTarget& rt, sf::RenderStates states) const
+void TileLayer::Chunk::draw(sf::RenderTarget& rt, sf::RenderStates states) const
 {
 	states.transform *= getTransform();
 	for (const auto& a : m_chunkArrays)

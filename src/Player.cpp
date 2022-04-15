@@ -388,3 +388,25 @@ void Player::setActualClimbingState(PlayerActualClimbingState stateToSet)
 {
 	this->actualClimbingState = stateToSet;
 }
+
+void Player::resolveCollision(const sf::FloatRect& overlap, const sf::Vector2f& collisionNormal)
+{
+	//the collision normal is stored in x and y, with the penetration in z
+	sf::Vector3f manifold;
+
+	if (overlap.width < overlap.height) // collision in x direction
+	{
+		manifold.x = (collisionNormal.x < 0) ? 1.f : -1.f;
+		manifold.z = overlap.width;
+		this->setVelocity(sf::Vector2f(0, this->getVelocity().y));
+	}
+	else // collision in y direction
+	{
+		manifold.y = (collisionNormal.y < 0) ? 1.f : -1.f;
+		manifold.z = overlap.height;
+		this->stopFalling();
+	}
+
+	sf::Vector2f normal(manifold.x * manifold.z, manifold.y * manifold.z);
+	this->move(normal);
+}

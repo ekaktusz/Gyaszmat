@@ -121,4 +121,6 @@ public:
 	void setResolved(bool newResolvedState);
 	void setPossibleClimbingDirections(PlayerPossibleClimbingDir directionToSet);
 	void setActualClimbingState(PlayerActualClimbingState stateToSet);
+
+	void resolveCollision(const sf::FloatRect& overlap, const sf::Vector2f& collisionNormal);
 };

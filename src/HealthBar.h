@@ -26,4 +26,6 @@ public:
 	void setPosition(const sf::Vector2f& position);
 	void draw(sf::RenderTarget& target, sf::RenderStates states) const;
 	void update(unsigned int health);
+	void setHealth(unsigned int health);
+	void setMaxHealth(unsigned int maxHealth);
 };
