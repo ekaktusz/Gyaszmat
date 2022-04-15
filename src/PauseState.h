@@ -21,6 +21,7 @@ private:
 	sf::Sprite background;
 
 	Button continueButton;
+	Button mainMenuButton;
 
 	Label titleLabel;
 };

@@ -16,6 +16,7 @@ public:
 	void popState();
 	void changeState(State* state);
 	State* peekState();
+	void returnToMain();
 
 	void run();
 

@@ -30,6 +30,17 @@ PauseState::PauseState(Game* game)
 		this->game->popState();
 	});
 
+	this->mainMenuButton.setText("exit to mainmenu");
+	this->mainMenuButton.setFont(res::Font::Roboto);
+	this->mainMenuButton.setAlignment(Button::Alignment::Center);
+	this->mainMenuButton.setSize(sf::Vector2f(200, 30));
+	this->mainMenuButton.setPosition(sf::Vector2f(this->game->renderWindow.getSize().x / 2.f
+			- this->mainMenuButton.getGlobalBounds().width / 2.f,
+		200));
+	this->mainMenuButton.setAction([&]() { 
+		this->game->returnToMain();
+	});
+
 }
 
 void PauseState::render()
@@ -37,6 +48,7 @@ void PauseState::render()
 	this->game->renderWindow.clear();
 	this->game->renderWindow.draw(this->background);
 	this->game->renderWindow.draw(this->continueButton);
+	this->game->renderWindow.draw(this->mainMenuButton);
 	this->game->renderWindow.draw(this->titleLabel);
 	this->game->renderWindow.display();
 }
@@ -62,4 +74,5 @@ void PauseState::handleEvent(const sf::Event& event)
 		}
 	}
 	this->continueButton.handleEvent(event);
+	this->mainMenuButton.handleEvent(event);
 }

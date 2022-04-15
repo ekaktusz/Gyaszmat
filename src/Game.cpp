@@ -28,6 +28,13 @@ State* Game::peekState()
 	return this->states.top();
 }
 
+void Game::returnToMain()
+{
+	while (!this->states.empty())
+		popState();
+	this->pushState(new MenuState(this));
+}
+
 void Game::run()
 {
 	sf::Event event;
