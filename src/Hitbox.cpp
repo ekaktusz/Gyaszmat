@@ -1,6 +1,6 @@
 #include "Hitbox.h"
 
-Hitbox::Hitbox() 
+Hitbox::Hitbox()
 {}
 
 Hitbox::Hitbox(const sf::Vector2f& parentPosition, sf::Vector2f size, sf::Vector2f offset) :
@@ -30,4 +30,3 @@ sf::FloatRect Hitbox::getGlobalBounds() const
 {
 	return this->hitbox.getGlobalBounds();
 }
-

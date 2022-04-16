@@ -28,7 +28,7 @@ HealthBar::HealthBar(unsigned int health, unsigned int maxHealth) :
 		+ "]"); // can be change to std::format after we support c++20
 	this->label.getText().setFillColor(sf::Color::White);
 	this->label.getText().setCharacterSize(this->height - 4);
-	
+
 	this->alignTextToMid();
 }
 

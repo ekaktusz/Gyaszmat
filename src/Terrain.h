@@ -1,17 +1,16 @@
 #pragma once
 
-#include "pch.h"
 #include "Collidable.h"
-#include "Objectlayer.h"
+#include "ObjectLayer.h"
 #include "Player.h"
+#include "pch.h"
 
-
-class Terrain : public Collidable 
+class Terrain : public Collidable
 {
-private: 
+private:
 	ObjectLayer* objectLayer;
 
-public: 
+public:
 	Terrain(const tmx::Map* map);
 	void updateCollision(Player& player) override;
 };

@@ -14,7 +14,6 @@ void ResourceManager::loadFonts()
 	this->fontHolder.load(res::Font::Pixel, fontPath / "pixel_art_font.ttf");
 	this->fontHolder.load(res::Font::Upheaval, fontPath / "upheaval.ttf");
 	this->fontHolder.load(res::Font::Fipps, fontPath / "fipps.otf");
-	
 }
 
 void ResourceManager::loadMaps()

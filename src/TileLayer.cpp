@@ -210,4 +210,3 @@ void TileLayer::draw(sf::RenderTarget& rt, sf::RenderStates states) const
 		rt.draw(*c, states);
 	}
 }
-

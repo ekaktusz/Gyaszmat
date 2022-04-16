@@ -11,7 +11,7 @@ PauseState::PauseState(Game* game)
 	this->titleLabel.getText().setPosition(this->game->renderWindow.getSize().x / 2.f
 			- this->titleLabel.getText().getGlobalBounds().width / 2.f,
 		20.f);
-	
+
 	this->backgroundTexture =
 		ResourceManager::getInstance().getTexture(res::Texture::PauseBackground);
 	this->backgroundTexture.setRepeated(true);
@@ -37,10 +37,7 @@ PauseState::PauseState(Game* game)
 	this->mainMenuButton.setPosition(sf::Vector2f(this->game->renderWindow.getSize().x / 2.f
 			- this->mainMenuButton.getGlobalBounds().width / 2.f,
 		200));
-	this->mainMenuButton.setAction([&]() { 
-		this->game->returnToMain();
-	});
-
+	this->mainMenuButton.setAction([&]() { this->game->returnToMain(); });
 }
 
 void PauseState::render()

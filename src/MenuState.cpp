@@ -1,36 +1,31 @@
 #include "MenuState.h"
-#include "ResourceManager.h"
 #include "GameState.h"
-
+#include "ResourceManager.h"
 
 MenuState::MenuState(Game* game)
 {
 	this->game = game;
-	
+
 	this->titleLabel.getText().setString(game->name);
 	this->titleLabel.getText().setFont(ResourceManager::getInstance().getFont(res::Font::Pixel));
 	this->titleLabel.getText().setCharacterSize(50);
-	this->titleLabel.getText().setPosition(
-		this->game->renderWindow.getSize().x - this->titleLabel.getText().getGlobalBounds().width - 20,
+	this->titleLabel.getText().setPosition(this->game->renderWindow.getSize().x
+			- this->titleLabel.getText().getGlobalBounds().width - 20,
 		20);
-
 
 	this->backgroundTexture =
 		ResourceManager::getInstance().getTexture(res::Texture::MenuBackground);
 	this->background.setTexture(this->backgroundTexture);
-
 
 	this->startButton.setText("new game");
 	this->startButton.setFont(res::Font::Roboto);
 	this->startButton.setAlignment(Button::Alignment::Center);
 	this->startButton.setPosition(sf::Vector2f(30, 100));
 	this->startButton.setSize(sf::Vector2f(200, 30));
-	this->startButton.setAction([&]() 
-		{ 
-			SPDLOG_INFO("Switch to GameState: Starting the game");
-			this->game->pushState(new GameState(this->game));
-		}
-	);
+	this->startButton.setAction([&]() {
+		SPDLOG_INFO("Switch to GameState: Starting the game");
+		this->game->pushState(new GameState(this->game));
+	});
 
 	this->exitButton.setText("exitame");
 	this->exitButton.setFont(res::Font::Roboto);

@@ -3,7 +3,7 @@
 #include "MenuState.h"
 
 void Game::pushState(State* state)
-{	
+{
 	this->states.push(state);
 }
 
@@ -67,4 +67,3 @@ Game::~Game()
 	while (!this->states.empty())
 		popState();
 }
-

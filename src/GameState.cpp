@@ -1,7 +1,7 @@
 #include "GameState.h"
-#include "ResourceManager.h"
-#include "PauseState.h"
 #include "MapLayerNames.h"
+#include "PauseState.h"
+#include "ResourceManager.h"
 
 GameState::GameState(Game* game)
 {
@@ -16,7 +16,7 @@ GameState::GameState(Game* game)
 
 	this->view = sf::View(sf::Vector2f(0.f, 0.f), sf::Vector2f(Game::XX, Game::YY));
 	this->game->renderWindow.setView(this->view);
-	
+
 	this->playerHealthBar.setHealth(100);
 	this->playerHealthBar.setMaxHealth(100);
 }
@@ -66,7 +66,7 @@ void GameState::render()
 {
 	this->game->renderWindow.clear();
 	this->game->renderWindow.setView(this->view);
-	this->game->renderWindow.draw(*this->tileLayerFar); // layer behind player
+	this->game->renderWindow.draw(*this->tileLayerFar);	   // layer behind player
 	this->game->renderWindow.draw(*this->tileLayerMiddle); // layer of map
 	this->game->renderWindow.draw(this->player);
 	this->game->renderWindow.draw(*this->tileLayerNear); // layer vefore player

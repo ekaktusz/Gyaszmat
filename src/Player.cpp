@@ -8,7 +8,6 @@ Player::Player()
 	this->jumpingTexture = ResourceManager::getInstance().getTexture(res::Texture::PlayerJump);
 	this->climbingTexture = ResourceManager::getInstance().getTexture(res::Texture::PlayerClimb);
 
-
 	this->sprite.setTexture(idleTexture);
 	// Set starting frame to the first 32x32 part of the image
 	this->currentFrame = sf::IntRect(0, 0, 32, 32);
@@ -19,7 +18,9 @@ Player::Player()
 
 	// Set up hitbox
 	sf::Vector2f hitboxSize = sf::Vector2f(
-		this->sprite.getGlobalBounds().width - 34, this->sprite.getGlobalBounds().height - 12);
+		this->sprite.getGlobalBounds().width - 34,
+		this->sprite.getGlobalBounds().height - 12
+	);
 	sf::Vector2f hitboxOffSet = sf::Vector2f(17, 12);
 	this->hitbox = Hitbox(this->sprite.getPosition(), hitboxSize, hitboxOffSet);
 

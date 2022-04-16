@@ -22,4 +22,3 @@ const std::vector<sf::FloatRect>& ObjectLayer::getObjectBounds() const
 {
 	return this->objectBounds;
 }
-
