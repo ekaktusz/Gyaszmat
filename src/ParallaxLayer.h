@@ -7,6 +7,7 @@ class ParallaxLayer : public sf::Drawable
 private:
 	sf::Sprite sprite;
 	sf::Texture texture;
+	sf::IntRect currentFrame;
 	float distanceFromCamera;
 
 public:

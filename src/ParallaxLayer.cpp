@@ -1,4 +1,5 @@
 #include "ParallaxLayer.h"
+#include "Game.h"
 
 ParallaxLayer::ParallaxLayer(const sf::Texture& texture, float distanceFromCamera)
 {
@@ -6,6 +7,7 @@ ParallaxLayer::ParallaxLayer(const sf::Texture& texture, float distanceFromCamer
 	this->texture.setRepeated(true);
 	this->sprite.setTexture(this->texture);
 	this->distanceFromCamera = distanceFromCamera;
+	this->currentFrame = sf::IntRect(0, 0, Game::XX, Game::YY);
 }
 
 // Inherited via Drawable
@@ -41,7 +43,9 @@ const sf::Vector2f& ParallaxLayer::getPosition()
 
 void ParallaxLayer::update(sf::Vector2f cameraPosition)
 {
-	this->sprite.setPosition(cameraPosition.x * (this->distanceFromCamera), cameraPosition.y);
+	this->currentFrame.left = cameraPosition.x * (1 - distanceFromCamera);
+	this->sprite.setPosition(cameraPosition.x, cameraPosition.y);
+	this->sprite.setTextureRect(this->currentFrame);
 }
 
 

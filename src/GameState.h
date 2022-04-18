@@ -28,7 +28,7 @@ private:
 	TileLayer* tileLayerNear;
 	Ladder* ladder;
 	Terrain* terrain;
-
+	
 	ParallaxBackground parallaxBackground;
 
 	HealthBar playerHealthBar;

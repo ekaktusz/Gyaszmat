@@ -24,13 +24,13 @@ GameState::GameState(Game* game)
 	this->parallaxBackground.addLayer(new ParallaxLayer(
 		ResourceManager::getInstance().getTexture(res::Texture::ParallaxMountain1), 1.f));
 	this->parallaxBackground.addLayer(new ParallaxLayer(
-		ResourceManager::getInstance().getTexture(res::Texture::ParallaxMountain2), 0.7f));
+		ResourceManager::getInstance().getTexture(res::Texture::ParallaxMountain2), 0.97f));
 	this->parallaxBackground.addLayer(new ParallaxLayer(
-		ResourceManager::getInstance().getTexture(res::Texture::ParallaxMountain3), 0.4f));
+		ResourceManager::getInstance().getTexture(res::Texture::ParallaxMountain3), 0.94f));
 	this->parallaxBackground.addLayer(new ParallaxLayer(
-		ResourceManager::getInstance().getTexture(res::Texture::ParallaxMountain4), 0.2f));
+		ResourceManager::getInstance().getTexture(res::Texture::ParallaxMountain4), 0.85f));
 	this->parallaxBackground.addLayer(new ParallaxLayer(
-		ResourceManager::getInstance().getTexture(res::Texture::ParallaxMountain5), 0.1f));
+		ResourceManager::getInstance().getTexture(res::Texture::ParallaxMountain5), 0.8f));
 
 	this->parallaxBackground.setScale(Game::YY / this->parallaxBackground.getGlobalBounds().height,
 		Game::YY / this->parallaxBackground.getGlobalBounds().height);
