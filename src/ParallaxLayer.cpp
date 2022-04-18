@@ -44,6 +44,7 @@ const sf::Vector2f& ParallaxLayer::getPosition()
 void ParallaxLayer::update(sf::Vector2f cameraPosition)
 {
 	this->currentFrame.left = cameraPosition.x * (1 - distanceFromCamera);
+	this->currentFrame.top = cameraPosition.y * (1 - distanceFromCamera) * 0.1;
 	this->sprite.setPosition(cameraPosition.x, cameraPosition.y);
 	this->sprite.setTextureRect(this->currentFrame);
 }
