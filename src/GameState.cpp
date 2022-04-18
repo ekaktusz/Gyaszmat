@@ -13,6 +13,7 @@ GameState::GameState(Game* game)
 	this->tileLayerNear = new TileLayer(*this->map, MapLayerNames::TileLayerName::FrontLayer);
 	this->ladder = new Ladder(map);
 	this->terrain = new Terrain(map);
+	this->mapSize = map->getBounds();
 
 	this->view = sf::View(sf::Vector2f(0.f, 0.f), sf::Vector2f(Game::XX, Game::YY));
 	this->game->renderWindow.setView(this->view);
@@ -50,15 +51,14 @@ void GameState::update(sf::Time deltaTime)
 	sf::Vector2f movement =
 		player.getCenterPosition() - view.getCenter() - sf::Vector2f(0.f, Game::YY / 10);
 	this->view.move(movement * deltaTime.asSeconds() * 10.f);
-	//this->parallaxBackground.update(player.getCenterPosition() - view.getCenter());
 	//this->view.setCenter(this->player.getCenterPosition() - sf::Vector2f(0.f, Game::XX / 6));
 	this->updateCollision();
 	this->playerHealthBar.update(this->player.getHealth());
-	this->playerHealthBar.setPosition(
-		sf::Vector2f(this->view.getCenter() - sf::Vector2f(Game::XX / 2, Game::YY / 2)));
-	
-	this->parallaxBackground.setPosition(
-		sf::Vector2f(this->view.getCenter() - sf::Vector2f(Game::XX / 2, Game::YY / 2)));
+
+	sf::Vector2f cameraPosition(this->view.getCenter() - sf::Vector2f(Game::XX / 2, Game::YY / 2));
+	this->playerHealthBar.setPosition(cameraPosition);
+
+	this->parallaxBackground.update(cameraPosition);
 }
 
 void GameState::handleEvent(const sf::Event& event)

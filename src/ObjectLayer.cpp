@@ -9,7 +9,6 @@ ObjectLayer::ObjectLayer(const tmx::Map& map, MapLayerNames::ObjectLayerName nam
 	{
 		const auto& objectLayer = layers[idx]->getLayerAs<tmx::ObjectGroup>();
 		const auto& objects = objectLayer.getObjects();
-
 		for (const auto& object : objects)
 		{
 			tmx::FloatRect rect = object.getAABB();

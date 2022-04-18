@@ -2,7 +2,9 @@
 
 ParallaxLayer::ParallaxLayer(const sf::Texture& texture, float distanceFromCamera)
 {
-	this->sprite.setTexture(texture);
+	this->texture = texture;
+	this->texture.setRepeated(true);
+	this->sprite.setTexture(this->texture);
 	this->distanceFromCamera = distanceFromCamera;
 }
 
@@ -36,3 +38,10 @@ const sf::Vector2f& ParallaxLayer::getPosition()
 {
 	return this->sprite.getPosition();
 }
+
+void ParallaxLayer::update(sf::Vector2f cameraPosition)
+{
+	this->sprite.setPosition(cameraPosition.x * (this->distanceFromCamera), cameraPosition.y);
+}
+
+

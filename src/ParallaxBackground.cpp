@@ -42,3 +42,12 @@ void ParallaxBackground::setPosition(sf::Vector2f position)
 		layer->setPosition(position);
 	}
 }
+
+
+void ParallaxBackground::update(sf::Vector2f cameraPosition)
+{
+	for (auto layer : this->backgroundLayers)
+	{
+		layer->update(cameraPosition);
+	}
+}

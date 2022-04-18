@@ -6,6 +6,7 @@ class ParallaxLayer : public sf::Drawable
 {
 private:
 	sf::Sprite sprite;
+	sf::Texture texture;
 	float distanceFromCamera;
 
 public:
@@ -21,4 +22,7 @@ public:
 	
 	sf::FloatRect getGlobalBounds();
 	const sf::Vector2f& getPosition();
+
+	void update(sf::Vector2f cameraPosition);
+
 };

@@ -35,9 +35,7 @@ public:
 
 	// Inherited via Drawable
 	void draw(sf::RenderTarget& target, sf::RenderStates states) const override;
-	void update();
+	void update(sf::Vector2f cameraPosition);
 
 	void setScale(float x, float y);
-
-
 };

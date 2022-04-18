@@ -20,6 +20,7 @@ private:
 	sf::View view;
 
 	sf::Clock clock;
+	tmx::FloatRect mapSize;
 
 	const tmx::Map* map;
 	TileLayer* tileLayerFar;
