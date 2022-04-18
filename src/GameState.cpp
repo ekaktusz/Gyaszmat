@@ -16,12 +16,25 @@ GameState::GameState(Game* game)
 
 	this->view = sf::View(sf::Vector2f(0.f, 0.f), sf::Vector2f(Game::XX, Game::YY));
 	this->game->renderWindow.setView(this->view);
-	
+
 	this->playerHealthBar.setHealth(100);
 	this->playerHealthBar.setMaxHealth(100);
-}
 
-GameState::~GameState()
+	this->parallaxBackground.addLayer(new ParallaxLayer(
+		ResourceManager::getInstance().getTexture(res::Texture::ParallaxMountain1), 1.f));
+	this->parallaxBackground.addLayer(new ParallaxLayer(
+		ResourceManager::getInstance().getTexture(res::Texture::ParallaxMountain2), 0.7f));
+	this->parallaxBackground.addLayer(new ParallaxLayer(
+		ResourceManager::getInstance().getTexture(res::Texture::ParallaxMountain3), 0.4f));
+	this->parallaxBackground.addLayer(new ParallaxLayer(
+		ResourceManager::getInstance().getTexture(res::Texture::ParallaxMountain4), 0.2f));
+	this->parallaxBackground.addLayer(new ParallaxLayer(
+		ResourceManager::getInstance().getTexture(res::Texture::ParallaxMountain5), 0.1f));
+
+	this->parallaxBackground.setScale(Game::YY / this->parallaxBackground.getGlobalBounds().height,
+		Game::YY / this->parallaxBackground.getGlobalBounds().height);
+}
+	GameState::~GameState()
 {
 	delete tileLayerFar;
 	delete tileLayerMiddle;
@@ -37,10 +50,14 @@ void GameState::update(sf::Time deltaTime)
 	sf::Vector2f movement =
 		player.getCenterPosition() - view.getCenter() - sf::Vector2f(0.f, Game::YY / 10);
 	this->view.move(movement * deltaTime.asSeconds() * 10.f);
+	//this->parallaxBackground.update(player.getCenterPosition() - view.getCenter());
 	//this->view.setCenter(this->player.getCenterPosition() - sf::Vector2f(0.f, Game::XX / 6));
 	this->updateCollision();
 	this->playerHealthBar.update(this->player.getHealth());
 	this->playerHealthBar.setPosition(
+		sf::Vector2f(this->view.getCenter() - sf::Vector2f(Game::XX / 2, Game::YY / 2)));
+	
+	this->parallaxBackground.setPosition(
 		sf::Vector2f(this->view.getCenter() - sf::Vector2f(Game::XX / 2, Game::YY / 2)));
 }
 
@@ -66,6 +83,10 @@ void GameState::render()
 {
 	this->game->renderWindow.clear();
 	this->game->renderWindow.setView(this->view);
+
+	
+	this->game->renderWindow.draw(this->parallaxBackground);
+
 	this->game->renderWindow.draw(*this->tileLayerFar); // layer behind player
 	this->game->renderWindow.draw(*this->tileLayerMiddle); // layer of map
 	this->game->renderWindow.draw(this->player);

@@ -9,6 +9,7 @@
 #include "pch.h"
 #include "Ladder.h"
 #include "Terrain.h"
+#include "ParallaxBackground.h"
 
 class GameState : public State
 {
@@ -26,6 +27,8 @@ private:
 	TileLayer* tileLayerNear;
 	Ladder* ladder;
 	Terrain* terrain;
+
+	ParallaxBackground parallaxBackground;
 
 	HealthBar playerHealthBar;
 
