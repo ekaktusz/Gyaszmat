@@ -4,16 +4,16 @@
 ParallaxLayer::ParallaxLayer(const sf::Texture& texture, float distanceFromCamera)
 {
 	this->texture = texture;
-	this->texture.setRepeated(true);
 	this->sprite.setTexture(this->texture);
+	this->sprite2.setTexture(this->texture);
 	this->distanceFromCamera = distanceFromCamera;
-	this->currentFrame = sf::IntRect(0, 0, Game::XX, Game::YY);
 }
 
 // Inherited via Drawable
 void ParallaxLayer::draw(sf::RenderTarget& target, sf::RenderStates states) const
 {
 	target.draw(this->sprite);
+	target.draw(this->sprite2);
 }
 
 void ParallaxLayer::setPosition(float x, float y)
@@ -29,6 +29,7 @@ void ParallaxLayer::setPosition(sf::Vector2f position)
 void ParallaxLayer::setScale(float x, float y)
 {
 	this->sprite.setScale(x, y);
+	this->sprite2.setScale(x, y);
 }
 
 sf::FloatRect ParallaxLayer::getGlobalBounds()
@@ -42,11 +43,25 @@ const sf::Vector2f& ParallaxLayer::getPosition()
 }
 
 void ParallaxLayer::update(sf::Vector2f cameraPosition)
-{
-	this->currentFrame.left = cameraPosition.x * (1 - distanceFromCamera);
-	this->currentFrame.top = cameraPosition.y * (1 - distanceFromCamera) * 0.1;
-	this->sprite.setPosition(cameraPosition.x, cameraPosition.y);
-	this->sprite.setTextureRect(this->currentFrame);
+{	
+	this->sprite.setPosition(cameraPosition.x * (this->distanceFromCamera), cameraPosition.y);
+
+	//ha már majdnem kiért a kamera a spriteról
+	if (this->sprite.getGlobalBounds().left + this->sprite.getGlobalBounds().width
+		< cameraPosition.x + Game::XX + 10)
+	{
+		//
+		this->sprite2.setPosition(
+			cameraPosition.x * (this->distanceFromCamera) + this->sprite.getGlobalBounds().width,
+			cameraPosition.y);
+	}
+	else
+	{
+		this->sprite2.setPosition(
+			cameraPosition.x * (this->distanceFromCamera) - this->sprite.getGlobalBounds().width,
+			cameraPosition.y);
+	}
+	
 }
 
 
