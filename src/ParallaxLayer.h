@@ -7,9 +7,10 @@ class ParallaxLayer : public sf::Drawable
 private:
 	bool elol = true;
 	sf::Sprite sprite;
-	sf::Sprite sprite2;
 	sf::Texture texture;
+	sf::Shader parallaxShader;
 	float distanceFromCamera;
+	float segg = 0;
 
 public:
 	ParallaxLayer(const sf::Texture& texture, float distanceFromCamera);
