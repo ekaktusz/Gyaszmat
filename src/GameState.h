@@ -20,6 +20,8 @@ private:
 	sf::View view;
 
 	sf::Clock clock;
+	float frame_time;
+
 	tmx::FloatRect mapSize;
 
 	const tmx::Map* map;
@@ -32,6 +34,7 @@ private:
 	ParallaxBackground parallaxBackground;
 
 	HealthBar playerHealthBar;
+	Label frameTimeLabel;
 
 	void render() override;
 	void update(sf::Time deltaTime) override;

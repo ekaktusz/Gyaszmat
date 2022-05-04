@@ -7,6 +7,7 @@ GameState::GameState(Game* game)
 {
 	this->game = game;
 
+	// Init map
 	this->map = &ResourceManager::getInstance().getMap(res::Map::TestMap);
 	this->tileLayerFar = new TileLayer(*this->map, MapLayerNames::TileLayerName::BackLayer);
 	this->tileLayerMiddle = new TileLayer(*this->map, MapLayerNames::TileLayerName::MidLayer);
@@ -18,9 +19,11 @@ GameState::GameState(Game* game)
 	this->view = sf::View(sf::Vector2f(0.f, 0.f), sf::Vector2f(Game::XX, Game::YY));
 	this->game->renderWindow.setView(this->view);
 
+	// Init healthbar
 	this->playerHealthBar.setHealth(100);
 	this->playerHealthBar.setMaxHealth(100);
 
+	// Init background
 	this->parallaxBackground.addLayer(new ParallaxLayer(
 		ResourceManager::getInstance().getTexture(res::Texture::ParallaxMountain1), 1.f));
 	this->parallaxBackground.addLayer(new ParallaxLayer(
@@ -34,6 +37,15 @@ GameState::GameState(Game* game)
 
 	this->parallaxBackground.setScale(Game::YY / this->parallaxBackground.getGlobalBounds().height,
 		Game::YY / this->parallaxBackground.getGlobalBounds().height);
+
+	// Init frame time widget
+	this->frameTimeLabel.getText().setFont(ResourceManager::getInstance().getFont(res::Font::Roboto));
+	this->frameTimeLabel.getText().setString("HLLO");
+	this->frameTimeLabel.getText().setCharacterSize(30);
+	this->frameTimeLabel.getText().setFillColor(sf::Color::Yellow);
+	this->frameTimeLabel.getText().setOutlineColor(sf::Color::Black);
+	this->frameTimeLabel.getText().setOutlineColor(sf::Color::Black);
+	this->frameTimeLabel.getText().setOutlineThickness(1.f);
 }
 	GameState::~GameState()
 {
@@ -57,6 +69,9 @@ void GameState::update(sf::Time deltaTime)
 
 	sf::Vector2f cameraPosition(this->view.getCenter() - sf::Vector2f(Game::XX / 2, Game::YY / 2));
 	this->playerHealthBar.setPosition(cameraPosition);
+	this->frameTimeLabel.getText().setPosition(cameraPosition);
+	// Change to 1.f / this->frame_time to show FPS
+	this->frameTimeLabel.getText().setString(std::to_string(this->frame_time));
 
 	this->parallaxBackground.update(cameraPosition);
 }
@@ -81,17 +96,16 @@ void GameState::handleEvent(const sf::Event& event)
 
 void GameState::render()
 {
+	frame_time = this->clock.restart().asSeconds();
 	this->game->renderWindow.clear();
 	this->game->renderWindow.setView(this->view);
-
-	
 	this->game->renderWindow.draw(this->parallaxBackground);
-
 	this->game->renderWindow.draw(*this->tileLayerFar); // layer behind player
 	this->game->renderWindow.draw(*this->tileLayerMiddle); // layer of map
 	this->game->renderWindow.draw(this->player);
 	this->game->renderWindow.draw(*this->tileLayerNear); // layer vefore player
 	this->game->renderWindow.draw(this->playerHealthBar);
+	this->game->renderWindow.draw(this->frameTimeLabel);
 	this->game->renderWindow.display();
 }
 

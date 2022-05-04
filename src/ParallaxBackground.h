@@ -10,31 +10,15 @@ private:
 
 public:
 	ParallaxBackground();
-	~ParallaxBackground()
-	{
-		for (auto layer : backgroundLayers)
-		{
-			delete layer;
-		}
-	}
+	~ParallaxBackground();
 
 	void addLayer(ParallaxLayer* parallaxLayer);
 
-	void setPosition(float x, float y);
-	void setPosition(sf::Vector2f position);
-
-	sf::FloatRect getGlobalBounds()
-	{
-		if (this->backgroundLayers.empty())
-		{
-			SPDLOG_WARN("backgroundLayers is empty.");
-			return sf::FloatRect();
-		}
-		return backgroundLayers.at(0)->getGlobalBounds();
-	}
+	sf::FloatRect getGlobalBounds();
 
 	// Inherited via Drawable
 	void draw(sf::RenderTarget& target, sf::RenderStates states) const override;
+
 	void update(sf::Vector2f cameraPosition);
 
 	void setScale(float x, float y);

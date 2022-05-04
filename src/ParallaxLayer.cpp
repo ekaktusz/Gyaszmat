@@ -9,12 +9,14 @@ ParallaxLayer::ParallaxLayer(const sf::Texture& texture, float distanceFromCamer
 	this->distanceFromCamera = distanceFromCamera;
 
 	this->parallaxShader.loadFromMemory(
-        "uniform float offset;"
+        "uniform float offsetx;"
+		"uniform float offsety;"
 
         "void main() {"
         "    gl_Position = gl_ProjectionMatrix * gl_ModelViewMatrix * gl_Vertex;"
         "    gl_TexCoord[0] = gl_TextureMatrix[0] * gl_MultiTexCoord0;"
-        "    gl_TexCoord[0].x = gl_TexCoord[0].x + offset;" // magic
+        "    gl_TexCoord[0].x = gl_TexCoord[0].x + offsetx;" // magic
+		"    gl_TexCoord[0].y = gl_TexCoord[0].y + offsety;" // magic
         "    gl_FrontColor = gl_Color;"
         "}"
         , sf::Shader::Vertex);
@@ -24,16 +26,6 @@ ParallaxLayer::ParallaxLayer(const sf::Texture& texture, float distanceFromCamer
 void ParallaxLayer::draw(sf::RenderTarget& target, sf::RenderStates states) const
 {
 	target.draw(this->sprite, &this->parallaxShader);
-}
-
-void ParallaxLayer::setPosition(float x, float y)
-{
-	this->sprite.setPosition(x, y);
-}
-
-void ParallaxLayer::setPosition(sf::Vector2f position)
-{
-	this->sprite.setPosition(position);
 }
 
 void ParallaxLayer::setScale(float x, float y)
@@ -46,15 +38,11 @@ sf::FloatRect ParallaxLayer::getGlobalBounds()
 	return this->sprite.getGlobalBounds();
 }
 
-const sf::Vector2f& ParallaxLayer::getPosition()
-{
-	return this->sprite.getPosition();
-}
-
 void ParallaxLayer::update(sf::Vector2f cameraPosition)
 {	
 	this->sprite.setPosition(cameraPosition);
-	parallaxShader.setUniform("offset", cameraPosition.x * (this->distanceFromCamera) * 0.0001f);
+	parallaxShader.setUniform("offsetx", cameraPosition.x * (this->distanceFromCamera) * 0.0001f);
+	parallaxShader.setUniform("offsety", 0.f);
 }
 
 

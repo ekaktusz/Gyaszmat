@@ -2,7 +2,14 @@
 #include "ResourceManager.h"
 
 ParallaxBackground::ParallaxBackground()
+{}
+
+ParallaxBackground::~ParallaxBackground()
 {
+	for (auto layer : backgroundLayers)
+	{
+		delete layer;
+	}
 }
 
 void ParallaxBackground::draw(sf::RenderTarget& target, sf::RenderStates states) const
@@ -27,20 +34,14 @@ void ParallaxBackground::addLayer(ParallaxLayer* parallaxLayer)
 	this->backgroundLayers.push_back(parallaxLayer);
 }
 
-void ParallaxBackground::setPosition(float x, float y)
+sf::FloatRect ParallaxBackground::getGlobalBounds()
 {
-	for (auto layer : this->backgroundLayers)
+	if (this->backgroundLayers.empty())
 	{
-		layer->setPosition(x, y);
+		SPDLOG_WARN("backgroundLayers is empty.");
+		return sf::FloatRect();
 	}
-}
-
-void ParallaxBackground::setPosition(sf::Vector2f position)
-{
-	for (auto layer : this->backgroundLayers)
-	{
-		layer->setPosition(position);
-	}
+	return backgroundLayers.at(0)->getGlobalBounds();
 }
 
 
