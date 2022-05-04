@@ -2,13 +2,15 @@
 
 #include "Enemy.h"
 #include "HealthBar.h"
-#include "Ladder.h"
+#include "TileLayer.h"
 #include "ObjectLayer.h"
 #include "Player.h"
 #include "State.h"
 #include "Terrain.h"
-#include "TileLayer.h"
 #include "pch.h"
+#include "Ladder.h"
+#include "Terrain.h"
+#include "ParallaxBackground.h"
 
 class GameState : public State
 {
@@ -19,6 +21,9 @@ private:
 	sf::View view;
 
 	sf::Clock clock;
+	float frame_time;
+
+	tmx::FloatRect mapSize;
 
 	const tmx::Map* map;
 	TileLayer* tileLayerFar;
@@ -26,8 +31,11 @@ private:
 	TileLayer* tileLayerNear;
 	Ladder* ladder;
 	Terrain* terrain;
+	
+	ParallaxBackground parallaxBackground;
 
 	HealthBar playerHealthBar;
+	Label frameTimeLabel;
 
 	void render() override;
 	void update(sf::Time deltaTime) override;

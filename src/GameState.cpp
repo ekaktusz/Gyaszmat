@@ -7,21 +7,47 @@ GameState::GameState(Game* game)
 {
 	this->game = game;
 
+	// Init map
 	this->map = &ResourceManager::getInstance().getMap(res::Map::TestMap);
 	this->tileLayerFar = new TileLayer(*this->map, MapLayerNames::TileLayerName::BackLayer);
 	this->tileLayerMiddle = new TileLayer(*this->map, MapLayerNames::TileLayerName::MidLayer);
 	this->tileLayerNear = new TileLayer(*this->map, MapLayerNames::TileLayerName::FrontLayer);
 	this->ladder = new Ladder(map);
 	this->terrain = new Terrain(map);
+	this->mapSize = map->getBounds();
 
 	this->view = sf::View(sf::Vector2f(0.f, 0.f), sf::Vector2f(Game::XX, Game::YY));
 	this->game->renderWindow.setView(this->view);
 
+	// Init healthbar
 	this->playerHealthBar.setHealth(100);
 	this->playerHealthBar.setMaxHealth(100);
-}
 
-GameState::~GameState()
+	// Init background
+	this->parallaxBackground.addLayer(new ParallaxLayer(
+		ResourceManager::getInstance().getTexture(res::Texture::ParallaxMountain1), 1.f));
+	this->parallaxBackground.addLayer(new ParallaxLayer(
+		ResourceManager::getInstance().getTexture(res::Texture::ParallaxMountain2), 0.97f));
+	this->parallaxBackground.addLayer(new ParallaxLayer(
+		ResourceManager::getInstance().getTexture(res::Texture::ParallaxMountain3), 0.94f));
+	this->parallaxBackground.addLayer(new ParallaxLayer(
+		ResourceManager::getInstance().getTexture(res::Texture::ParallaxMountain4), 0.85f));
+	this->parallaxBackground.addLayer(new ParallaxLayer(
+		ResourceManager::getInstance().getTexture(res::Texture::ParallaxMountain5), 0.8f));
+
+	this->parallaxBackground.setScale(Game::YY / this->parallaxBackground.getGlobalBounds().height,
+		Game::YY / this->parallaxBackground.getGlobalBounds().height);
+
+	// Init frame time widget
+	this->frameTimeLabel.getText().setFont(ResourceManager::getInstance().getFont(res::Font::Roboto));
+	this->frameTimeLabel.getText().setString("HLLO");
+	this->frameTimeLabel.getText().setCharacterSize(30);
+	this->frameTimeLabel.getText().setFillColor(sf::Color::Yellow);
+	this->frameTimeLabel.getText().setOutlineColor(sf::Color::Black);
+	this->frameTimeLabel.getText().setOutlineColor(sf::Color::Black);
+	this->frameTimeLabel.getText().setOutlineThickness(1.f);
+}
+	GameState::~GameState()
 {
 	delete tileLayerFar;
 	delete tileLayerMiddle;
@@ -40,8 +66,14 @@ void GameState::update(sf::Time deltaTime)
 	//this->view.setCenter(this->player.getCenterPosition() - sf::Vector2f(0.f, Game::XX / 6));
 	this->updateCollision();
 	this->playerHealthBar.update(this->player.getHealth());
-	this->playerHealthBar.setPosition(
-		sf::Vector2f(this->view.getCenter() - sf::Vector2f(Game::XX / 2, Game::YY / 2)));
+
+	sf::Vector2f cameraPosition(this->view.getCenter() - sf::Vector2f(Game::XX / 2, Game::YY / 2));
+	this->playerHealthBar.setPosition(cameraPosition);
+	this->frameTimeLabel.getText().setPosition(cameraPosition);
+	// Change to 1.f / this->frame_time to show FPS
+	this->frameTimeLabel.getText().setString(std::to_string(this->frame_time));
+
+	this->parallaxBackground.update(cameraPosition);
 }
 
 void GameState::handleEvent(const sf::Event& event)
@@ -64,13 +96,16 @@ void GameState::handleEvent(const sf::Event& event)
 
 void GameState::render()
 {
+	frame_time = this->clock.restart().asSeconds();
 	this->game->renderWindow.clear();
 	this->game->renderWindow.setView(this->view);
-	this->game->renderWindow.draw(*this->tileLayerFar);	   // layer behind player
+	this->game->renderWindow.draw(this->parallaxBackground);
+	this->game->renderWindow.draw(*this->tileLayerFar); // layer behind player
 	this->game->renderWindow.draw(*this->tileLayerMiddle); // layer of map
 	this->game->renderWindow.draw(this->player);
 	this->game->renderWindow.draw(*this->tileLayerNear); // layer vefore player
 	this->game->renderWindow.draw(this->playerHealthBar);
+	this->game->renderWindow.draw(this->frameTimeLabel);
 	this->game->renderWindow.display();
 }
 
