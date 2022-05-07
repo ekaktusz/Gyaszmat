@@ -12,8 +12,10 @@ private:
 	float distanceFromCamera;
 	float segg = 0;
 
+	float y_offset;
+
 public:
-	ParallaxLayer(const sf::Texture& texture, float distanceFromCamera);
+	ParallaxLayer(const sf::Texture& texture, float distanceFromCamera, float y_offset = 0.f);
 
 	// Inherited via Drawable
 	void draw(sf::RenderTarget& target, sf::RenderStates states) const override;

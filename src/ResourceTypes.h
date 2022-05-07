@@ -11,13 +11,20 @@ namespace res
 		PlayerRun,
 		PlayerJump,
 		PlayerClimb,
-		MenuBackground,
+		MenuBackgroundMountain,
+		MenuBackgroundForest,
 		PauseBackground,
 		ParallaxMountain1,
 		ParallaxMountain2,
 		ParallaxMountain3,
 		ParallaxMountain4,
-		ParallaxMountain5
+		ParallaxMountain5,
+		ParallaxForest1,
+		ParallaxForest2,
+		ParallaxForest3,
+		ParallaxForest4,
+		ParallaxForest5
+
 	};
 
 	enum class Font

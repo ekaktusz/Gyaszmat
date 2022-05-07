@@ -25,7 +25,7 @@ public:
 	void setAlignment(Alignment alignment);
 	void setText(std::string text);
 	void setFont(res::Font font);
-	void setColor(sf::Color color);
+	void setInnerColor(sf::Color color);
 	void setOutlineColor(sf::Color color);
 	void setTextColor(sf::Color color);
 	const sf::FloatRect& getGlobalBounds();

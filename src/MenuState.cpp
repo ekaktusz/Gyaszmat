@@ -14,7 +14,7 @@ MenuState::MenuState(Game* game)
 		20);
 
 	this->backgroundTexture =
-		ResourceManager::getInstance().getTexture(res::Texture::MenuBackground);
+		ResourceManager::getInstance().getTexture(res::Texture::MenuBackgroundForest);
 	this->background.setTexture(this->backgroundTexture);
 
 	this->startButton.setText("new game");
