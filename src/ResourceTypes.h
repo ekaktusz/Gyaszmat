@@ -24,7 +24,6 @@ namespace res
 		ParallaxForest3,
 		ParallaxForest4,
 		ParallaxForest5
-
 	};
 
 	enum class Font
