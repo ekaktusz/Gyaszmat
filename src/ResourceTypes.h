@@ -39,6 +39,11 @@ namespace res
 		PeacefulGameplay
 	};
 
+	enum class Sound
+	{
+		Jump
+	};
+
 	enum class Map
 	{
 		TestMap

@@ -22,6 +22,18 @@ void ResourceManager::loadMaps()
 	this->mapHolder.load(res::Map::TestMap, mapPath / "platform.tmx");
 }
 
+void ResourceManager::loadSounds()
+{
+	std::filesystem::path soundPath = assetPath / "sounds";
+	this->soundBufferHolder.load(res::Sound::Jump, soundPath / "jump.wav");
+}
+
+void ResourceManager::loadMusic()
+{
+	std::filesystem::path musicPath = assetPath / "music";
+	this->musicHolder.load(res::Music::PeacefulGameplay, musicPath / "bad_apple.mp3");
+}
+
 void ResourceManager::loadTextures()
 {
 	std::filesystem::path texturePath = assetPath / "textures";
@@ -57,4 +69,15 @@ const sf::Font& ResourceManager::getFont(res::Font id)
 const tmx::Map& ResourceManager::getMap(res::Map id)
 {
 	return mapHolder.get(id);
+}
+
+const sf::SoundBuffer& ResourceManager::getSoundBuffer(res::Sound id)
+{
+	return soundBufferHolder.get(id);
+}
+
+
+const sf::Music& ResourceManager::getMusic(res::Music id)
+{
+	return musicHolder.get(id);
 }
