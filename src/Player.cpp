@@ -343,7 +343,7 @@ void Player::updateHitbox()
 	this->hitbox.update(this->sprite.getPosition());
 }
 
-// This is needed, to stop a player if a state change happens while pressing down a key
+// This is needed, to stop a player if a game state change happens while pressing down a key
 void Player::stop()
 {
 	this->isMovingLeft = false;
@@ -370,9 +370,9 @@ const PlayerActualClimbingState Player::getActualClimbingState() const
 	return this->actualClimbingState;
 }
 
-void Player::setCollisionWithLadder(bool newCollisionWithLaddertate)
+void Player::setCollisionWithLadder(bool collisionWithLadder)
 {
-	this->collisionWithLadder = newCollisionWithLaddertate;
+	this->collisionWithLadder = collisionWithLadder;
 }
 
 void Player::setResolved(bool newResolvedState)
@@ -392,6 +392,8 @@ void Player::setActualClimbingState(PlayerActualClimbingState stateToSet)
 
 void Player::resolveCollision(const sf::FloatRect& overlap, const sf::Vector2f& collisionNormal)
 {
+	this->setResolved(true);
+
 	//the collision normal is stored in x and y, with the penetration in z
 	sf::Vector3f manifold;
 

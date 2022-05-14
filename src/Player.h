@@ -117,7 +117,7 @@ public:
 	const PlayerPossibleClimbingDir getPossibleClimbingDirections() const;
 	const PlayerActualClimbingState getActualClimbingState() const;
 
-	void setCollisionWithLadder(bool newCollisionWithLaddertate);
+	void setCollisionWithLadder(bool collisionWithLadder);
 	void setResolved(bool newResolvedState);
 	void setPossibleClimbingDirections(PlayerPossibleClimbingDir directionToSet);
 	void setActualClimbingState(PlayerActualClimbingState stateToSet);

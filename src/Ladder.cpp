@@ -17,21 +17,23 @@ Ladder::~Ladder()
 void Ladder::updateCollision(Player& player)
 {
 	sf::FloatRect playerBound = player.getHitbox().getGlobalBounds();
+
 	std::vector<sf::FloatRect> midLadderBounds = this->midladderLayer->getObjectBounds();
 	std::vector<sf::FloatRect> topLadderBounds = this->topLadderLayer->getObjectBounds();
 	std::vector<sf::FloatRect> botLadderBounds = this->botLadderLayer->getObjectBounds();
 
-	player.setResolved(false);
+	// player.setResolved(false);
 	player.setCollisionWithLadder(false);
 	player.setPossibleClimbingDirections(PlayerPossibleClimbingDir::NONE);
 
 	sf::FloatRect overlap;
 
+	// Intersection with bottom layer
 	for (const sf::FloatRect& ladderBottomBound : botLadderBounds)
 	{
 		if (ladderBottomBound.intersects(playerBound, overlap))
 		{
-			// a letra aljan allsz, csak felfele mehetsz, nem kell resolve
+			// Standing at the bottom of the ladder
 			player.setPossibleClimbingDirections(PlayerPossibleClimbingDir::UP);
 			player.setCollisionWithLadder(true);
 		}

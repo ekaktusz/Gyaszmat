@@ -111,6 +111,7 @@ void GameState::render()
 
 void GameState::updateCollision()
 {
+	this->player.setResolved(false);
 	this->terrain->updateCollision(this->player);
 	this->ladder->updateCollision(this->player);
 }
