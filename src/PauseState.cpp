@@ -28,6 +28,7 @@ PauseState::PauseState(Game* game)
 	this->continueButton.setAction([&]() {
 		SPDLOG_INFO("Switch back to GameState : Continue the game");
 		this->game->popState();
+		throw bool{ false };
 	});
 
 	this->mainMenuButton.setText("exit to mainmenu");
@@ -70,6 +71,13 @@ void PauseState::handleEvent(const sf::Event& event)
 			return;
 		}
 	}
-	this->continueButton.handleEvent(event);
-	this->mainMenuButton.handleEvent(event);
+	try
+	{
+		this->continueButton.handleEvent(event);
+		this->mainMenuButton.handleEvent(event);
+	}
+	catch (bool e)
+	{
+		return;
+	}
 }

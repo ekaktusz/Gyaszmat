@@ -101,7 +101,7 @@ void Button::setText(std::string text)
 	this->setPosition(outerButton.getPosition());
 }
 
-void Button::setColor(sf::Color color)
+void Button::setInnerColor(sf::Color color)
 {
 	this->innerButton.setFillColor(color);
 }

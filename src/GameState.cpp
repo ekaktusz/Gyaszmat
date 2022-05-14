@@ -25,18 +25,18 @@ GameState::GameState(Game* game)
 
 	// Init background
 	this->parallaxBackground.addLayer(new ParallaxLayer(
-		ResourceManager::getInstance().getTexture(res::Texture::ParallaxMountain1), 1.f));
+		ResourceManager::getInstance().getTexture(res::Texture::ParallaxForest1), 1.f));
 	this->parallaxBackground.addLayer(new ParallaxLayer(
-		ResourceManager::getInstance().getTexture(res::Texture::ParallaxMountain2), 0.97f));
+		ResourceManager::getInstance().getTexture(res::Texture::ParallaxForest2), 0.97f));
 	this->parallaxBackground.addLayer(new ParallaxLayer(
-		ResourceManager::getInstance().getTexture(res::Texture::ParallaxMountain3), 0.94f));
+		ResourceManager::getInstance().getTexture(res::Texture::ParallaxForest3), 0.94f, 30.f));
 	this->parallaxBackground.addLayer(new ParallaxLayer(
-		ResourceManager::getInstance().getTexture(res::Texture::ParallaxMountain4), 0.85f));
+		ResourceManager::getInstance().getTexture(res::Texture::ParallaxForest4), 0.85f, 50.f));
 	this->parallaxBackground.addLayer(new ParallaxLayer(
-		ResourceManager::getInstance().getTexture(res::Texture::ParallaxMountain5), 0.8f));
+		ResourceManager::getInstance().getTexture(res::Texture::ParallaxForest5), 0.8f, 50.f));
 
-	this->parallaxBackground.setScale(Game::YY / this->parallaxBackground.getGlobalBounds().height,
-		Game::YY / this->parallaxBackground.getGlobalBounds().height);
+	this->parallaxBackground.setScale(Game::YY / this->parallaxBackground.getGlobalBounds().height * 1.5,
+		Game::YY / this->parallaxBackground.getGlobalBounds().height * 1.5);
 
 	// Init frame time widget
 	this->frameTimeLabel.getText().setFont(ResourceManager::getInstance().getFont(res::Font::Roboto));
@@ -61,7 +61,7 @@ void GameState::update(sf::Time deltaTime)
 {
 	this->player.update();
 	sf::Vector2f movement =
-		player.getCenterPosition() - view.getCenter() - sf::Vector2f(0.f, Game::YY / 10);
+		player.getCenterPosition() - view.getCenter() - sf::Vector2f(0.f, Game::YY / 8);
 	this->view.move(movement * deltaTime.asSeconds() * 10.f);
 	//this->view.setCenter(this->player.getCenterPosition() - sf::Vector2f(0.f, Game::XX / 6));
 	this->updateCollision();

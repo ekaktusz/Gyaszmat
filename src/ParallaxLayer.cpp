@@ -1,12 +1,13 @@
 #include "ParallaxLayer.h"
 #include "Game.h"
 
-ParallaxLayer::ParallaxLayer(const sf::Texture& texture, float distanceFromCamera)
+ParallaxLayer::ParallaxLayer(const sf::Texture& texture, float distanceFromCamera, float y_offset)
 {
 	this->texture = texture;
 	this->texture.setRepeated(true);
 	this->sprite.setTexture(this->texture);
 	this->distanceFromCamera = distanceFromCamera;
+	this->y_offset = y_offset;
 
 	this->parallaxShader.loadFromMemory(
         "uniform float offsetx;"
@@ -40,8 +41,9 @@ sf::FloatRect ParallaxLayer::getGlobalBounds()
 
 void ParallaxLayer::update(sf::Vector2f cameraPosition)
 {	
-	this->sprite.setPosition(cameraPosition);
+	this->sprite.setPosition(cameraPosition.x, cameraPosition.y + this->y_offset);
 	parallaxShader.setUniform("offsetx", cameraPosition.x * (this->distanceFromCamera) * 0.0001f);
+	//parallaxShader.setUniform("offsety", cameraPosition.y * 1 / (this->distanceFromCamera) * 0.001f);
 	parallaxShader.setUniform("offsety", 0.f);
 }
 
