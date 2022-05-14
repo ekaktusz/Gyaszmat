@@ -87,8 +87,8 @@ void Player::handleKeyboardInput(sf::Event event)
 {
 	if (event.type == sf::Event::KeyPressed)
 	{
-		if (event.key.code == sf::Keyboard::W && this->numberOfJumps > 0
-			&& !this->collisionWithLadder)
+		if ((event.key.code == sf::Keyboard::W && this->numberOfJumps > 0 && !collisionWithLadder)
+			|| (event.key.code == sf::Keyboard::W && this->numberOfJumps > 0 && this->possibleClimbingDirection == PlayerPossibleClimbingDir::DOWN))
 		{
 			this->numberOfJumps--;
 			this->pressedJump = true;

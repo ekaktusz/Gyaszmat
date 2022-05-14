@@ -67,7 +67,7 @@ void Ladder::updateCollision(Player& player)
 				player.resolveCollision(overlap, collisionNormal);
 				player.setPossibleClimbingDirections(PlayerPossibleClimbingDir::DOWN);
 				player.setActualClimbingState(PlayerActualClimbingState::NONE);
-				player.stopFalling();
+				//player.stopFalling();
 			}
 		}
 	}
