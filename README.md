@@ -72,7 +72,7 @@ brew install sfml
 ### Build, clean and execute
 The steps are exactly the same as described in the Linux section.
 
-## Building on Windows (Technical Alpha Preview 0.1)
+## Building on Windows
 
 ### Setup the environment
 1. Download and install Visual Studio 2022 with cmake
