@@ -26,8 +26,8 @@ public:
 	const sf::Texture& getTexture(res::Texture id);
 	const sf::Font& getFont(res::Font id);
 	const tmx::Map& getMap(res::Map id);
-	const sf::SoundBuffer& getSoundBuffer(res::Sound id);
-	const sf::Music& getMusic(res::Music id);
+	sf::SoundBuffer& getSoundBuffer(res::Sound id);
+	sf::Music& getMusic(res::Music id);
 
 private:
 	ResourceManager();

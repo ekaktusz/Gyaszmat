@@ -5,6 +5,8 @@ ResourceManager::ResourceManager()
 	loadTextures();
 	loadFonts();
 	loadMaps();
+	loadMusic();
+	loadSounds();
 }
 
 void ResourceManager::loadFonts()
@@ -31,7 +33,7 @@ void ResourceManager::loadSounds()
 void ResourceManager::loadMusic()
 {
 	std::filesystem::path musicPath = assetPath / "music";
-	this->musicHolder.load(res::Music::PeacefulGameplay, musicPath / "bad_apple.mp3");
+	this->musicHolder.load(res::Music::PeacefulGameplay, musicPath / "bad_apple.ogg");
 }
 
 void ResourceManager::loadTextures()
@@ -71,13 +73,13 @@ const tmx::Map& ResourceManager::getMap(res::Map id)
 	return mapHolder.get(id);
 }
 
-const sf::SoundBuffer& ResourceManager::getSoundBuffer(res::Sound id)
+sf::SoundBuffer& ResourceManager::getSoundBuffer(res::Sound id)
 {
 	return soundBufferHolder.get(id);
 }
 
 
-const sf::Music& ResourceManager::getMusic(res::Music id)
+sf::Music& ResourceManager::getMusic(res::Music id)
 {
 	return musicHolder.get(id);
 }

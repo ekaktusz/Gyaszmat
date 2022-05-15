@@ -12,7 +12,7 @@ class ResourceHolder
 public:
 	ResourceHolder() = default;
 	virtual void load(Identifier id, const std::filesystem::path& filePath) = 0;
-	const Resource& get(Identifier id) const;
+	Resource& get(Identifier id) const;
 protected:
 	void insert(Identifier id, std::unique_ptr<Resource> resource);
 
@@ -26,7 +26,7 @@ void ResourceHolder<Resource, Identifier>::insert(Identifier id, std::unique_ptr
 }
 
 template <typename Resource, typename Identifier>
-const Resource& ResourceHolder<Resource, Identifier>::get(Identifier id) const
+Resource& ResourceHolder<Resource, Identifier>::get(Identifier id) const
 {
 	auto found = resourceMap.find(id);
 	if (found == resourceMap.end())

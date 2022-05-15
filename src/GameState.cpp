@@ -46,6 +46,8 @@ GameState::GameState(Game* game)
 	this->frameTimeLabel.getText().setOutlineColor(sf::Color::Black);
 	this->frameTimeLabel.getText().setOutlineColor(sf::Color::Black);
 	this->frameTimeLabel.getText().setOutlineThickness(1.f);
+
+	//ResourceManager::getInstance().getMusic(res::Music::PeacefulGameplay).play();
 }
 	GameState::~GameState()
 {
@@ -105,7 +107,7 @@ void GameState::render()
 	this->game->renderWindow.draw(this->player);
 	this->game->renderWindow.draw(*this->tileLayerNear); // layer vefore player
 	this->game->renderWindow.draw(this->playerHealthBar);
-	this->game->renderWindow.draw(this->frameTimeLabel);
+	this->game->renderWindow.draw(this->frameTimeLabel); // comment out if dont want to see frame
 	this->game->renderWindow.display();
 }
 
