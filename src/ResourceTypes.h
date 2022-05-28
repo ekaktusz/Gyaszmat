@@ -36,7 +36,17 @@ namespace res
 
 	enum class Music
 	{
-		PeacefulGameplay
+		PeacefulGameplay,
+		LudumDare1,
+		LudumDare2,
+		LudumDare3,
+		LudumDare4,
+		LudumDare5,
+		LudumDare6,
+		LudumDare7,
+		LudumDare8,
+		LudumDare9,
+		LudumDare10
 	};
 
 	enum class Sound

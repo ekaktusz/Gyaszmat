@@ -48,6 +48,8 @@ GameState::GameState(Game* game)
 	this->frameTimeLabel.getText().setOutlineThickness(1.f);
 
 	//ResourceManager::getInstance().getMusic(res::Music::PeacefulGameplay).play();
+	musicPlayer.chooseTrack(res::Music::LudumDare2);
+	musicPlayer.play();
 }
 	GameState::~GameState()
 {
@@ -61,6 +63,7 @@ GameState::GameState(Game* game)
 
 void GameState::update(sf::Time deltaTime)
 {
+	this->musicPlayer.play();
 	this->player.update();
 	sf::Vector2f movement =
 		player.getCenterPosition() - view.getCenter() - sf::Vector2f(0.f, Game::YY / 8);
@@ -90,6 +93,7 @@ void GameState::handleEvent(const sf::Event& event)
 		{
 			SPDLOG_INFO("Switch to PauseState...");
 			this->player.stop();
+			this->musicPlayer.pause();
 			this->game->pushState(new PauseState(this->game));
 		}
 	}

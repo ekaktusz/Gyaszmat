@@ -11,7 +11,12 @@ void MusicPlayer::chooseTrack(res::Music musicId)
 
 void MusicPlayer::play()
 {
-	this->music->play();
+	if (this->music->getStatus() != sf::SoundSource::Playing) this->music->play();
+}
+
+void MusicPlayer::pause()
+{
+	this->music->pause();
 }
 
 void MusicPlayer::stop()
@@ -19,9 +24,19 @@ void MusicPlayer::stop()
 	this->music->stop();
 }
 
-void MusicPlayer::setPaused(bool paused)
+void MusicPlayer::setPlayingOffset(sf::Time time)
 {
-	paused ? this->music->pause() : this->music->play();
+	this->music->setPlayingOffset(time);
+}
+
+void MusicPlayer::setLoop(bool loop)
+{
+	this->music->setLoop(loop);
+}
+
+void MusicPlayer::setPitch(float pitch)
+{
+	this->music->setPitch(pitch);
 }
 
 void MusicPlayer::setVolume(float volume)

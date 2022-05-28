@@ -11,6 +11,7 @@
 #include "Ladder.h"
 #include "Terrain.h"
 #include "ParallaxBackground.h"
+#include "MusicPlayer.h"
 
 class GameState : public State
 {
@@ -36,6 +37,8 @@ private:
 
 	HealthBar playerHealthBar;
 	Label frameTimeLabel;
+
+	MusicPlayer musicPlayer;
 
 	void render() override;
 	void update(sf::Time deltaTime) override;

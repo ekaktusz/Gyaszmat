@@ -24,6 +24,7 @@ MenuState::MenuState(Game* game)
 	this->startButton.setSize(sf::Vector2f(200, 30));
 	this->startButton.setAction([&]() {
 		SPDLOG_INFO("Switch to GameState: Starting the game");
+		this->musicPlayer.pause();
 		this->game->pushState(new GameState(this->game));
 	});
 
@@ -36,10 +37,13 @@ MenuState::MenuState(Game* game)
 		SPDLOG_INFO("BUTTON CLICKED YEAH");
 		this->game->renderWindow.close();
 	});
+
+	this->musicPlayer.chooseTrack(res::Music::LudumDare1);
 }
 
 void MenuState::update(sf::Time deltaTime)
 {
+	this->musicPlayer.play();
 	this->game->renderWindow.setView(this->game->renderWindow.getDefaultView());
 }
 

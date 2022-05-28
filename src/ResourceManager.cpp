@@ -33,7 +33,16 @@ void ResourceManager::loadSounds()
 void ResourceManager::loadMusic()
 {
 	std::filesystem::path musicPath = assetPath / "music";
-	this->musicHolder.load(res::Music::PeacefulGameplay, musicPath / "bad_apple.ogg");
+	this->musicHolder.load(res::Music::LudumDare1, musicPath / "ludumdare38" / "track1.wav");
+	this->musicHolder.load(res::Music::LudumDare2, musicPath / "ludumdare38" / "track2.wav");
+	this->musicHolder.load(res::Music::LudumDare3, musicPath / "ludumdare38" / "track3.wav");
+	this->musicHolder.load(res::Music::LudumDare4, musicPath / "ludumdare38" / "track4.wav");
+	this->musicHolder.load(res::Music::LudumDare5, musicPath / "ludumdare38" / "track5.wav");
+	this->musicHolder.load(res::Music::LudumDare6, musicPath / "ludumdare38" / "track6.wav");
+	this->musicHolder.load(res::Music::LudumDare7, musicPath / "ludumdare38" / "track7.wav");
+	this->musicHolder.load(res::Music::LudumDare8, musicPath / "ludumdare38" / "track8.wav");
+	this->musicHolder.load(res::Music::LudumDare9, musicPath / "ludumdare38" / "track9.wav");
+	this->musicHolder.load(res::Music::LudumDare10, musicPath / "ludumdare38" / "track10.wav");
 }
 
 void ResourceManager::loadTextures()

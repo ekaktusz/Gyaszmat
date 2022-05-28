@@ -10,7 +10,7 @@ SoundPlayer::SoundPlayer()
 
 void SoundPlayer::play(res::Sound soundId)
 {
-	this->sounds.push_back(sf::Sound(ResourceManager::getInstance().getSoundBuffer(soundId));
+	this->sounds.push_back(sf::Sound(ResourceManager::getInstance().getSoundBuffer(soundId)));
 	this->sounds.back().play();
 }
 
@@ -28,7 +28,7 @@ sf::Vector2f SoundPlayer::getListenerPosition() const
 	return sf::Vector2f(position.x, -position.y);
 }
 
-void SoundPlayer::setListenerPosition(sf::Vector2f position)
+/* void SoundPlayer::setListenerPosition(sf::Vector2f position)
 {
-	sf::Listener::setPosition(position.x, -position.y, ListenerZ);
-}
+	//sf::Listener::setPosition(position.x, -position.y);
+}*/
