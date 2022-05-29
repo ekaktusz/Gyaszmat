@@ -1,7 +1,8 @@
 #include "Player.h"
 #include "ResourceManager.h"
+#include "SoundPlayer.h"
 
-Player::Player()
+Player::Player(SoundPlayer soundPlayer) : soundPlayer(soundPlayer)
 {
 	this->idleTexture = ResourceManager::getInstance().getTexture(res::Texture::PlayerIdle);
 	this->runningTexture = ResourceManager::getInstance().getTexture(res::Texture::PlayerRun);
@@ -90,6 +91,7 @@ void Player::handleKeyboardInput(sf::Event event)
 		if ((event.key.code == sf::Keyboard::W && this->numberOfJumps > 0 && !collisionWithLadder)
 			|| (event.key.code == sf::Keyboard::W && this->numberOfJumps > 0 && this->possibleClimbingDirection == PlayerPossibleClimbingDir::DOWN))
 		{
+			this->soundPlayer.play(res::Sound::Jump1);
 			this->numberOfJumps--;
 			this->pressedJump = true;
 		}

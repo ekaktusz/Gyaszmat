@@ -51,7 +51,9 @@ namespace res
 
 	enum class Sound
 	{
-		Jump
+		Jump1,
+		Jump2,
+		FootStepGrass
 	};
 
 	enum class Map

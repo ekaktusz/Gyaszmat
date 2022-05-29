@@ -14,7 +14,7 @@ public:
 			SPDLOG_ERROR("Failed to parse tiled map: " + filePath.string());
 			return;
 		}
-		SPDLOG_INFO("Map loaded succesfully: " + filePath.string());
+		SPDLOG_INFO("Sound loaded succesfully: " + filePath.string());
 		this->insert(id, std::move(sound));
 	}
 };

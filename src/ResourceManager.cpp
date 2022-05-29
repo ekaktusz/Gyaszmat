@@ -27,7 +27,9 @@ void ResourceManager::loadMaps()
 void ResourceManager::loadSounds()
 {
 	std::filesystem::path soundPath = assetPath / "sounds";
-	this->soundBufferHolder.load(res::Sound::Jump, soundPath / "jump.wav");
+	this->soundBufferHolder.load(res::Sound::Jump1, soundPath / "jump.wav");
+	this->soundBufferHolder.load(res::Sound::Jump2, soundPath / "jump2.wav");
+	this->soundBufferHolder.load(res::Sound::FootStepGrass, soundPath / "grass_footstep.wav");
 }
 
 void ResourceManager::loadMusic()

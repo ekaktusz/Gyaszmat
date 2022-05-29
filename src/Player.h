@@ -3,6 +3,8 @@
 #include "Entity.h"
 #include "Hitbox.h"
 
+class SoundPlayer;
+
 enum class PlayerAnimationState
 {
 	IDLE = 0,
@@ -85,8 +87,11 @@ private:
 	void updatePhysics();
 	void updateHitbox();
 
+	// Not the owner btw. 
+	SoundPlayer& soundPlayer;
+
 public:
-	Player();
+	Player(SoundPlayer soundPlayer);
 	~Player();
 
 	unsigned int getHealth();
