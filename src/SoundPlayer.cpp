@@ -26,7 +26,6 @@ void SoundPlayer::play(res::Sound soundId, sf::Vector2f position)
 	SPDLOG_INFO(this->sounds.empty());
 	SPDLOG_INFO(this->sounds.size());
 	this->sounds.clear();
-	SPDLOG_INFO(this->sounds.size());
 	this->sounds.push_back(sf::Sound());
 	
 	sf::Sound& sound = this->sounds.back();

@@ -91,7 +91,7 @@ private:
 	SoundPlayer& soundPlayer;
 
 public:
-	Player(SoundPlayer soundPlayer);
+	Player(SoundPlayer& soundPlayer);
 	~Player();
 
 	unsigned int getHealth();

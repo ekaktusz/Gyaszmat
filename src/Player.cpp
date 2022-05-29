@@ -2,7 +2,7 @@
 #include "ResourceManager.h"
 #include "SoundPlayer.h"
 
-Player::Player(SoundPlayer soundPlayer) : soundPlayer(soundPlayer)
+Player::Player(SoundPlayer& soundPlayer) : soundPlayer(soundPlayer)
 {
 	this->idleTexture = ResourceManager::getInstance().getTexture(res::Texture::PlayerIdle);
 	this->runningTexture = ResourceManager::getInstance().getTexture(res::Texture::PlayerRun);
