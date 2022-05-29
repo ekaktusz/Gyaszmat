@@ -18,6 +18,6 @@ public:
 	sf::Vector2f getListenerPosition() const;
 
 private:
-	std::vector<sf::Sound> sounds; // use std::list instead of vector that it garuanntees no relocating, and removing is easier
+	std::list<sf::Sound> sounds; // use std::list instead of vector that it garuanntees no relocating, and removing is easier
 
 };

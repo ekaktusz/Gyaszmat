@@ -56,16 +56,7 @@ void SoundPlayer::resume()
 
 void SoundPlayer::removeStoppedSounds()
 {
-	//sounds.remove_if([](const sf::Sound& s) { return s.getStatus() == sf::Sound::Stopped; });
-
-	this->sounds.erase(
-    std::remove_if(
-        this->sounds.begin(), 
-        this->sounds.end(),
-        [](sf::Sound& s) { return s.getStatus() == sf::Sound::Stopped; }
-    ), 
-    this->sounds.end()
-); 
+	this->sounds.remove_if([](const sf::Sound& s) { return s.getStatus() == sf::Sound::Stopped; });
 }
 
 sf::Vector2f SoundPlayer::getListenerPosition() const
