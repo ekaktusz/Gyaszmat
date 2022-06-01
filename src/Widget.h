@@ -1,4 +1,5 @@
 #pragma once
+
 #include "pch.h"
 
 class Widget : public sf::Drawable

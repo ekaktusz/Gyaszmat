@@ -3,6 +3,11 @@
 #include "PauseState.h"
 #include "ResourceManager.h"
 
+#include "Player.h"
+#include "TileLayer.h"
+#include "Ladder.h"
+#include "Terrain.h"
+
 GameState::GameState(Game* game)
 {
 	this->game = game;
@@ -52,9 +57,6 @@ GameState::GameState(Game* game)
 	musicPlayer.chooseTrack(res::Music::LudumDare2);
 	musicPlayer.play();
 	musicPlayer.setVolume(100);
-
-	// Init sounds
-	
 }
 
 GameState::~GameState()
@@ -83,8 +85,8 @@ void GameState::update(sf::Time deltaTime)
 	sf::Vector2f cameraPosition(this->view.getCenter() - sf::Vector2f(Game::XX / 2, Game::YY / 2));
 	this->playerHealthBar.setPosition(cameraPosition);
 	this->frameTimeLabel.getText().setPosition(cameraPosition);
-	// Change to 1.f / this->frame_time to show FPS
-	this->frameTimeLabel.getText().setString(std::to_string(this->frame_time));
+	// Change to 1.f / this->frameTime to show FPS
+	this->frameTimeLabel.getText().setString(std::to_string(this->frameTime));
 
 	this->parallaxBackground.update(cameraPosition);
 }
@@ -110,7 +112,7 @@ void GameState::handleEvent(const sf::Event& event)
 
 void GameState::render()
 {
-	frame_time = this->clock.restart().asSeconds();
+	frameTime = this->clock.restart().asSeconds();
 	this->game->renderWindow.clear();
 	this->game->renderWindow.setView(this->view);
 	this->game->renderWindow.draw(this->parallaxBackground);

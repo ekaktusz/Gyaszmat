@@ -1,4 +1,5 @@
 #pragma once
+
 #include "ResourceHolder.h"
 #include "ResourceTypes.h"
 #include "pch.h"

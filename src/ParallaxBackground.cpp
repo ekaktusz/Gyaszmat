@@ -34,7 +34,7 @@ void ParallaxBackground::addLayer(ParallaxLayer* parallaxLayer)
 	this->backgroundLayers.push_back(parallaxLayer);
 }
 
-sf::FloatRect ParallaxBackground::getGlobalBounds()
+sf::FloatRect ParallaxBackground::getGlobalBounds() const
 {
 	if (this->backgroundLayers.empty())
 	{

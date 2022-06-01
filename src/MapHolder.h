@@ -1,7 +1,8 @@
 #pragma once
+
+#include "pch.h"
 #include "ResourceHolder.h"
 #include "ResourceTypes.h"
-#include "pch.h"
 
 class MapHolder : public ResourceHolder<tmx::Map, res::Map>
 {

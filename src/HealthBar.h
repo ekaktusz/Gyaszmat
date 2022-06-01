@@ -1,10 +1,19 @@
 #pragma once
 
 #include "pch.h"
-#include "Button.h"
+#include "Label.h"
 
 class HealthBar : public sf::Drawable
 {
+public:
+	HealthBar(unsigned int health = 100, unsigned int maxHealth = 100);
+	void setOffset(const sf::Vector2f& offsetFromTopLeft);
+	void setPosition(const sf::Vector2f& position);
+	void draw(sf::RenderTarget& target, sf::RenderStates states) const;
+	void update(unsigned int health);
+	void setHealth(unsigned int health);
+	void setMaxHealth(unsigned int maxHealth);
+
 private:
 	unsigned int health;
 	unsigned int maxHealth;
@@ -19,13 +28,4 @@ private:
 	Label label;
 
 	void alignTextToMid();
-
-public:
-	HealthBar(unsigned int health = 100, unsigned int maxHealth = 100);
-	void setOffset(const sf::Vector2f& offsetFromTopLeft);
-	void setPosition(const sf::Vector2f& position);
-	void draw(sf::RenderTarget& target, sf::RenderStates states) const;
-	void update(unsigned int health);
-	void setHealth(unsigned int health);
-	void setMaxHealth(unsigned int maxHealth);
 };

@@ -1,4 +1,5 @@
 #pragma once
+
 #include "Widget.h"
 #include "Label.h"
 #include "ResourceTypes.h"
@@ -28,7 +29,8 @@ public:
 	void setInnerColor(sf::Color color);
 	void setOutlineColor(sf::Color color);
 	void setTextColor(sf::Color color);
-	const sf::FloatRect& getGlobalBounds();
+	
+	sf::FloatRect getGlobalBounds() const{ return outerButton.getGlobalBounds(); }
 
 private:
 	Alignment alignment;

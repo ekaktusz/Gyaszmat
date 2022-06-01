@@ -1,5 +1,4 @@
 #include "Game.h"
-#include "GameState.h"
 #include "MenuState.h"
 
 void Game::pushState(State* state)
@@ -20,7 +19,7 @@ void Game::changeState(State* state)
 	pushState(state);
 }
 
-State* Game::peekState()
+State* Game::peekState() const
 {
 	if (this->states.empty())
 		return nullptr;

@@ -1,4 +1,5 @@
 #pragma once
+
 #include "pch.h"
 
 class State;
@@ -6,7 +7,6 @@ class State;
 class Game
 {
 public:
-
 	static const unsigned int XX = 800;
 	static const unsigned int YY = 600;
 	const std::string name = "Gyaszmat";
@@ -15,7 +15,7 @@ public:
 	void pushState(State* state);
 	void popState();
 	void changeState(State* state);
-	State* peekState();
+	State* peekState() const;
 	void returnToMain();
 
 	void run();
@@ -24,7 +24,7 @@ public:
 	~Game();
 
 	sf::RenderWindow renderWindow;	
-private:
 
+private:
 	std::stack<State*> states;
 };
