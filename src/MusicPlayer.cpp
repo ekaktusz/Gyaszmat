@@ -39,6 +39,7 @@ void MusicPlayer::setPitch(float pitch)
 	this->music->setPitch(pitch);
 }
 
+// between 0 and 100
 void MusicPlayer::setVolume(float volume)
 {
 	this->music->setVolume(volume);

@@ -80,6 +80,7 @@ void Player::draw(sf::RenderTarget& target, sf::RenderStates states) const
 void Player::update()
 {
 	this->updateAnimation();
+	this->updateSound();
 	this->updatePhysics();
 	this->updateHitbox();
 }
@@ -147,6 +148,7 @@ void Player::updateAnimation()
 {
 	PlayerAnimationState prevState = this->animationState;
 
+	// Choose the correct animation
 	if (this->velocity.y > 0 && !this->collisionWithLadder)
 		this->animationState = PlayerAnimationState::FALLING;
 	else if (this->velocity.y > 0 && this->collisionWithLadder)
@@ -173,18 +175,7 @@ void Player::updateAnimation()
 		resetAnimationTimer();
 	}
 
-	// This is for flipping the image to the right direction
-	if (this->velocity.x > 0)
-	{
-		this->sprite.setScale(2, 2);
-		this->sprite.setOrigin(0.f, 0.f);
-	}
-	else if (this->velocity.x < 0)
-	{
-		this->sprite.setScale(-2, 2);
-		this->sprite.setOrigin(this->sprite.getGlobalBounds().width / 2.f, 0);
-	}
-
+	// Set the correct animation
 	if (this->animationState == PlayerAnimationState::IDLE)
 	{
 		setAnimation(0.2f, idleTexture);
@@ -212,6 +203,36 @@ void Player::updateAnimation()
 	{
 		setAnimation(0.3f, climbingTexture);
 	}
+
+	// This is for flipping the image to the right direction
+	if (this->velocity.x > 0)
+	{
+		this->sprite.setScale(2, 2);
+		this->sprite.setOrigin(0.f, 0.f);
+	}
+	else if (this->velocity.x < 0)
+	{
+		this->sprite.setScale(-2, 2);
+		this->sprite.setOrigin(this->sprite.getGlobalBounds().width / 2.f, 0);
+	}
+}
+
+void Player::updateSound()
+{
+	// We should improve it to a better is onGround
+	if ((animationState == PlayerAnimationState::MOVING_LEFT || animationState == PlayerAnimationState::MOVING_RIGHT))
+	{
+		
+		if (this->soundTimer.getElapsedTime().asSeconds() >= 0.3)
+		{	
+			this->soundPlayer.play(res::Sound::FootStepGrass);
+			this->soundTimer.restart();
+		}
+	}
+	else
+	{
+		this->soundPlayer.removeSoundsById(res::Sound::FootStepGrass);
+	}
 }
 
 void Player::setAnimation(float timePeriod, sf::Texture& animationTexture, bool stopped)
@@ -231,7 +252,6 @@ void Player::setAnimation(float timePeriod, sf::Texture& animationTexture, bool 
 			}
 			this->animationTimer.restart();
 		}
-
 		this->sprite.setTextureRect(this->currentFrame);
 	}
 }
@@ -414,4 +434,11 @@ void Player::resolveCollision(const sf::FloatRect& overlap, const sf::Vector2f& 
 
 	sf::Vector2f normal(manifold.x * manifold.z, manifold.y * manifold.z);
 	this->move(normal);
+}
+
+
+// TODO: better
+bool Player::isOnGround() const
+{
+	return this->velocity.y == 1.f;
 }

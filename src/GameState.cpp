@@ -51,6 +51,7 @@ GameState::GameState(Game* game)
 	// Init background music
 	musicPlayer.chooseTrack(res::Music::LudumDare2);
 	musicPlayer.play();
+	musicPlayer.setVolume(100);
 
 	// Init sounds
 	

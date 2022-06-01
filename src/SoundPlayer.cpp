@@ -23,12 +23,9 @@ void SoundPlayer::play(res::Sound soundId)
 
 void SoundPlayer::play(res::Sound soundId, sf::Vector2f position)
 {
-	SPDLOG_INFO(this->sounds.empty());
-	SPDLOG_INFO(this->sounds.size());
-	this->sounds.clear();
-	this->sounds.push_back(sf::Sound());
+	this->sounds.push_back(GSound(soundId, sf::Sound()));
 	
-	sf::Sound& sound = this->sounds.back();
+	sf::Sound& sound = this->sounds.back().sound;
 
 	sound.setBuffer(ResourceManager::getInstance().getSoundBuffer(soundId));
 	sound.setPosition(position.x, position.y, 0.f);
@@ -40,23 +37,28 @@ void SoundPlayer::play(res::Sound soundId, sf::Vector2f position)
 
 void SoundPlayer::pause()
 {
-	for (sf::Sound sound : this->sounds)
+	for (GSound gsound : this->sounds)
 	{
-		sound.pause();
+		gsound.sound.pause();
 	}
 }
 
 void SoundPlayer::resume()
 {
-	for (sf::Sound& sound : this->sounds)
+	for (GSound gsound : this->sounds)
 	{
-		if (sound.getStatus() == sf::Sound::Paused) sound.play();
+		if (gsound.sound.getStatus() == sf::Sound::Paused) gsound.sound.play();
 	}
 }
 
 void SoundPlayer::removeStoppedSounds()
 {
-	this->sounds.remove_if([](const sf::Sound& s) { return s.getStatus() == sf::Sound::Stopped; });
+	this->sounds.remove_if([](const GSound& gsound) { return gsound.sound.getStatus() == sf::Sound::Stopped; });
+}
+
+void SoundPlayer::removeSoundsById(res::Sound soundId)
+{
+	this->sounds.remove_if([&](const GSound& gsound) { return gsound.soundId == soundId; });
 }
 
 sf::Vector2f SoundPlayer::getListenerPosition() const

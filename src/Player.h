@@ -40,6 +40,9 @@ private:
 
 	static const short MAX_NUMBER_OF_JUMPS = 2;
 
+	//Sound
+	sf::Clock soundTimer;
+
 	// Hitbox
 	Hitbox hitbox;
 
@@ -86,9 +89,12 @@ private:
 	void updateAnimation();
 	void updatePhysics();
 	void updateHitbox();
+	void updateSound();
 
 	// Not the owner btw. 
 	SoundPlayer& soundPlayer;
+
+	bool isOnGround() const;
 
 public:
 	Player(SoundPlayer& soundPlayer);
