@@ -2,6 +2,7 @@
 #include "pch.h"
 #include "State.h"
 #include "Button.h"
+#include "MusicPlayer.h"
 
 class MenuState : public State
 {
@@ -15,6 +16,8 @@ public:
 
 	Button startButton;
 	Button exitButton;
+
+	MusicPlayer musicPlayer;
 
 	Label titleLabel;
 

@@ -3,6 +3,8 @@
 #include "Entity.h"
 #include "Hitbox.h"
 
+class SoundPlayer;
+
 enum class PlayerAnimationState
 {
 	IDLE = 0,
@@ -37,6 +39,9 @@ private:
 	unsigned int maxHealth;
 
 	static const short MAX_NUMBER_OF_JUMPS = 2;
+
+	//Sound
+	sf::Clock soundTimer;
 
 	// Hitbox
 	Hitbox hitbox;
@@ -84,9 +89,15 @@ private:
 	void updateAnimation();
 	void updatePhysics();
 	void updateHitbox();
+	void updateSound();
+
+	// Not the owner btw. 
+	SoundPlayer& soundPlayer;
+
+	bool isOnGround() const;
 
 public:
-	Player();
+	Player(SoundPlayer& soundPlayer);
 	~Player();
 
 	unsigned int getHealth();

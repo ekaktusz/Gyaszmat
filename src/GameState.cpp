@@ -6,6 +6,7 @@
 GameState::GameState(Game* game)
 {
 	this->game = game;
+	this->player = new Player(this->soundPlayer);
 
 	// Init map
 	this->map = &ResourceManager::getInstance().getMap(res::Map::TestMap);
@@ -46,8 +47,17 @@ GameState::GameState(Game* game)
 	this->frameTimeLabel.getText().setOutlineColor(sf::Color::Black);
 	this->frameTimeLabel.getText().setOutlineColor(sf::Color::Black);
 	this->frameTimeLabel.getText().setOutlineThickness(1.f);
+
+	// Init background music
+	musicPlayer.chooseTrack(res::Music::LudumDare2);
+	musicPlayer.play();
+	musicPlayer.setVolume(100);
+
+	// Init sounds
+	
 }
-	GameState::~GameState()
+
+GameState::~GameState()
 {
 	delete tileLayerFar;
 	delete tileLayerMiddle;
@@ -55,17 +65,20 @@ GameState::GameState(Game* game)
 	delete ladder;
 	delete terrain;
 	delete map;
+	delete player;
 }
 
 void GameState::update(sf::Time deltaTime)
 {
-	this->player.update();
+	this->soundPlayer.removeStoppedSounds();
+	this->musicPlayer.play();
+	this->player->update();
 	sf::Vector2f movement =
-		player.getCenterPosition() - view.getCenter() - sf::Vector2f(0.f, Game::YY / 8);
+		player->getCenterPosition() - view.getCenter() - sf::Vector2f(0.f, Game::YY / 8);
 	this->view.move(movement * deltaTime.asSeconds() * 10.f);
 	//this->view.setCenter(this->player.getCenterPosition() - sf::Vector2f(0.f, Game::XX / 6));
 	this->updateCollision();
-	this->playerHealthBar.update(this->player.getHealth());
+	this->playerHealthBar.update(this->player->getHealth());
 
 	sf::Vector2f cameraPosition(this->view.getCenter() - sf::Vector2f(Game::XX / 2, Game::YY / 2));
 	this->playerHealthBar.setPosition(cameraPosition);
@@ -87,11 +100,12 @@ void GameState::handleEvent(const sf::Event& event)
 		if (event.key.code == sf::Keyboard::Escape)
 		{
 			SPDLOG_INFO("Switch to PauseState...");
-			this->player.stop();
+			this->player->stop();
+			this->musicPlayer.pause();
 			this->game->pushState(new PauseState(this->game));
 		}
 	}
-	this->player.handleKeyboardInput(event);
+	this->player->handleKeyboardInput(event);
 }
 
 void GameState::render()
@@ -102,16 +116,16 @@ void GameState::render()
 	this->game->renderWindow.draw(this->parallaxBackground);
 	this->game->renderWindow.draw(*this->tileLayerFar); // layer behind player
 	this->game->renderWindow.draw(*this->tileLayerMiddle); // layer of map
-	this->game->renderWindow.draw(this->player);
+	this->game->renderWindow.draw(*this->player);
 	this->game->renderWindow.draw(*this->tileLayerNear); // layer vefore player
 	this->game->renderWindow.draw(this->playerHealthBar);
-	this->game->renderWindow.draw(this->frameTimeLabel);
+	this->game->renderWindow.draw(this->frameTimeLabel); // comment out if dont want to see frame
 	this->game->renderWindow.display();
 }
 
 void GameState::updateCollision()
 {
-	this->player.setResolved(false);
-	this->terrain->updateCollision(this->player);
-	this->ladder->updateCollision(this->player);
+	this->player->setResolved(false);
+	this->terrain->updateCollision(*this->player);
+	this->ladder->updateCollision(*this->player);
 }

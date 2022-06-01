@@ -11,11 +11,13 @@
 #include "Ladder.h"
 #include "Terrain.h"
 #include "ParallaxBackground.h"
+#include "MusicPlayer.h"
+#include "SoundPlayer.h"
 
 class GameState : public State
 {
 private:
-	Player player;
+	Player* player;
 	std::vector<Enemy> enemies;
 
 	sf::View view;
@@ -36,6 +38,9 @@ private:
 
 	HealthBar playerHealthBar;
 	Label frameTimeLabel;
+
+	MusicPlayer musicPlayer;
+	SoundPlayer soundPlayer;
 
 	void render() override;
 	void update(sf::Time deltaTime) override;

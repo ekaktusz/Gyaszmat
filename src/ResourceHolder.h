@@ -12,22 +12,21 @@ class ResourceHolder
 public:
 	ResourceHolder() = default;
 	virtual void load(Identifier id, const std::filesystem::path& filePath) = 0;
-	const Resource& get(Identifier id) const;
+	Resource& get(Identifier id) const;
 protected:
-	void insert(Identifier id, Resource* resource);
+	void insert(Identifier id, std::unique_ptr<Resource> resource);
 
 	std::map<Identifier, std::unique_ptr<Resource>> resourceMap;
 };
 
 template <typename Resource, typename Identifier>
-void ResourceHolder<Resource, Identifier>::insert(Identifier id, Resource* resource)
+void ResourceHolder<Resource, Identifier>::insert(Identifier id, std::unique_ptr<Resource> resource)
 {
-	std::unique_ptr<Resource> uniqueResource(resource);
-	resourceMap.try_emplace(id, std::move(uniqueResource));
+	resourceMap.try_emplace(id, std::move(resource));
 }
 
 template <typename Resource, typename Identifier>
-const Resource& ResourceHolder<Resource, Identifier>::get(Identifier id) const
+Resource& ResourceHolder<Resource, Identifier>::get(Identifier id) const
 {
 	auto found = resourceMap.find(id);
 	if (found == resourceMap.end())

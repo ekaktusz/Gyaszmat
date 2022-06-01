@@ -3,6 +3,7 @@
 #include "State.h"
 #include "Label.h"
 #include "Button.h"
+#include "MusicPlayer.h"
 
 class PauseState : public State
 {
@@ -22,6 +23,8 @@ private:
 
 	Button continueButton;
 	Button mainMenuButton;
+
+	MusicPlayer musicPlayer;
 
 	Label titleLabel;
 };
