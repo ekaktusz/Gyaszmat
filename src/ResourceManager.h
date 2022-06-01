@@ -8,6 +8,7 @@
 #include "MusicHolder.h"
 
 // Singleton for accessing resources in all classes. Loads everything in it's constructor, in the first time it accessed.
+// Maybe not the most efficient, but for this small game it's probably gonna be enough
 // Everytime we want to add a new asset we have to append it's methods.
 
 class ResourceManager

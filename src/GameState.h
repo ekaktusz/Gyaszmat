@@ -1,21 +1,24 @@
 #pragma once
 
+#include "pch.h"
 #include "Enemy.h"
 #include "HealthBar.h"
-#include "TileLayer.h"
-#include "ObjectLayer.h"
-#include "Player.h"
 #include "State.h"
-#include "Terrain.h"
-#include "pch.h"
-#include "Ladder.h"
-#include "Terrain.h"
 #include "ParallaxBackground.h"
 #include "MusicPlayer.h"
 #include "SoundPlayer.h"
 
+class Player;
+class TileLayer;
+class Ladder;
+class Terrain;
+
 class GameState : public State
 {
+public:
+	GameState(Game* game);
+	~GameState();
+
 private:
 	Player* player;
 	std::vector<Enemy> enemies;
@@ -23,7 +26,7 @@ private:
 	sf::View view;
 
 	sf::Clock clock;
-	float frame_time;
+	float frameTime;
 
 	tmx::FloatRect mapSize;
 
@@ -47,8 +50,4 @@ private:
 	void handleEvent(const sf::Event& event) override;
 
 	void updateCollision();
-
-public:
-	GameState(Game* game);
-	~GameState();
 };

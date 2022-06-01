@@ -1,5 +1,8 @@
 #include "Terrain.h"
 
+#include "ObjectLayer.h"
+#include "Player.h"
+
 Terrain::Terrain(const tmx::Map* map)
 {
 	this->objectLayer = new ObjectLayer(*map, MapLayerNames::ObjectLayerName::ObjectLayer);

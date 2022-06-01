@@ -33,6 +33,37 @@ enum class PlayerActualClimbingState
 
 class Player : public Entity
 {
+public:
+	Player(SoundPlayer& soundPlayer);
+	~Player();
+
+	unsigned int getHealth();
+	unsigned int getMaxHealth();
+	bool getAnimationSwitch();
+	const Hitbox& getHitbox() const;
+	const sf::Vector2f getVelocity() const;
+	const sf::Vector2f getCenterPosition() const;
+	const bool isCollidingWithLadder() const;
+	const bool isResolved() const;
+	const PlayerPossibleClimbingDir getPossibleClimbingDirections() const;
+	const PlayerActualClimbingState getActualClimbingState() const;
+
+	void draw(sf::RenderTarget& target, sf::RenderStates states) const;
+	void update();
+	void handleKeyboardInput(sf::Event event);
+
+	void setPosition(const float x, const float y);
+	void setVelocity(sf::Vector2f velocity);
+	void setCollisionWithLadder(bool collisionWithLadder);
+	void setResolved(bool newResolvedState);
+	void setPossibleClimbingDirections(PlayerPossibleClimbingDir directionToSet);
+	void setActualClimbingState(PlayerActualClimbingState stateToSet);
+
+	void resolveCollision(const sf::FloatRect& overlap, const sf::Vector2f& collisionNormal);
+	void stop();
+	void stopFalling();
+	void move(const sf::Vector2f& offset);
+
 private:
 	// Game parameters
 	unsigned int health;
@@ -42,6 +73,7 @@ private:
 
 	//Sound
 	sf::Clock soundTimer;
+	SoundPlayer& soundPlayer;
 
 	// Hitbox
 	Hitbox hitbox;
@@ -91,47 +123,5 @@ private:
 	void updateHitbox();
 	void updateSound();
 
-	// Not the owner btw. 
-	SoundPlayer& soundPlayer;
-
 	bool isOnGround() const;
-
-public:
-	Player(SoundPlayer& soundPlayer);
-	~Player();
-
-	unsigned int getHealth();
-	unsigned int getMaxHealth();
-
-	bool getAnimationSwitch();
-	const Hitbox& getHitbox() const;
-
-	void draw(sf::RenderTarget& target, sf::RenderStates states) const;
-
-	void update();
-	void handleKeyboardInput(sf::Event event);
-
-	void stopFalling();
-	void move(const sf::Vector2f& offset);
-
-	void setPosition(const float x, const float y);
-	void setVelocity(sf::Vector2f velocity);
-
-	const sf::Vector2f getVelocity() const;
-
-	const sf::Vector2f getCenterPosition() const;
-
-	void stop();
-	// Ladder:
-	const bool isCollidingWithLadder() const;
-	const bool isResolved() const;
-	const PlayerPossibleClimbingDir getPossibleClimbingDirections() const;
-	const PlayerActualClimbingState getActualClimbingState() const;
-
-	void setCollisionWithLadder(bool collisionWithLadder);
-	void setResolved(bool newResolvedState);
-	void setPossibleClimbingDirections(PlayerPossibleClimbingDir directionToSet);
-	void setActualClimbingState(PlayerActualClimbingState stateToSet);
-
-	void resolveCollision(const sf::FloatRect& overlap, const sf::Vector2f& collisionNormal);
 };

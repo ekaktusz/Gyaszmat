@@ -4,9 +4,6 @@
 
 class Hitbox : public sf::Drawable
 {
-	sf::RectangleShape hitbox;
-	sf::Vector2f offset;
-
 public:
 	Hitbox();
 	Hitbox(const sf::Vector2f& parentPosition, sf::Vector2f size, sf::Vector2f offset);
@@ -16,4 +13,8 @@ public:
 	void draw(sf::RenderTarget& target, sf::RenderStates states) const;
 
 	sf::FloatRect getGlobalBounds() const;
+
+private:
+	sf::RectangleShape hitbox;
+	sf::Vector2f offset;
 };
