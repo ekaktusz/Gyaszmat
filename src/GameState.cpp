@@ -66,7 +66,6 @@ GameState::~GameState()
 	delete tileLayerNear;
 	delete ladder;
 	delete terrain;
-	delete map;
 	delete player;
 }
 

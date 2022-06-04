@@ -29,9 +29,8 @@ State* Game::peekState() const
 
 void Game::returnToMain()
 {
-	while (!this->states.empty())
+	while (this->states.size() > 1)
 		popState();
-	this->pushState(new MenuState(this));
 }
 
 void Game::run()

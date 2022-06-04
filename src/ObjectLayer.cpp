@@ -15,6 +15,10 @@ ObjectLayer::ObjectLayer(const tmx::Map& map, MapLayerNames::ObjectLayerName nam
 			objectBounds.push_back(sf::FloatRect(rect.left, rect.top, rect.width, rect.height));
 		}
 	}
+	else
+	{
+		SPDLOG_WARN("Not a valid layer, object layer will be uninitilaized.");
+	}
 }
 
 const std::vector<sf::FloatRect>& ObjectLayer::getObjectBounds() const

@@ -34,7 +34,7 @@ MenuState::MenuState(Game* game)
 	this->exitButton.setPosition(sf::Vector2f(30, 200));
 	this->exitButton.setSize(sf::Vector2f(200, 30));
 	this->exitButton.setAction([&]() {
-		SPDLOG_INFO("BUTTON CLICKED YEAH");
+		SPDLOG_INFO("Exit button clicked");
 		this->game->renderWindow.close();
 	});
 
