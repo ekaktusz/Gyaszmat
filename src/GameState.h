@@ -1,7 +1,6 @@
 #pragma once
 
 #include "pch.h"
-#include "Enemy.h"
 #include "HealthBar.h"
 #include "State.h"
 #include "ParallaxBackground.h"
@@ -19,9 +18,13 @@ public:
 	GameState(Game* game);
 	~GameState();
 
+	// Inherited via State
+	void render() override;
+	void update(sf::Time deltaTime) override;
+	void handleEvent(const sf::Event& event) override;
+
 private:
 	Player* player;
-	std::vector<Enemy> enemies;
 
 	sf::View view;
 
@@ -44,10 +47,6 @@ private:
 
 	MusicPlayer musicPlayer;
 	SoundPlayer soundPlayer;
-
-	void render() override;
-	void update(sf::Time deltaTime) override;
-	void handleEvent(const sf::Event& event) override;
 
 	void updateCollision();
 };

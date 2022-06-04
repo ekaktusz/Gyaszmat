@@ -1,6 +1,5 @@
 #pragma once
 
-#include "Entity.h"
 #include "Hitbox.h"
 
 class SoundPlayer;
@@ -31,7 +30,7 @@ enum class PlayerActualClimbingState
 	CLIMBED
 };
 
-class Player : public Entity
+class Player : public sf::Drawable
 {
 public:
 	Player(SoundPlayer& soundPlayer);
