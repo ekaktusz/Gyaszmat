@@ -2,59 +2,54 @@
 #include "GameState.h"
 #include "ResourceManager.h"
 
-MenuState::MenuState(Game* game)
+MenuState::MenuState(Game* game) : State(game)
 {
-	this->m_Game = game;
+	m_TitleLabel.getText().setString(Game::s_Name);
+	m_TitleLabel.getText().setFont(ResourceManager::getInstance().getFont(res::Font::Pixel));
+	m_TitleLabel.getText().setCharacterSize(50);
+	m_TitleLabel.getText().setPosition(m_Game->renderWindow.getSize().x - m_TitleLabel.getText().getGlobalBounds().width - 20, 20);
 
-	this->titleLabel.getText().setString(m_Game->s_Name);
-	this->titleLabel.getText().setFont(ResourceManager::getInstance().getFont(res::Font::Pixel));
-	this->titleLabel.getText().setCharacterSize(50);
-	this->titleLabel.getText().setPosition(m_Game->renderWindow.getSize().x
-			- this->titleLabel.getText().getGlobalBounds().width - 20,
-		20);
+	m_BackgroundTexture = ResourceManager::getInstance().getTexture(res::Texture::MenuBackgroundForest);
+	m_Background.setTexture(m_BackgroundTexture);
 
-	this->backgroundTexture =
-		ResourceManager::getInstance().getTexture(res::Texture::MenuBackgroundForest);
-	this->background.setTexture(this->backgroundTexture);
-
-	this->startButton.setText("new game");
-	this->startButton.setFont(res::Font::Roboto);
-	this->startButton.setAlignment(Button::Alignment::Center);
-	this->startButton.setPosition(sf::Vector2f(30, 100));
-	this->startButton.setSize(sf::Vector2f(200, 30));
-	this->startButton.setAction([&]() {
+	m_StartButton.setText("new game");
+	m_StartButton.setFont(res::Font::Roboto);
+	m_StartButton.setAlignment(Button::Alignment::Center);
+	m_StartButton.setPosition(sf::Vector2f(30, 100));
+	m_StartButton.setSize(sf::Vector2f(200, 30));
+	this->m_StartButton.setAction([&]() {
 		SPDLOG_INFO("Switch to GameState: Starting the game");
-		this->musicPlayer.pause();
+		m_MusicPlayer.pause();
 		m_Game->pushState(new GameState(m_Game));
 	});
 
-	this->exitButton.setText("exitame");
-	this->exitButton.setFont(res::Font::Roboto);
-	this->exitButton.setAlignment(Button::Alignment::Center);
-	this->exitButton.setPosition(sf::Vector2f(30, 200));
-	this->exitButton.setSize(sf::Vector2f(200, 30));
-	this->exitButton.setAction([&]() {
+	m_ExitButton.setText("exitame");
+	m_ExitButton.setFont(res::Font::Roboto);
+	m_ExitButton.setAlignment(Button::Alignment::Center);
+	m_ExitButton.setPosition(sf::Vector2f(30, 200));
+	m_ExitButton.setSize(sf::Vector2f(200, 30));
+	m_ExitButton.setAction([&]() {
 		SPDLOG_INFO("Exit button clicked");
 		m_Game->renderWindow.close();
 	});
 
-	this->musicPlayer.chooseTrack(res::Music::LudumDare1);
-	this->musicPlayer.setLoop(true);
+	m_MusicPlayer.chooseTrack(res::Music::LudumDare1);
+	m_MusicPlayer.setLoop(true);
 }
 
 void MenuState::update(sf::Time deltaTime)
 {
-	this->musicPlayer.play();
+	m_MusicPlayer.play();
 	m_Game->renderWindow.setView(m_Game->renderWindow.getDefaultView());
 }
 
 void MenuState::render()
 {
 	m_Game->renderWindow.clear();
-	m_Game->renderWindow.draw(background);
-	m_Game->renderWindow.draw(startButton);
-	m_Game->renderWindow.draw(exitButton);
-	m_Game->renderWindow.draw(titleLabel);
+	m_Game->renderWindow.draw(m_Background);
+	m_Game->renderWindow.draw(m_StartButton);
+	m_Game->renderWindow.draw(m_ExitButton);
+	m_Game->renderWindow.draw(m_TitleLabel);
 	m_Game->renderWindow.display();
 }
 
@@ -64,6 +59,6 @@ void MenuState::handleEvent(const sf::Event& event)
 	{
 		m_Game->renderWindow.close();
 	}
-	this->startButton.handleEvent(event);
-	this->exitButton.handleEvent(event);
+	m_StartButton.handleEvent(event);
+	m_ExitButton.handleEvent(event);
 }

@@ -6,7 +6,7 @@ ParallaxBackground::ParallaxBackground()
 
 ParallaxBackground::~ParallaxBackground()
 {
-	for (auto layer : backgroundLayers)
+	for (auto layer : m_BackgroundLayers)
 	{
 		delete layer;
 	}
@@ -15,7 +15,7 @@ ParallaxBackground::~ParallaxBackground()
 void ParallaxBackground::draw(sf::RenderTarget& target, sf::RenderStates states) const
 {
 	
-	for (auto layer : this->backgroundLayers)
+	for (auto layer : m_BackgroundLayers)
 	{
 		target.draw(*layer);
 	}
@@ -23,7 +23,7 @@ void ParallaxBackground::draw(sf::RenderTarget& target, sf::RenderStates states)
 
 void ParallaxBackground::setScale(float x, float y)
 {
-	for (auto layer : this->backgroundLayers)
+	for (auto layer : m_BackgroundLayers)
 	{
 		layer->setScale(x, y);
 	}
@@ -31,23 +31,23 @@ void ParallaxBackground::setScale(float x, float y)
 
 void ParallaxBackground::addLayer(ParallaxLayer* parallaxLayer)
 {
-	this->backgroundLayers.push_back(parallaxLayer);
+	m_BackgroundLayers.push_back(parallaxLayer);
 }
 
 sf::FloatRect ParallaxBackground::getGlobalBounds() const
 {
-	if (this->backgroundLayers.empty())
+	if (m_BackgroundLayers.empty())
 	{
 		SPDLOG_WARN("backgroundLayers is empty.");
 		return sf::FloatRect();
 	}
-	return backgroundLayers.at(0)->getGlobalBounds();
+	return m_BackgroundLayers.at(0)->getGlobalBounds();
 }
 
 
 void ParallaxBackground::update(sf::Vector2f cameraPosition)
 {
-	for (auto layer : this->backgroundLayers)
+	for (auto layer : m_BackgroundLayers)
 	{
 		layer->update(cameraPosition);
 	}

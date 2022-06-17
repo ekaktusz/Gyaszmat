@@ -12,7 +12,7 @@ public:
 	LadderLayer(const tmx::Map* map);
 	~LadderLayer();
 
-	void updateCollision(Player& player);
+	virtual void updateCollision(Player& player) override;
 
 private:
 	void updateCollisionBotLayer(Player& player);

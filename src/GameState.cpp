@@ -5,20 +5,17 @@
 
 #include "Player.h"
 #include "TileLayer.h"
-#include "Ladder.h"
+#include "LadderLayer.h"
 #include "Terrain.h"
 
-GameState::GameState(Game* game)
+GameState::GameState(Game* game) : State(game), m_Player(new Player(m_SoundPlayer)), m_FrameTime(0.f)
 {
-	m_Game = game;
-	m_Player = new Player(m_SoundPlayer);
-
 	// Init m_Map
 	m_Map = &ResourceManager::getInstance().getMap(res::Map::TestMap);
 	m_TileLayerFar = new TileLayer(*m_Map, MapLayerNames::TileLayerName::BackLayer);
 	m_TileLayerMiddle = new TileLayer(*m_Map, MapLayerNames::TileLayerName::MidLayer);
 	m_TileLayerNear = new TileLayer(*m_Map, MapLayerNames::TileLayerName::FrontLayer);
-	m_Ladder = new LadderLayer(m_Map);
+	m_LadderLayer = new LadderLayer(m_Map);
 	m_Terrain = new Terrain(m_Map);
 	m_MapSize = m_Map->getBounds();
 
@@ -66,7 +63,7 @@ GameState::~GameState()
 	delete m_TileLayerFar;
 	delete m_TileLayerMiddle;
 	delete m_TileLayerNear;
-	delete m_Ladder;
+	delete m_LadderLayer;
 	delete m_Terrain;
 	delete m_Player;
 }
@@ -128,5 +125,5 @@ void GameState::updateCollision()
 {
 	m_Player->setResolved(false);
 	m_Terrain->updateCollision(*m_Player);
-	m_Ladder->updateCollision(*m_Player);
+	m_LadderLayer->updateCollision(*m_Player);
 }

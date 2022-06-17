@@ -19,9 +19,9 @@ public:
 	~GameState();
 
 	// Inherited via State
-	void render() override;
-	void update(sf::Time deltaTime) override;
-	void handleEvent(const sf::Event& event) override;
+	virtual void render() override;
+	virtual void update(sf::Time deltaTime) override;
+	virtual void handleEvent(const sf::Event& event) override;
 
 private:
 	void updateCollision();
@@ -39,7 +39,7 @@ private:
 	TileLayer* m_TileLayerFar;
 	TileLayer* m_TileLayerMiddle;
 	TileLayer* m_TileLayerNear;
-	LadderLayer* m_Ladder;
+	LadderLayer* m_LadderLayer;
 	Terrain* m_Terrain;
 	
 	ParallaxBackground m_ParallaxBackground;

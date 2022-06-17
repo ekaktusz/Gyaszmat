@@ -12,7 +12,7 @@ ObjectLayer::ObjectLayer(const tmx::Map& map, MapLayerNames::ObjectLayerName nam
 		for (const auto& object : objects)
 		{
 			tmx::FloatRect rect = object.getAABB();
-			objectBounds.push_back(sf::FloatRect(rect.left, rect.top, rect.width, rect.height));
+			m_ObjectBounds.push_back(sf::FloatRect(rect.left, rect.top, rect.width, rect.height));
 		}
 	}
 	else
@@ -23,5 +23,5 @@ ObjectLayer::ObjectLayer(const tmx::Map& map, MapLayerNames::ObjectLayerName nam
 
 const std::vector<sf::FloatRect>& ObjectLayer::getObjectBounds() const
 {
-	return this->objectBounds;
+	return m_ObjectBounds;
 }

@@ -12,21 +12,21 @@ public:
 	MenuState(Game* game);
 
 	// Inherited via State
-	void render() override;
-	void update(sf::Time deltaTime) override;
-	void handleEvent(const sf::Event& event) override;
+	virtual void render() override;
+	virtual void update(sf::Time deltaTime) override;
+	virtual void handleEvent(const sf::Event& event) override;
 
 private:
-	sf::View view;
+	sf::View m_View;
 
-	sf::Texture backgroundTexture;
-	sf::Sprite background;
+	sf::Texture m_BackgroundTexture;
+	sf::Sprite m_Background;
 
-	Button startButton;
-	Button exitButton;
+	Button m_StartButton;
+	Button m_ExitButton;
 
-	MusicPlayer musicPlayer;
-	SoundPlayer soundPlayer; // Will be used for button sounds etc.
+	MusicPlayer m_MusicPlayer;
+	SoundPlayer m_SoundPlayer; // Will be used for button sounds etc.
 
-	Label titleLabel;
+	Label m_TitleLabel;
 };

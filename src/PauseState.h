@@ -17,15 +17,13 @@ public:
 	virtual void handleEvent(const sf::Event& event) override;
 
 private:
-	sf::View view;
+	sf::Texture m_BackgroundTexture;
+	sf::Sprite m_Background;
 
-	sf::Texture backgroundTexture;
-	sf::Sprite background;
+	Button m_ContinueButton;
+	Button m_MainMenuButton;
 
-	Button continueButton;
-	Button mainMenuButton;
+	MusicPlayer m_MusicPlayer;
 
-	MusicPlayer musicPlayer;
-
-	Label titleLabel;
+	Label m_TitleLabel;
 };

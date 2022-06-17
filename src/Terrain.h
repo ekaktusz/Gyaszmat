@@ -10,7 +10,7 @@ class Terrain : public Collidable
 {
 public:
 	Terrain(const tmx::Map* map);
-	void updateCollision(Player& player) override;
+	virtual void updateCollision(Player& player) override;
 
 private:
 	ObjectLayer* objectLayer;

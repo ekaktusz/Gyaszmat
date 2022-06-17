@@ -5,7 +5,7 @@
 class ParallaxLayer : public sf::Drawable
 {
 public:
-	ParallaxLayer(const sf::Texture& texture, float distanceFromCamera, float y_offset = 0.f);
+	ParallaxLayer(const sf::Texture& texture, float distanceFromCamera, float offsetY = 0.f);
 
 	// Inherited via Drawable
 	void draw(sf::RenderTarget& target, sf::RenderStates states) const override;
@@ -16,10 +16,10 @@ public:
 	sf::FloatRect getGlobalBounds();
 
 private:
-	sf::Sprite sprite;
-	sf::Texture texture;
-	sf::Shader parallaxShader;
+	sf::Sprite m_Sprite;
+	sf::Texture m_Texture;
+	sf::Shader m_ParallaxShader;
 
-	float distanceFromCamera;
-	float y_offset;
+	float m_DistanceFromCamera;
+	float m_OffsetY;
 };

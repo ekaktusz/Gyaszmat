@@ -21,5 +21,5 @@ public:
 	void setScale(float x, float y);
 
 private:
-	std::vector<ParallaxLayer*> backgroundLayers;
+	std::vector<ParallaxLayer*> m_BackgroundLayers;
 };
