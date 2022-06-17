@@ -3,33 +3,33 @@
 
 void Game::pushState(State* state)
 {
-	this->states.push(state);
+	m_States.push(state);
 }
 
 void Game::popState()
 {
-	delete this->states.top();
-	this->states.pop();
+	delete m_States.top();
+	m_States.pop();
 }
 
 void Game::changeState(State* state)
 {
-	if (!this->states.empty())
+	if (!m_States.empty())
 		popState();
 	pushState(state);
 }
 
 State* Game::peekState() const
 {
-	if (this->states.empty())
+	if (m_States.empty())
 		return nullptr;
 
-	return this->states.top();
+	return m_States.top();
 }
 
 void Game::returnToMain()
 {
-	while (this->states.size() > 1)
+	while (m_States.size() > 1)
 		popState();
 }
 
@@ -38,8 +38,8 @@ void Game::run()
 	sf::Event event;
 	sf::Clock clock;
 	sf::Time timeSinceLastUpdate = sf::Time::Zero;
-	sf::Time timePerFrame = sf::seconds(1.f / Game::MAX_FPS);
-	while (this->renderWindow.isOpen())
+	sf::Time timePerFrame = sf::seconds(1.f / Game::s_MaxFPS);
+	while (renderWindow.isOpen())
 	{
 		sf::Time elapsedTime = clock.restart();
 		timeSinceLastUpdate += elapsedTime;
@@ -47,21 +47,21 @@ void Game::run()
 		{
 			timeSinceLastUpdate -= timePerFrame;
 
-			while (this->renderWindow.pollEvent(event))
-				this->peekState()->handleEvent(event);
-			this->peekState()->update(timePerFrame);
+			while (renderWindow.pollEvent(event))
+				peekState()->handleEvent(event);
+			peekState()->update(timePerFrame);
 		}
-		this->peekState()->render();
+		peekState()->render();
 	}
 }
 
-Game::Game() : renderWindow({ Game::XX, Game::YY }, Game::name)
+Game::Game() : renderWindow({ Game::s_WindowSizeX, Game::s_WindowSizeY }, Game::s_Name)
 {
-	this->pushState(new MenuState(this)); //starting state
+	pushState(new MenuState(this)); //starting state
 }
 
 Game::~Game()
 {
-	while (!this->states.empty())
+	while (!m_States.empty())
 		popState();
 }

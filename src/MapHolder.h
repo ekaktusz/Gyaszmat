@@ -16,6 +16,6 @@ public:
 			return;
 		}
 		SPDLOG_INFO("Map loaded succesfully: " + filePath.string());
-		this->insert(id, std::move(map));
+		insert(id, std::move(map));
 	}
 };

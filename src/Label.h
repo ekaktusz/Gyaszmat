@@ -16,5 +16,5 @@ public:
 	sf::Text& getText();
 
 private:
-	sf::Text text;
+	sf::Text m_Text;
 };

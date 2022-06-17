@@ -7,10 +7,8 @@ class State;
 class Game
 {
 public:
-	static const unsigned int XX = 800;
-	static const unsigned int YY = 600;
-	const std::string name = "Gyaszmat";
-	static const unsigned int MAX_FPS = 60;
+	Game();
+	~Game();
 
 	void pushState(State* state);
 	void popState();
@@ -20,11 +18,14 @@ public:
 
 	void run();
 
-	Game();
-	~Game();
-
-	sf::RenderWindow renderWindow;	
+public:
+	// Game variables
+	static constexpr unsigned int s_WindowSizeX = 800;
+	static constexpr unsigned int s_WindowSizeY = 600;
+	inline static const std::string s_Name = "Gyaszmat";
+	static constexpr unsigned int s_MaxFPS = 60;
+	sf::RenderWindow renderWindow;
 
 private:
-	std::stack<State*> states;
+	std::stack<State*> m_States;
 };

@@ -17,7 +17,7 @@ Player::Player(SoundPlayer& soundPlayer) : soundPlayer(soundPlayer)
 	// Default is to small
 	this->sprite.setScale(2, 2);
 
-	// Set up hitbox
+	// Set up m_Hitbox
 	sf::Vector2f hitboxSize = sf::Vector2f(
 		this->sprite.getGlobalBounds().width - 34,
 		this->sprite.getGlobalBounds().height - 12
@@ -73,7 +73,7 @@ unsigned int Player::getMaxHealth()
 void Player::draw(sf::RenderTarget& target, sf::RenderStates states) const
 {
 	target.draw(sprite);
-	// Uncomment the following row to draw the player's hitbox:
+	// Uncomment the following row to draw the player's m_Hitbox:
 	target.draw(this->hitbox);
 }
 
@@ -134,8 +134,7 @@ void Player::handleKeyboardInput(sf::Event event)
 			this->isMovingRight = false;
 		}
 		else if ((event.key.code == sf::Keyboard::W || event.key.code == sf::Keyboard::S)
-			&& (this->actualClimbingState == PlayerActualClimbingState::CLIMBINGUP
-				|| this->actualClimbingState == PlayerActualClimbingState::CLIMBINGDOWN))
+			&& (collisionWithLadder))
 		{
 			this->actualClimbingState = PlayerActualClimbingState::CLIMBED;
 			this->setVelocity(sf::Vector2f(0.f, 0.f));
@@ -380,11 +379,6 @@ const bool Player::isCollidingWithLadder() const
 const bool Player::isResolved() const
 {
 	return this->resolved;
-}
-
-const PlayerPossibleClimbingDir Player::getPossibleClimbingDirections() const
-{
-	return this->possibleClimbingDirection;
 }
 
 const PlayerActualClimbingState Player::getActualClimbingState() const

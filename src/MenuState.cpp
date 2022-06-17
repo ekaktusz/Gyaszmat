@@ -4,12 +4,12 @@
 
 MenuState::MenuState(Game* game)
 {
-	this->game = game;
+	this->m_Game = game;
 
-	this->titleLabel.getText().setString(game->name);
+	this->titleLabel.getText().setString(m_Game->s_Name);
 	this->titleLabel.getText().setFont(ResourceManager::getInstance().getFont(res::Font::Pixel));
 	this->titleLabel.getText().setCharacterSize(50);
-	this->titleLabel.getText().setPosition(this->game->renderWindow.getSize().x
+	this->titleLabel.getText().setPosition(m_Game->renderWindow.getSize().x
 			- this->titleLabel.getText().getGlobalBounds().width - 20,
 		20);
 
@@ -25,7 +25,7 @@ MenuState::MenuState(Game* game)
 	this->startButton.setAction([&]() {
 		SPDLOG_INFO("Switch to GameState: Starting the game");
 		this->musicPlayer.pause();
-		this->game->pushState(new GameState(this->game));
+		m_Game->pushState(new GameState(m_Game));
 	});
 
 	this->exitButton.setText("exitame");
@@ -35,33 +35,34 @@ MenuState::MenuState(Game* game)
 	this->exitButton.setSize(sf::Vector2f(200, 30));
 	this->exitButton.setAction([&]() {
 		SPDLOG_INFO("Exit button clicked");
-		this->game->renderWindow.close();
+		m_Game->renderWindow.close();
 	});
 
 	this->musicPlayer.chooseTrack(res::Music::LudumDare1);
+	this->musicPlayer.setLoop(true);
 }
 
 void MenuState::update(sf::Time deltaTime)
 {
 	this->musicPlayer.play();
-	this->game->renderWindow.setView(this->game->renderWindow.getDefaultView());
+	m_Game->renderWindow.setView(m_Game->renderWindow.getDefaultView());
 }
 
 void MenuState::render()
 {
-	this->game->renderWindow.clear();
-	this->game->renderWindow.draw(background);
-	this->game->renderWindow.draw(startButton);
-	this->game->renderWindow.draw(exitButton);
-	this->game->renderWindow.draw(titleLabel);
-	this->game->renderWindow.display();
+	m_Game->renderWindow.clear();
+	m_Game->renderWindow.draw(background);
+	m_Game->renderWindow.draw(startButton);
+	m_Game->renderWindow.draw(exitButton);
+	m_Game->renderWindow.draw(titleLabel);
+	m_Game->renderWindow.display();
 }
 
 void MenuState::handleEvent(const sf::Event& event)
 {
 	if (event.type == sf::Event::Closed)
 	{
-		this->game->renderWindow.close();
+		m_Game->renderWindow.close();
 	}
 	this->startButton.handleEvent(event);
 	this->exitButton.handleEvent(event);

@@ -15,6 +15,6 @@ public:
 	sf::FloatRect getGlobalBounds() const;
 
 private:
-	sf::RectangleShape hitbox;
-	sf::Vector2f offset;
+	sf::RectangleShape m_Hitbox;
+	sf::Vector2f m_Offset;
 };

@@ -3,12 +3,12 @@
 
 PauseState::PauseState(Game* game)
 {
-	this->game = game;
+	m_Game = game;
 
-	this->titleLabel.getText().setString(game->name);
+	this->titleLabel.getText().setString(game->s_Name);
 	this->titleLabel.getText().setFont(ResourceManager::getInstance().getFont(res::Font::Pixel));
 	this->titleLabel.getText().setCharacterSize(50);
-	this->titleLabel.getText().setPosition(this->game->renderWindow.getSize().x / 2.f
+	this->titleLabel.getText().setPosition(m_Game->renderWindow.getSize().x / 2.f
 			- this->titleLabel.getText().getGlobalBounds().width / 2.f,
 		20.f);
 
@@ -22,12 +22,12 @@ PauseState::PauseState(Game* game)
 	this->continueButton.setFont(res::Font::Roboto);
 	this->continueButton.setAlignment(Button::Alignment::Center);
 	this->continueButton.setSize(sf::Vector2f(200, 30));
-	this->continueButton.setPosition(sf::Vector2f(this->game->renderWindow.getSize().x / 2.f
+	this->continueButton.setPosition(sf::Vector2f(m_Game->renderWindow.getSize().x / 2.f
 			- this->continueButton.getGlobalBounds().width / 2.f,
 		100));
 	this->continueButton.setAction([&]() {
 		SPDLOG_INFO("Switch back to GameState : Continue the game");
-		this->game->popState();
+		m_Game->popState();
 		throw bool{ false };
 	});
 
@@ -35,39 +35,39 @@ PauseState::PauseState(Game* game)
 	this->mainMenuButton.setFont(res::Font::Roboto);
 	this->mainMenuButton.setAlignment(Button::Alignment::Center);
 	this->mainMenuButton.setSize(sf::Vector2f(200, 30));
-	this->mainMenuButton.setPosition(sf::Vector2f(this->game->renderWindow.getSize().x / 2.f
+	this->mainMenuButton.setPosition(sf::Vector2f(m_Game->renderWindow.getSize().x / 2.f
 			- this->mainMenuButton.getGlobalBounds().width / 2.f,
 		200));
-	this->mainMenuButton.setAction([&]() { this->game->returnToMain(); });
+	this->mainMenuButton.setAction([&]() { m_Game->returnToMain(); });
 }
 
 void PauseState::render()
 {
-	this->game->renderWindow.clear();
-	this->game->renderWindow.draw(this->background);
-	this->game->renderWindow.draw(this->continueButton);
-	this->game->renderWindow.draw(this->mainMenuButton);
-	this->game->renderWindow.draw(this->titleLabel);
-	this->game->renderWindow.display();
+	m_Game->renderWindow.clear();
+	m_Game->renderWindow.draw(this->background);
+	m_Game->renderWindow.draw(this->continueButton);
+	m_Game->renderWindow.draw(this->mainMenuButton);
+	m_Game->renderWindow.draw(this->titleLabel);
+	m_Game->renderWindow.display();
 }
 
 void PauseState::update(sf::Time deltaTime)
 {
-	this->game->renderWindow.setView(this->game->renderWindow.getDefaultView());
+	m_Game->renderWindow.setView(m_Game->renderWindow.getDefaultView());
 }
 
 void PauseState::handleEvent(const sf::Event& event)
 {
 	if (event.type == sf::Event::Closed)
 	{
-		this->game->renderWindow.close();
+		m_Game->renderWindow.close();
 	}
 	if (event.type == sf::Event::KeyPressed)
 	{
 		if (event.key.code == sf::Keyboard::Escape)
 		{
 			SPDLOG_INFO("Switch back to GameState : Continue the game");
-			this->game->popState();
+			m_Game->popState();
 			return;
 		}
 	}

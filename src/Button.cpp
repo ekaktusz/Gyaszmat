@@ -4,40 +4,40 @@
 Button::Button() // just for setting default values
 {
 	// set default color
-	this->innerButton.setFillColor(sf::Color(175, 28, 122));
-	this->outerButton.setFillColor(sf::Color(237, 255, 104));
+	m_InnerButton.setFillColor(sf::Color(175, 28, 122));
+	m_OuterButton.setFillColor(sf::Color(237, 255, 104));
 
 	// set default font
-	this->label.getText().setFont(ResourceManager::getInstance().getFont(res::Font::Roboto));
+	m_Label.getText().setFont(ResourceManager::getInstance().getFont(res::Font::Roboto));
 
-	// set default text color
-	this->label.getText().setFillColor(sf::Color::White);
+	// set default m_Text color
+	m_Label.getText().setFillColor(sf::Color::White);
 
 	// set default size
-	this->setSize(sf::Vector2f(300, 50));
+	setSize(sf::Vector2f(300, 50));
 
-	this->alignment = Alignment::Center;
+	m_Alignment = Alignment::Center;
 
-	this->setPosition(sf::Vector2f(50, 50));
+	setPosition(sf::Vector2f(50, 50));
 }
 
 void Button::draw(sf::RenderTarget& target, sf::RenderStates states) const
 {
-	target.draw(this->outerButton);
-	target.draw(this->innerButton);
-	target.draw(this->label);
+	target.draw(m_OuterButton);
+	target.draw(m_InnerButton);
+	target.draw(m_Label);
 }
 
 void Button::handleEvent(const sf::Event& event)
 {
 	if (event.type == sf::Event::MouseButtonPressed)
 	{
-		if (this->outerButton.getGlobalBounds().contains(
+		if (m_OuterButton.getGlobalBounds().contains(
 				sf::Vector2f(event.mouseButton.x, event.mouseButton.y)))
 		{
-			if (actionToDo)
+			if (m_ActionToDo)
 			{
-				actionToDo();
+				m_ActionToDo();
 			}
 			else
 			{
@@ -49,74 +49,73 @@ void Button::handleEvent(const sf::Event& event)
 
 void Button::setAction(std::function<void()> actionToDo)
 {
-	this->actionToDo = actionToDo;
+	m_ActionToDo = actionToDo;
 }
 
 void Button::setPosition(sf::Vector2f position)
 {
-	this->outerButton.setPosition(position);
-	this->innerButton.setPosition(position.x + outerLineSize, position.y + outerLineSize);
-	if (alignment == Alignment::Center)
+	m_OuterButton.setPosition(position);
+	m_InnerButton.setPosition(position.x + m_OuterLineSize, position.y + m_OuterLineSize);
+
+	float x = 0.f;
+	float y = 0.f;
+
+	if (m_Alignment == Alignment::Center)
 	{
-		this->label.getText().setPosition(this->innerButton.getPosition().x
-				+ this->innerButton.getGlobalBounds().width / 2
-				- this->label.getText().getGlobalBounds().width / 2,
-			this->innerButton.getPosition().y + this->innerButton.getGlobalBounds().height / 2
-				- this->label.getText().getGlobalBounds().height);
+		x = m_InnerButton.getPosition().x + m_InnerButton.getGlobalBounds().width / 2 - m_Label.getText().getGlobalBounds().width / 2;
+		y = m_InnerButton.getPosition().y + m_InnerButton.getGlobalBounds().height / 2 - m_Label.getText().getGlobalBounds().height;		
 	}
-	else if (alignment == Alignment::Left)
+	else if (m_Alignment == Alignment::Left)
 	{
-		this->label.getText().setPosition(this->innerButton.getPosition().x + offsetFromEdge,
-			this->innerButton.getPosition().y + this->innerButton.getGlobalBounds().height / 2
-				- this->label.getText().getGlobalBounds().height);
+		x = m_InnerButton.getPosition().x + m_OffsetFromEdge;
+		y = m_InnerButton.getPosition().y + m_InnerButton.getGlobalBounds().height / 2 - m_Label.getText().getGlobalBounds().height;
 	}
-	else if (alignment == Alignment::Right)
+	else if (m_Alignment == Alignment::Right)
 	{
-		this->label.getText().setPosition(this->innerButton.getPosition().x
-				+ this->innerButton.getGlobalBounds().width
-				- this->label.getText().getGlobalBounds().width - offsetFromEdge,
-			this->innerButton.getPosition().y + this->innerButton.getGlobalBounds().height / 2
-				- this->label.getText().getGlobalBounds().height);
+		x = m_InnerButton.getPosition().x + m_InnerButton.getGlobalBounds().width - m_Label.getText().getGlobalBounds().width - m_OffsetFromEdge;
+		y = m_InnerButton.getPosition().y + m_InnerButton.getGlobalBounds().height / 2 - m_Label.getText().getGlobalBounds().height;
 	}
+
+	m_Label.getText().setPosition(x,y);
 }
 
 void Button::setSize(sf::Vector2f size)
 {
-	this->outerButton.setSize(size);
-	this->innerButton.setSize(
-		size - sf::Vector2f(this->outerLineSize * 2, this->outerLineSize * 2));
-	this->label.getText().setCharacterSize(innerButton.getSize().y - 2);
-	this->setPosition(outerButton.getPosition());
+	m_OuterButton.setSize(size);
+	m_InnerButton.setSize(
+		size - sf::Vector2f(m_OuterLineSize * 2, m_OuterLineSize * 2));
+	m_Label.getText().setCharacterSize(m_InnerButton.getSize().y - 2);
+	setPosition(m_OuterButton.getPosition());
 }
 
 void Button::setAlignment(Button::Alignment alignment)
 {
-	this->alignment = alignment;
+	m_Alignment = alignment;
 }
 
 void Button::setText(std::string text)
 {
-	this->label.getText().setString(text);
-	// We should update the position since text size changed
-	this->setPosition(outerButton.getPosition());
+	m_Label.getText().setString(text);
+	// We should update the position since m_Text size changed
+	setPosition(m_OuterButton.getPosition());
 }
 
 void Button::setInnerColor(sf::Color color)
 {
-	this->innerButton.setFillColor(color);
+	m_InnerButton.setFillColor(color);
 }
 
 void Button::setOutlineColor(sf::Color color)
 {
-	this->outerButton.setFillColor(color);
+	m_OuterButton.setFillColor(color);
 }
 
 void Button::setFont(res::Font font)
 {
-	this->label.getText().setFont(ResourceManager::getInstance().getFont(font));
+	m_Label.getText().setFont(ResourceManager::getInstance().getFont(font));
 }
 
 void Button::setTextColor(sf::Color color)
 {
-	this->label.getText().setFillColor(color);
+	m_Label.getText().setFillColor(color);
 }

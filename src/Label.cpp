@@ -6,7 +6,7 @@ Label::Label()
 
 void Label::draw(sf::RenderTarget& target, sf::RenderStates states) const
 {
-	target.draw(this->text);
+	target.draw(this->m_Text);
 }
 
 void Label::handleEvent(const sf::Event& event)
@@ -14,5 +14,5 @@ void Label::handleEvent(const sf::Event& event)
 
 sf::Text& Label::getText()
 {
-	return this->text;
+	return this->m_Text;
 }

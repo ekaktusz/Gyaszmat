@@ -1,74 +1,69 @@
 #include "HealthBar.h"
 #include "ResourceManager.h"
 
-HealthBar::HealthBar(unsigned int health, unsigned int maxHealth) :
-	health(health),
-	maxHealth(maxHealth)
+HealthBar::HealthBar(unsigned int health, unsigned int maxHealth, float length, float height) :
+	m_Health(health),
+	m_MaxHealth(maxHealth)
 {
-	this->offsetFromTopLeft = sf::Vector2f(25.f, 25.f);
-
-	// Can be played with
-	this->length = 250.f;
-	this->height = 20.f;
+	m_OffsetFromTopLeft = sf::Vector2f(25.f, 25.f);
 
 	// inner bar
-	this->healthBar.setSize(
-		sf::Vector2f(this->health / this->maxHealth * this->length, this->height));
-	this->healthBar.setFillColor(sf::Color::Red);
-	this->healthBar.setPosition(this->offsetFromTopLeft);
+	m_HealthBar.setSize(
+		sf::Vector2f(m_Health / m_MaxHealth * length, height));
+	m_HealthBar.setFillColor(sf::Color::Red);
+	m_HealthBar.setPosition(m_OffsetFromTopLeft);
 
 	// outer bar
-	this->maxHealthBar.setSize(sf::Vector2f(length, height));
-	this->maxHealthBar.setFillColor(sf::Color(25, 25, 25, 200)); // grey
-	this->maxHealthBar.setPosition(this->offsetFromTopLeft);
+	m_MaxHealthBar.setSize(sf::Vector2f(length, height));
+	m_MaxHealthBar.setFillColor(sf::Color(25, 25, 25, 200));
+	m_MaxHealthBar.setPosition(m_OffsetFromTopLeft);
 
-	// text
-	this->label.getText().setFont(ResourceManager::getInstance().getFont(res::Font::Roboto));
-	this->label.getText().setString("[" + std::to_string(health) + "/" + std::to_string(maxHealth)
-		+ "]"); // can be change to std::format after we support c++20
-	this->label.getText().setFillColor(sf::Color::White);
-	this->label.getText().setCharacterSize(this->height - 4);
+	// m_Text
+	m_Label.getText().setFont(ResourceManager::getInstance().getFont(res::Font::Roboto));
+	m_Label.getText().setString("[" + std::to_string(health) + "/" + std::to_string(maxHealth) + "]"); // can be change to std::format after we support c++20
+	m_Label.getText().setFillColor(sf::Color::White);
+	m_Label.getText().setCharacterSize(height - 4);
 
-	this->alignTextToMid();
+	alignTextToMid();
 }
 
 void HealthBar::setOffset(const sf::Vector2f& offsetFromTopLeft)
 {
-	this->offsetFromTopLeft = offsetFromTopLeft;
+	m_OffsetFromTopLeft = offsetFromTopLeft;
 }
 
 void HealthBar::setPosition(const sf::Vector2f& position)
 {
-	this->healthBar.setPosition(position + this->offsetFromTopLeft);
-	this->maxHealthBar.setPosition(position + this->offsetFromTopLeft);
-	this->alignTextToMid();
+	m_HealthBar.setPosition(position + m_OffsetFromTopLeft);
+	m_MaxHealthBar.setPosition(position + m_OffsetFromTopLeft);
+	alignTextToMid();
 }
 
 void HealthBar::draw(sf::RenderTarget& target, sf::RenderStates states) const
 {
-	target.draw(this->maxHealthBar);
-	target.draw(this->healthBar);
-	target.draw(this->label);
+	target.draw(m_MaxHealthBar);
+	target.draw(m_HealthBar);
+	target.draw(m_Label);
 }
 
 void HealthBar::update(unsigned int health)
 {
-	this->health = health;
+	m_Health = health;
 }
 
 void HealthBar::setHealth(unsigned int health)
 {
-	this->health = health;
+	m_Health = health;
 }
 
 void HealthBar::setMaxHealth(unsigned int maxHealth)
 {
-	this->maxHealth = maxHealth;
+	m_MaxHealth = maxHealth;
 }
 
 void HealthBar::alignTextToMid()
 {
-	this->label.getText().setPosition(this->maxHealthBar.getPosition().x + this->length / 2
-			- this->label.getText().getGlobalBounds().width / 2,
-		this->maxHealthBar.getPosition().y);
+	float x = m_MaxHealthBar.getPosition().x + m_MaxHealthBar.getSize().x / 2 - m_Label.getText().getGlobalBounds().width / 2;
+	float y = this->m_MaxHealthBar.getPosition().y;
+	m_Label.getText().setPosition(x, y);
 }

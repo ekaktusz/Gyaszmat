@@ -9,7 +9,7 @@
 
 class Player;
 class TileLayer;
-class Ladder;
+class LadderLayer;
 class Terrain;
 
 class GameState : public State
@@ -24,29 +24,29 @@ public:
 	void handleEvent(const sf::Event& event) override;
 
 private:
-	Player* player;
-
-	sf::View view;
-
-	sf::Clock clock;
-	float frameTime;
-
-	tmx::FloatRect mapSize;
-
-	const tmx::Map* map;
-	TileLayer* tileLayerFar;
-	TileLayer* tileLayerMiddle;
-	TileLayer* tileLayerNear;
-	Ladder* ladder;
-	Terrain* terrain;
-	
-	ParallaxBackground parallaxBackground;
-
-	HealthBar playerHealthBar;
-	Label frameTimeLabel;
-
-	MusicPlayer musicPlayer;
-	SoundPlayer soundPlayer;
-
 	void updateCollision();
+
+private:
+	Player* m_Player;
+
+	sf::View m_View;
+
+	sf::Clock m_Clock;
+	float m_FrameTime;
+
+	tmx::FloatRect m_MapSize;
+	const tmx::Map* m_Map;
+	TileLayer* m_TileLayerFar;
+	TileLayer* m_TileLayerMiddle;
+	TileLayer* m_TileLayerNear;
+	LadderLayer* m_Ladder;
+	Terrain* m_Terrain;
+	
+	ParallaxBackground m_ParallaxBackground;
+
+	HealthBar m_PlayerHealthBar;
+	Label m_FrameTimeLabel;
+
+	MusicPlayer m_MusicPlayer;
+	SoundPlayer m_SoundPlayer;
 };

@@ -16,6 +16,6 @@ public:
 			return;
 		}
 		SPDLOG_INFO("Font loaded successfully: " + filePath.string());
-		this->insert(id, std::move(font));
+		insert(id, std::move(font));
 	}
 };

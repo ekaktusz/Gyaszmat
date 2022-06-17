@@ -44,7 +44,6 @@ public:
 	const sf::Vector2f getCenterPosition() const;
 	const bool isCollidingWithLadder() const;
 	const bool isResolved() const;
-	const PlayerPossibleClimbingDir getPossibleClimbingDirections() const;
 	const PlayerActualClimbingState getActualClimbingState() const;
 
 	void draw(sf::RenderTarget& target, sf::RenderStates states) const;
