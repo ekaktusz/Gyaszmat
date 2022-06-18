@@ -10,7 +10,6 @@ public:
 	~Hitbox();
 
 	virtual void draw(sf::RenderTarget& target, sf::RenderStates states) const override;
-
 	void update(const sf::Vector2f& parentPosition);
 
 	sf::FloatRect getGlobalBounds() const;

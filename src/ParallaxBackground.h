@@ -8,16 +8,14 @@ class ParallaxBackground : public sf::Drawable
 public:
 	ParallaxBackground();
 	~ParallaxBackground();
-
-	void addLayer(ParallaxLayer* parallaxLayer);
+	
+	// Inherited via Drawable
+	virtual void draw(sf::RenderTarget& target, sf::RenderStates states) const override;
+	void update(sf::Vector2f cameraPosition);
 
 	sf::FloatRect getGlobalBounds() const;
 
-	// Inherited via Drawable
-	virtual void draw(sf::RenderTarget& target, sf::RenderStates states) const override;
-
-	void update(sf::Vector2f cameraPosition);
-
+	void addLayer(ParallaxLayer* parallaxLayer);
 	void setScale(float x, float y);
 
 private:

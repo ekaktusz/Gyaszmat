@@ -74,28 +74,28 @@ void ResourceManager::loadTextures()
 	m_TextureHolder.load(res::Texture::ParallaxForest5, texturePath / "parallax_backgrounds" / "forest_pack" / "05-pine2.png");
 }
 
-const sf::Texture& ResourceManager::getTexture(res::Texture id)
+const sf::Texture& ResourceManager::getTexture(res::Texture id) const
 {
 	return m_TextureHolder.get(id);
 }
 
-const sf::Font& ResourceManager::getFont(res::Font id)
+const sf::Font& ResourceManager::getFont(res::Font id) const
 {
 	return m_FontHolder.get(id);
 }
 
-const tmx::Map& ResourceManager::getMap(res::Map id)
+const tmx::Map& ResourceManager::getMap(res::Map id) const
 {
 	return m_MapHolder.get(id);
 }
 
-sf::SoundBuffer& ResourceManager::getSoundBuffer(res::Sound id)
+sf::SoundBuffer& ResourceManager::getSoundBuffer(res::Sound id) const
 {
 	return m_SoundBufferHolder.get(id);
 }
 
 
-sf::Music& ResourceManager::getMusic(res::Music id)
+sf::Music& ResourceManager::getMusic(res::Music id) const
 {
 	return m_MusicHolder.get(id);
 }

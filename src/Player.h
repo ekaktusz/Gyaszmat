@@ -36,6 +36,10 @@ public:
 	Player(SoundPlayer& soundPlayer);
 	~Player();
 
+	virtual void draw(sf::RenderTarget& target, sf::RenderStates states) const override;
+	void update();
+	void handleKeyboardInput(sf::Event event);
+
 	unsigned int getHealth() const;
 	unsigned int getMaxHealth() const;
 	bool getAnimationSwitch();
@@ -45,10 +49,6 @@ public:
 	const bool isCollidingWithLadder() const;
 	const bool isResolved() const;
 	const PlayerActualClimbingState getActualClimbingState() const;
-
-	virtual void draw(sf::RenderTarget& target, sf::RenderStates states) const override;
-	void update();
-	void handleKeyboardInput(sf::Event event);
 
 	void setPosition(const float x, const float y);
 	void setVelocity(sf::Vector2f velocity);
