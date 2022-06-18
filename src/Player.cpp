@@ -217,35 +217,35 @@ void Player::updateAnimation()
 	{
 		setAnimation(0.1f, m_RunningTexture);
 	}
-	else if (this->m_AnimationState == PlayerAnimationState::JUMPING)
+	else if (m_AnimationState == PlayerAnimationState::JUMPING)
 	{
 		setAnimation(0.3f, m_JumpingTexture);
 	}
-	else if (this->m_AnimationState == PlayerAnimationState::FALLING)
+	else if (m_AnimationState == PlayerAnimationState::FALLING)
 	{
 		setAnimation(0.3f, m_JumpingTexture);
 	}
-	else if (this->m_AnimationState == PlayerAnimationState::CLIMBING
-		&& this->m_ActualClimbingState == PlayerActualClimbingState::CLIMBED)
+	else if (m_AnimationState == PlayerAnimationState::CLIMBING
+		&& m_ActualClimbingState == PlayerActualClimbingState::CLIMBED)
 	{
 		setAnimation(0.3f, m_ClimbingTexture, true);
 	}
-	else if (this->m_AnimationState == PlayerAnimationState::CLIMBING
-		&& this->m_ActualClimbingState != PlayerActualClimbingState::CLIMBED)
+	else if (m_AnimationState == PlayerAnimationState::CLIMBING
+		&& m_ActualClimbingState != PlayerActualClimbingState::CLIMBED)
 	{
 		setAnimation(0.3f, m_ClimbingTexture);
 	}
 
 	// This is for flipping the image to the right direction
-	if (this->m_Velocity.x > 0)
+	if (m_Velocity.x > 0)
 	{
-		this->m_Sprite.setScale(2, 2);
-		this->m_Sprite.setOrigin(0.f, 0.f);
+		m_Sprite.setScale(2, 2);
+		m_Sprite.setOrigin(0.f, 0.f);
 	}
 	else if (this->m_Velocity.x < 0)
 	{
-		this->m_Sprite.setScale(-2, 2);
-		this->m_Sprite.setOrigin(this->m_Sprite.getGlobalBounds().width / 2.f, 0);
+		m_Sprite.setScale(-2, 2);
+		m_Sprite.setOrigin(m_Sprite.getGlobalBounds().width / 2.f, 0);
 	}
 }
 
@@ -461,9 +461,8 @@ void Player::resolveCollision(const sf::FloatRect& overlap, const sf::Vector2f& 
 	move(normal);
 }
 
-
 // TODO: better
 bool Player::isOnGround() const
 {
-	return this->m_Velocity.y == 1.f;
+	return m_Velocity.y == 1.f;
 }
