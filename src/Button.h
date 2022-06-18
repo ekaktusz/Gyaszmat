@@ -32,10 +32,7 @@ public:
 	void setOutlineColor(sf::Color color);
 	void setTextColor(sf::Color color);
 
-	sf::FloatRect getGlobalBounds() const
-	{
-		return m_OuterButton.getGlobalBounds();
-	}
+	sf::FloatRect getGlobalBounds() const { return m_OuterButton.getGlobalBounds(); }
 
 private:
 	Alignment m_Alignment;

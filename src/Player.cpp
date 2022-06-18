@@ -5,15 +5,15 @@
 // TODO: not the nicest solution
 namespace DefaultPlayerAttributes
 {
-	const short MaxNumberOfJumps = 2;
-	const short MaxHealth = 100;
+	constexpr short MaxNumberOfJumps = 2;
+	constexpr short MaxHealth = 100;
 	const sf::Vector2f MaxVelocity = sf::Vector2f(8.f, 32.f); //should be the half of the max tile size
 	const sf::Vector2f MinVelocity = sf::Vector2f(1.f, 0.f);
-	const float Acceleration = 1.7f;
-	const float Drag = 1 - 0.85f;
-	const float Gravity = 1.f;
-	const float JumpSpeed = -17.f;
-	const float MovementModifier = 1;
+	constexpr float Acceleration = 1.7f;
+	constexpr float Drag = 1 - 0.85f;
+	constexpr float Gravity = 1.f;
+	constexpr float JumpSpeed = -17.f;
+	constexpr float MovementModifier = 1;
 }
 
 

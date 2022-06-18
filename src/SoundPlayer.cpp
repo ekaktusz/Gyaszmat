@@ -4,9 +4,9 @@
 
 namespace
 {
-	const float listenerZ = 300.f;
-	const float attenuation = 8.f;
-	const float minDistance2d = 200.f;
+	constexpr float listenerZ = 300.f;
+	constexpr float attenuation = 8.f;
+	constexpr float minDistance2d = 200.f;
 	const float minDistance3d = std::sqrt(minDistance2d * minDistance2d + listenerZ * listenerZ);
 }
 

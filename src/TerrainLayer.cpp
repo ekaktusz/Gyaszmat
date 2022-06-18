@@ -5,13 +5,13 @@
 
 TerrainLayer::TerrainLayer(const tmx::Map* map)
 {
-	this->m_ObjectLayer = new ObjectLayer(*map, MapLayerNames::ObjectLayerName::ObjectLayer);
+	m_ObjectLayer = new ObjectLayer(*map, MapLayerNames::ObjectLayerName::ObjectLayer);
 }
 
 void TerrainLayer::updateCollision(Player& player)
 {
 	sf::FloatRect playerBound = player.getHitbox().getGlobalBounds();
-	std::vector<sf::FloatRect> objectBounds = this->m_ObjectLayer->getObjectBounds();
+	std::vector<sf::FloatRect> objectBounds = m_ObjectLayer->getObjectBounds();
 
 	// collision detection with every object on object layer
 	sf::FloatRect overlap;
