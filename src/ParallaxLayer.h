@@ -8,7 +8,7 @@ public:
 	ParallaxLayer(const sf::Texture& texture, float distanceFromCamera, float offsetY = 0.f);
 
 	// Inherited via Drawable
-	void draw(sf::RenderTarget& target, sf::RenderStates states) const override;
+	virtual void draw(sf::RenderTarget& target, sf::RenderStates states) const override;
 	void update(sf::Vector2f cameraPosition);
 
 	void setScale(float x, float y);

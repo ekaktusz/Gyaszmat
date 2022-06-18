@@ -1,8 +1,8 @@
 #pragma once
 
-#include "Widget.h"
 #include "Label.h"
 #include "ResourceTypes.h"
+#include "Widget.h"
 
 class Button : public Widget
 {
@@ -17,8 +17,8 @@ public:
 		Right
 	};
 
-	void draw(sf::RenderTarget& target, sf::RenderStates states) const override;
-	void handleEvent(const sf::Event& event) override;
+	virtual void draw(sf::RenderTarget& target, sf::RenderStates states) const override;
+	virtual void handleEvent(const sf::Event& event) override;
 
 	void setAction(std::function<void()> actionTodo);
 	void setPosition(sf::Vector2f position);
@@ -29,8 +29,11 @@ public:
 	void setInnerColor(sf::Color color);
 	void setOutlineColor(sf::Color color);
 	void setTextColor(sf::Color color);
-	
-	sf::FloatRect getGlobalBounds() const{ return m_OuterButton.getGlobalBounds(); }
+
+	sf::FloatRect getGlobalBounds() const
+	{
+		return m_OuterButton.getGlobalBounds();
+	}
 
 private:
 	Alignment m_Alignment;

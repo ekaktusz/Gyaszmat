@@ -14,11 +14,11 @@ Button::Button() // just for setting default values
 	m_Label.getText().setFillColor(sf::Color::White);
 
 	// set default size
-	setSize(sf::Vector2f(300, 50));
+	this->setSize(sf::Vector2f(300, 50));
 
 	m_Alignment = Alignment::Center;
 
-	setPosition(sf::Vector2f(50, 50));
+	this->setPosition(sf::Vector2f(50, 50));
 }
 
 void Button::draw(sf::RenderTarget& target, sf::RenderStates states) const
@@ -62,28 +62,32 @@ void Button::setPosition(sf::Vector2f position)
 
 	if (m_Alignment == Alignment::Center)
 	{
-		x = m_InnerButton.getPosition().x + m_InnerButton.getGlobalBounds().width / 2 - m_Label.getText().getGlobalBounds().width / 2;
-		y = m_InnerButton.getPosition().y + m_InnerButton.getGlobalBounds().height / 2 - m_Label.getText().getGlobalBounds().height;		
+		x = m_InnerButton.getPosition().x + m_InnerButton.getGlobalBounds().width / 2
+			- m_Label.getText().getGlobalBounds().width / 2;
+		y = m_InnerButton.getPosition().y + m_InnerButton.getGlobalBounds().height / 2
+			- m_Label.getText().getGlobalBounds().height;
 	}
 	else if (m_Alignment == Alignment::Left)
 	{
 		x = m_InnerButton.getPosition().x + m_OffsetFromEdge;
-		y = m_InnerButton.getPosition().y + m_InnerButton.getGlobalBounds().height / 2 - m_Label.getText().getGlobalBounds().height;
+		y = m_InnerButton.getPosition().y + m_InnerButton.getGlobalBounds().height / 2
+			- m_Label.getText().getGlobalBounds().height;
 	}
 	else if (m_Alignment == Alignment::Right)
 	{
-		x = m_InnerButton.getPosition().x + m_InnerButton.getGlobalBounds().width - m_Label.getText().getGlobalBounds().width - m_OffsetFromEdge;
-		y = m_InnerButton.getPosition().y + m_InnerButton.getGlobalBounds().height / 2 - m_Label.getText().getGlobalBounds().height;
+		x = m_InnerButton.getPosition().x + m_InnerButton.getGlobalBounds().width
+			- m_Label.getText().getGlobalBounds().width - m_OffsetFromEdge;
+		y = m_InnerButton.getPosition().y + m_InnerButton.getGlobalBounds().height / 2
+			- m_Label.getText().getGlobalBounds().height;
 	}
 
-	m_Label.getText().setPosition(x,y);
+	m_Label.getText().setPosition(x, y);
 }
 
 void Button::setSize(sf::Vector2f size)
 {
 	m_OuterButton.setSize(size);
-	m_InnerButton.setSize(
-		size - sf::Vector2f(m_OuterLineSize * 2, m_OuterLineSize * 2));
+	m_InnerButton.setSize(size - sf::Vector2f(m_OuterLineSize * 2, m_OuterLineSize * 2));
 	m_Label.getText().setCharacterSize(m_InnerButton.getSize().y - 2);
 	setPosition(m_OuterButton.getPosition());
 }
