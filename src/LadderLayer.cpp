@@ -1,62 +1,80 @@
-#include "Ladder.h"
+#include "LadderLayer.h"
 #include "ObjectLayer.h"
 #include "Player.h"
 
-Ladder::Ladder(const tmx::Map* map)
+LadderLayer::LadderLayer(const tmx::Map* map) : 
+	m_BotLadderLayer(new ObjectLayer(*map, MapLayerNames::ObjectLayerName::BotLadderLayer)),
+	m_MidLadderLayer(new ObjectLayer(*map, MapLayerNames::ObjectLayerName::MidLadderLayer)),
+	m_TopLadderLayer(new ObjectLayer(*map, MapLayerNames::ObjectLayerName::TopLadderLayer))
 {
-	this->midladderLayer = new ObjectLayer(*map, MapLayerNames::ObjectLayerName::MidLadderLayer);
-	this->topLadderLayer = new ObjectLayer(*map, MapLayerNames::ObjectLayerName::TopLadderLayer);
-	this->botLadderLayer = new ObjectLayer(*map, MapLayerNames::ObjectLayerName::BotLadderLayer);
 }
 
-Ladder::~Ladder()
+LadderLayer::~LadderLayer()
 {
-	delete this->midladderLayer;
-	delete this->topLadderLayer;
-	delete this->botLadderLayer;
+	delete m_MidLadderLayer;
+	delete m_TopLadderLayer;
+	delete m_BotLadderLayer;
 }
 
-void Ladder::updateCollision(Player& player)
+void LadderLayer::updateCollision(Player& player)
 {
-	sf::FloatRect playerBound = player.getHitbox().getGlobalBounds();
-
-	std::vector<sf::FloatRect> midLadderBounds = this->midladderLayer->getObjectBounds();
-	std::vector<sf::FloatRect> topLadderBounds = this->topLadderLayer->getObjectBounds();
-	std::vector<sf::FloatRect> botLadderBounds = this->botLadderLayer->getObjectBounds();
-
-	// player.setResolved(false);
 	player.setCollisionWithLadder(false);
 	player.setPossibleClimbingDirections(PlayerPossibleClimbingDir::NONE);
 
+	updateCollisionBotLayer(player);
+	updateCollisionMidLayer(player);
+	updateCollisionTopLayer(player);
+
+
+	if (!player.isCollidingWithLadder())
+	{
+		player.setActualClimbingState(PlayerActualClimbingState::NONE);
+	}
+}
+
+void LadderLayer::updateCollisionBotLayer(Player& player)
+{
 	sf::FloatRect overlap;
+	sf::FloatRect playerBound = player.getHitbox().getGlobalBounds();
+	std::vector<sf::FloatRect> botLadderBounds = m_BotLadderLayer->getObjectBounds();
 
 	// Intersection with bottom layer
 	for (const sf::FloatRect& ladderBottomBound : botLadderBounds)
 	{
 		if (ladderBottomBound.intersects(playerBound, overlap))
 		{
-			// Standing at the bottom of the ladder
 			player.setPossibleClimbingDirections(PlayerPossibleClimbingDir::UP);
 			player.setCollisionWithLadder(true);
 		}
 	}
+}
+
+void LadderLayer::updateCollisionMidLayer(Player& player)
+{
+	sf::FloatRect overlap;
+	sf::FloatRect playerBound = player.getHitbox().getGlobalBounds();
+	std::vector<sf::FloatRect> midLadderBounds = m_MidLadderLayer->getObjectBounds();
 
 	for (const sf::FloatRect& ladderBound : midLadderBounds)
 	{
 		if (ladderBound.intersects(playerBound, overlap))
 		{
-			// a letra kozepen allsz, barmerre mehetsz, nem kell resolve
 			player.setPossibleClimbingDirections(PlayerPossibleClimbingDir::BOTH);
 			player.setCollisionWithLadder(true);
 		}
 	}
+}
 
-	// collision detection with ladderTop layer
+void LadderLayer::updateCollisionTopLayer(Player& player)
+{
+	sf::FloatRect overlap;
+	sf::FloatRect playerBound = player.getHitbox().getGlobalBounds();
+	std::vector<sf::FloatRect> topLadderBounds = m_TopLadderLayer->getObjectBounds();
+
 	for (const sf::FloatRect& ladderTopBound : topLadderBounds)
 	{
 		if (ladderTopBound.intersects(playerBound, overlap))
 		{
-			// a letra tetejen allsz, barmerre mehetsz, kell resolve ha felette vagy es nem nyomod lefele
 			player.setPossibleClimbingDirections(PlayerPossibleClimbingDir::BOTH);
 			player.setCollisionWithLadder(true);
 
@@ -69,13 +87,7 @@ void Ladder::updateCollision(Player& player)
 				player.resolveCollision(overlap, collisionNormal);
 				player.setPossibleClimbingDirections(PlayerPossibleClimbingDir::DOWN);
 				player.setActualClimbingState(PlayerActualClimbingState::NONE);
-				//player.stopFalling();
 			}
 		}
-	}
-
-	if (!player.isCollidingWithLadder())
-	{
-		player.setActualClimbingState(PlayerActualClimbingState::NONE);
 	}
 }

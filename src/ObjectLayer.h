@@ -10,5 +10,5 @@ public:
 	const std::vector<sf::FloatRect>& getObjectBounds() const;
 
 private:
-	std::vector<sf::FloatRect> objectBounds;
+	std::vector<sf::FloatRect> m_ObjectBounds;
 };

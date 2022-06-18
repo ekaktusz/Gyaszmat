@@ -2,142 +2,168 @@
 #include "ResourceManager.h"
 #include "SoundPlayer.h"
 
-Player::Player(SoundPlayer& soundPlayer) : soundPlayer(soundPlayer)
+// TODO: not the nicest solution
+namespace DefaultPlayerAttributes
 {
-	this->idleTexture = ResourceManager::getInstance().getTexture(res::Texture::PlayerIdle);
-	this->runningTexture = ResourceManager::getInstance().getTexture(res::Texture::PlayerRun);
-	this->jumpingTexture = ResourceManager::getInstance().getTexture(res::Texture::PlayerJump);
-	this->climbingTexture = ResourceManager::getInstance().getTexture(res::Texture::PlayerClimb);
+	constexpr short MaxNumberOfJumps = 2;
+	constexpr short MaxHealth = 100;
+	const sf::Vector2f MaxVelocity = sf::Vector2f(8.f, 32.f); //should be the half of the max tile size
+	const sf::Vector2f MinVelocity = sf::Vector2f(1.f, 0.f);
+	constexpr float Acceleration = 1.7f;
+	constexpr float Drag = 1 - 0.85f;
+	constexpr float Gravity = 1.f;
+	constexpr float JumpSpeed = -17.f;
+	constexpr float MovementModifier = 1;
+}
 
-	this->sprite.setTexture(idleTexture);
+
+Player::Player(SoundPlayer& soundPlayer) : m_SoundPlayer(soundPlayer)
+{
+
+	m_Health = DefaultPlayerAttributes::MaxHealth;
+	m_MaxHealth = DefaultPlayerAttributes::MaxHealth;
+
+	m_IdleTexture = ResourceManager::getInstance().getTexture(res::Texture::PlayerIdle);
+	m_RunningTexture = ResourceManager::getInstance().getTexture(res::Texture::PlayerRun);
+	m_JumpingTexture = ResourceManager::getInstance().getTexture(res::Texture::PlayerJump);
+	m_ClimbingTexture = ResourceManager::getInstance().getTexture(res::Texture::PlayerClimb);
+
+	m_Sprite.setTexture(m_IdleTexture);
 	// Set starting frame to the first 32x32 part of the image
-	this->currentFrame = sf::IntRect(0, 0, 32, 32);
+	m_CurrentFrame = sf::IntRect(0, 0, 32, 32);
 	// Update the sprite texture
-	this->sprite.setTextureRect(currentFrame);
+    m_Sprite.setTextureRect(m_CurrentFrame);
 	// Default is to small
-	this->sprite.setScale(2, 2);
+	m_Sprite.setScale(2, 2);
 
-	// Set up hitbox
+	// Set up m_Hitbox
 	sf::Vector2f hitboxSize = sf::Vector2f(
-		this->sprite.getGlobalBounds().width - 34,
-		this->sprite.getGlobalBounds().height - 12
+		m_Sprite.getGlobalBounds().width - 34,
+		m_Sprite.getGlobalBounds().height - 12
 	);
 	sf::Vector2f hitboxOffSet = sf::Vector2f(17, 12);
-	this->hitbox = Hitbox(this->sprite.getPosition(), hitboxSize, hitboxOffSet);
+	m_Hitbox = Hitbox(m_Sprite.getPosition(), hitboxSize, hitboxOffSet);
 
 	// Init Animation
-	this->animationTimer.restart();
-	this->animationState = PlayerAnimationState::IDLE;
-	this->animationSwitch = true;
+	m_AnimationTimer.restart();
+	m_AnimationState = PlayerAnimationState::IDLE;
+	m_AnimationSwitch = true;
 
 	// Can be played with
-	this->velocity = sf::Vector2f(0.f, 0.f);
-	this->maxVelocity = sf::Vector2f(8.f, 32.f); //should be the max of pixel size /2
-	this->minVelocity = sf::Vector2f(1.f, 0.f);
-	this->acceleration = 1.7f;
-	this->drag = 1 - 0.85f;
-	this->gravity = 1;
-	this->jumpSpeed = -17.f;
-	this->movementModifier = 1;
-	this->numberOfJumps = Player::MAX_NUMBER_OF_JUMPS;
+	m_Velocity = sf::Vector2f(0.f, 0.f);
+	m_MaxVelocity = DefaultPlayerAttributes::MaxVelocity;
+	m_MinVelocity = DefaultPlayerAttributes::MinVelocity;
+	m_Acceleration = DefaultPlayerAttributes::Acceleration;
+	m_Drag = DefaultPlayerAttributes::Drag;
+	m_Gravity = DefaultPlayerAttributes::Gravity;
+	m_JumpSpeed = DefaultPlayerAttributes::JumpSpeed;
+	m_MovementModifier = DefaultPlayerAttributes::MovementModifier;
+	m_NumberOfJumps = DefaultPlayerAttributes::MaxNumberOfJumps;
 
 	// For move control
-	this->isMovingLeft = false;
-	this->isMovingRight = false;
-	this->pressedJump = false;
+	m_IsMovingLeft = false;
+	m_IsMovingRight = false;
+	m_PressedJump = false;
 
 	// Health kaland
-	this->maxHealth = 100;
-	this->health = this->maxHealth;
-	// Ladder
-	this->collisionWithLadder = false;
-	this->resolved = false;
+	m_MaxHealth = 100;
+	m_Health = this->m_MaxHealth;
 
-	this->possibleClimbingDirection = PlayerPossibleClimbingDir::NONE;
-	this->actualClimbingState = PlayerActualClimbingState::NONE;
+	// Ladder
+	m_CollisionWithLadder = false;
+	m_Resolved = false;
+
+	m_PossibleClimbingDirection = PlayerPossibleClimbingDir::NONE;
+	m_ActualClimbingState = PlayerActualClimbingState::NONE;
 }
 
 Player::~Player()
 {}
 
-unsigned int Player::getHealth()
+unsigned int Player::getHealth() const
 {
-	return this->health;
+	return m_Health;
 }
 
-unsigned int Player::getMaxHealth()
+unsigned int Player::getMaxHealth() const
 {
-	return this->maxHealth;
+	return m_MaxHealth;
 }
 
 void Player::draw(sf::RenderTarget& target, sf::RenderStates states) const
 {
-	target.draw(sprite);
-	// Uncomment the following row to draw the player's hitbox:
-	target.draw(this->hitbox);
+	target.draw(m_Sprite);
+	// Uncomment the following row to draw the player's m_Hitbox:
+	target.draw(this->m_Hitbox);
 }
 
 void Player::update()
 {
-	this->updateAnimation();
-	this->updateSound();
-	this->updatePhysics();
-	this->updateHitbox();
+	updateAnimation();
+	updateSound();
+	updatePhysics();
+	updateHitbox();
 }
 
 void Player::handleKeyboardInput(sf::Event event)
 {
 	if (event.type == sf::Event::KeyPressed)
 	{
-		if ((event.key.code == sf::Keyboard::W && this->numberOfJumps > 0 && !collisionWithLadder)
-			|| (event.key.code == sf::Keyboard::W && this->numberOfJumps > 0 && this->possibleClimbingDirection == PlayerPossibleClimbingDir::DOWN))
+		if (event.key.code == sf::Keyboard::W)
 		{
-			this->soundPlayer.play(res::Sound::Jump1);
-			this->numberOfJumps--;
-			this->pressedJump = true;
+			// if we have jump, and not on ladder (or on ladder top)
+			if (m_NumberOfJumps > 0 && (!m_CollisionWithLadder || m_PossibleClimbingDirection == PlayerPossibleClimbingDir::DOWN))
+			{
+				m_SoundPlayer.play(res::Sound::Jump1);
+				m_NumberOfJumps--;
+				m_PressedJump = true;
+			}
+
+			// if on ladder
+			if (m_CollisionWithLadder)
+			{
+				if (m_PossibleClimbingDirection == PlayerPossibleClimbingDir::BOTH || m_PossibleClimbingDirection == PlayerPossibleClimbingDir::UP)
+				{
+					m_ActualClimbingState = PlayerActualClimbingState::CLIMBINGUP;
+					setVelocity(sf::Vector2f(0.f, -3.f));
+				}
+			}
+		}
+
+		if (event.key.code == sf::Keyboard::S)
+		{
+			if (m_PossibleClimbingDirection == PlayerPossibleClimbingDir::BOTH || m_PossibleClimbingDirection == PlayerPossibleClimbingDir::DOWN)
+			{
+				this->m_ActualClimbingState = PlayerActualClimbingState::CLIMBINGDOWN;
+				this->setVelocity(sf::Vector2f(0.f, 3.f));
+			}
 		}
 
 		if (event.key.code == sf::Keyboard::A)
 		{
-			this->isMovingLeft = true;
-			this->isMovingRight = false;
-		}
-		else if (event.key.code == sf::Keyboard::D)
-		{
-			this->isMovingRight = true;
-			this->isMovingLeft = false;
+			m_IsMovingLeft = true;
+			m_IsMovingRight = false;
 		}
 
-		if (event.key.code == sf::Keyboard::W && this->collisionWithLadder
-			&& (this->possibleClimbingDirection == PlayerPossibleClimbingDir::BOTH
-				|| this->possibleClimbingDirection == PlayerPossibleClimbingDir::UP))
+		else if (event.key.code == sf::Keyboard::D)
 		{
-			this->actualClimbingState = PlayerActualClimbingState::CLIMBINGUP;
-			this->setVelocity(sf::Vector2f(0.f, -3.f));
-		}
-		else if (event.key.code == sf::Keyboard::S && this->collisionWithLadder
-			&& (this->possibleClimbingDirection == PlayerPossibleClimbingDir::BOTH
-				|| this->possibleClimbingDirection == PlayerPossibleClimbingDir::DOWN))
-		{
-			this->actualClimbingState = PlayerActualClimbingState::CLIMBINGDOWN;
-			this->setVelocity(sf::Vector2f(0.f, 3.f));
+			m_IsMovingRight = true;
+			m_IsMovingLeft = false;
 		}
 	}
 	else if (event.type == sf::Event::KeyReleased)
 	{
 		if (event.key.code == sf::Keyboard::A)
 		{
-			this->isMovingLeft = false;
+			m_IsMovingLeft = false;
 		}
 		else if (event.key.code == sf::Keyboard::D)
 		{
-			this->isMovingRight = false;
+			m_IsMovingRight = false;
 		}
-		else if ((event.key.code == sf::Keyboard::W || event.key.code == sf::Keyboard::S)
-			&& (this->actualClimbingState == PlayerActualClimbingState::CLIMBINGUP
-				|| this->actualClimbingState == PlayerActualClimbingState::CLIMBINGDOWN))
+		else if ((event.key.code == sf::Keyboard::W || event.key.code == sf::Keyboard::S) && (m_CollisionWithLadder))
 		{
-			this->actualClimbingState = PlayerActualClimbingState::CLIMBED;
+			this->m_ActualClimbingState = PlayerActualClimbingState::CLIMBED;
 			this->setVelocity(sf::Vector2f(0.f, 0.f));
 			stopFalling();
 		}
@@ -146,92 +172,98 @@ void Player::handleKeyboardInput(sf::Event event)
 
 void Player::updateAnimation()
 {
-	PlayerAnimationState prevState = this->animationState;
+	PlayerAnimationState prevState = m_AnimationState;
 
 	// Choose the correct animation
-	if (this->velocity.y > 0 && !this->collisionWithLadder)
-		this->animationState = PlayerAnimationState::FALLING;
-	else if (this->velocity.y > 0 && this->collisionWithLadder)
-		this->animationState = PlayerAnimationState::CLIMBING;
-	else if (this->velocity.y < 0 && !this->collisionWithLadder)
-		this->animationState = PlayerAnimationState::JUMPING;
-	else if (this->velocity.y < 0 && this->collisionWithLadder)
-		this->animationState = PlayerAnimationState::CLIMBING;
+	if (m_Velocity.y > 0 && !m_CollisionWithLadder)
+		m_AnimationState = PlayerAnimationState::FALLING;
+	else if (m_Velocity.y > 0 && m_CollisionWithLadder)
+		m_AnimationState = PlayerAnimationState::CLIMBING;
+	else if (m_Velocity.y < 0 && !m_CollisionWithLadder)
+		m_AnimationState = PlayerAnimationState::JUMPING;
+	else if (m_Velocity.y < 0 && m_CollisionWithLadder)
+		m_AnimationState = PlayerAnimationState::CLIMBING;
 	else
 	{
-		if (this->velocity.x > 0)
-			this->animationState = PlayerAnimationState::MOVING_RIGHT;
-		else if (this->velocity.x < 0)
-			this->animationState = PlayerAnimationState::MOVING_LEFT;
-		else if (this->actualClimbingState == PlayerActualClimbingState::CLIMBED)
-			this->animationState = PlayerAnimationState::CLIMBING;
+		if (m_Velocity.x > 0)
+			m_AnimationState = PlayerAnimationState::MOVING_RIGHT;
+		else if (m_Velocity.x < 0)
+			m_AnimationState = PlayerAnimationState::MOVING_LEFT;
 		else
-			this->animationState = PlayerAnimationState::IDLE;
+		{
+			if (m_ActualClimbingState == PlayerActualClimbingState::CLIMBED)
+			{
+				m_AnimationState = PlayerAnimationState::CLIMBING;
+			}
+			else
+			{
+				m_AnimationState = PlayerAnimationState::IDLE;
+			}
+		}
 	}
 
 	// If we enter to a new state we have to reset the timer.
-	if (prevState != this->animationState)
+	if (prevState != m_AnimationState)
 	{
 		resetAnimationTimer();
 	}
 
 	// Set the correct animation
-	if (this->animationState == PlayerAnimationState::IDLE)
+	if (m_AnimationState == PlayerAnimationState::IDLE)
 	{
-		setAnimation(0.2f, idleTexture);
+		setAnimation(0.2f, m_IdleTexture);
 	}
-	else if (this->animationState == PlayerAnimationState::MOVING_RIGHT
-		|| this->animationState == PlayerAnimationState::MOVING_LEFT)
+	else if (m_AnimationState == PlayerAnimationState::MOVING_RIGHT || m_AnimationState == PlayerAnimationState::MOVING_LEFT)
 	{
-		setAnimation(0.1f, runningTexture);
+		setAnimation(0.1f, m_RunningTexture);
 	}
-	else if (this->animationState == PlayerAnimationState::JUMPING)
+	else if (m_AnimationState == PlayerAnimationState::JUMPING)
 	{
-		setAnimation(0.3f, jumpingTexture);
+		setAnimation(0.3f, m_JumpingTexture);
 	}
-	else if (this->animationState == PlayerAnimationState::FALLING)
+	else if (m_AnimationState == PlayerAnimationState::FALLING)
 	{
-		setAnimation(0.3f, jumpingTexture);
+		setAnimation(0.3f, m_JumpingTexture);
 	}
-	else if (this->animationState == PlayerAnimationState::CLIMBING
-		&& this->actualClimbingState == PlayerActualClimbingState::CLIMBED)
+	else if (m_AnimationState == PlayerAnimationState::CLIMBING
+		&& m_ActualClimbingState == PlayerActualClimbingState::CLIMBED)
 	{
-		setAnimation(0.3f, climbingTexture, true);
+		setAnimation(0.3f, m_ClimbingTexture, true);
 	}
-	else if (this->animationState == PlayerAnimationState::CLIMBING
-		&& this->actualClimbingState != PlayerActualClimbingState::CLIMBED)
+	else if (m_AnimationState == PlayerAnimationState::CLIMBING
+		&& m_ActualClimbingState != PlayerActualClimbingState::CLIMBED)
 	{
-		setAnimation(0.3f, climbingTexture);
+		setAnimation(0.3f, m_ClimbingTexture);
 	}
 
 	// This is for flipping the image to the right direction
-	if (this->velocity.x > 0)
+	if (m_Velocity.x > 0)
 	{
-		this->sprite.setScale(2, 2);
-		this->sprite.setOrigin(0.f, 0.f);
+		m_Sprite.setScale(2, 2);
+		m_Sprite.setOrigin(0.f, 0.f);
 	}
-	else if (this->velocity.x < 0)
+	else if (this->m_Velocity.x < 0)
 	{
-		this->sprite.setScale(-2, 2);
-		this->sprite.setOrigin(this->sprite.getGlobalBounds().width / 2.f, 0);
+		m_Sprite.setScale(-2, 2);
+		m_Sprite.setOrigin(m_Sprite.getGlobalBounds().width / 2.f, 0);
 	}
 }
 
 void Player::updateSound()
 {
 	// We should improve it to a better is onGround
-	if ((animationState == PlayerAnimationState::MOVING_LEFT || animationState == PlayerAnimationState::MOVING_RIGHT))
+	if ((m_AnimationState == PlayerAnimationState::MOVING_LEFT || m_AnimationState == PlayerAnimationState::MOVING_RIGHT))
 	{
 		
-		if (this->soundTimer.getElapsedTime().asSeconds() >= 0.3)
+		if (this->m_SoundTimer.getElapsedTime().asSeconds() >= 0.3)
 		{	
-			this->soundPlayer.play(res::Sound::FootStepGrass);
-			this->soundTimer.restart();
+			this->m_SoundPlayer.play(res::Sound::FootStepGrass);
+			this->m_SoundTimer.restart();
 		}
 	}
 	else
 	{
-		this->soundPlayer.removeSoundsById(res::Sound::FootStepGrass);
+		this->m_SoundPlayer.removeSoundsById(res::Sound::FootStepGrass);
 	}
 }
 
@@ -239,20 +271,20 @@ void Player::setAnimation(float timePeriod, sf::Texture& animationTexture, bool 
 {
 	unsigned int frameSize = 32;
 	unsigned int frameNumber = animationTexture.getSize().x / frameSize;
-	this->sprite.setTexture(animationTexture);
-	if (this->animationTimer.getElapsedTime().asSeconds() >= timePeriod
-		|| this->getAnimationSwitch())
+	m_Sprite.setTexture(animationTexture);
+	if (m_AnimationTimer.getElapsedTime().asSeconds() >= timePeriod
+		|| getAnimationSwitch())
 	{
 		if (!stopped)
 		{
-			this->currentFrame.left += frameSize;
-			if (this->currentFrame.left >= (frameNumber - 1) * frameSize)
+			m_CurrentFrame.left += frameSize;
+			if (m_CurrentFrame.left >= (frameNumber - 1) * frameSize)
 			{
-				this->currentFrame.left = 0;
+				m_CurrentFrame.left = 0;
 			}
-			this->animationTimer.restart();
+			m_AnimationTimer.restart();
 		}
-		this->sprite.setTextureRect(this->currentFrame);
+		m_Sprite.setTextureRect(m_CurrentFrame);
 	}
 }
 
@@ -260,161 +292,154 @@ void Player::updatePhysics()
 {
 	float deltaTime = 1.f;
 	// Movement
-	if (this->isMovingLeft)
-		this->velocity.x += -1.f * this->acceleration * deltaTime;
-	if (this->isMovingRight)
-		this->velocity.x += 1.f * this->acceleration * deltaTime;
-	if (this->pressedJump)
+	if (m_IsMovingLeft)
+		m_Velocity.x += -1.f * m_Acceleration * deltaTime;
+	if (m_IsMovingRight)
+		m_Velocity.x += 1.f * m_Acceleration * deltaTime;
+	if (m_PressedJump)
 	{
-		this->velocity.y = this->jumpSpeed;
-		this->pressedJump = false;
+		m_Velocity.y = m_JumpSpeed;
+		m_PressedJump = false;
 	}
 
-	if (this->actualClimbingState != PlayerActualClimbingState::NONE)
+	if (m_ActualClimbingState != PlayerActualClimbingState::NONE)
 	{
-		this->gravity = 0.0f;
-		this->maxVelocity = sf::Vector2f(3.f, 3.f);
+		m_Gravity = 0.0f;
+		m_MaxVelocity = sf::Vector2f(3.f, 3.f);
 	}
 	else
 	{
-		this->gravity = 1.f;
-		this->maxVelocity = sf::Vector2f(8.f, 32.f);
+		m_Gravity = 1.f;
+		m_MaxVelocity = sf::Vector2f(8.f, 32.f);
 	}
 
 	// Apply drag and gravitation
-	this->velocity.y += this->gravity * deltaTime;
-	this->velocity.x *= (1 - drag * deltaTime);
+	m_Velocity.y += m_Gravity * deltaTime;
+	m_Velocity.x *= (1 - m_Drag * deltaTime);
 
 	// Apply bigger drag in air TODO: better, what happens if falling?
-	if (numberOfJumps < 2)
-		this->velocity.x *= (1 - drag * deltaTime);
+	if (m_NumberOfJumps < 2)
+		m_Velocity.x *= (1 - m_Drag * deltaTime);
 
 	// Min speed is neccessary cause otherwise it will go slower and slower but never gonna actually stop (drag)
 	// Set min speed in the x dimension
-	if (std::abs(this->velocity.x) < this->minVelocity.x)
-		this->velocity.x = 0.f;
+	if (std::abs(m_Velocity.x) < m_MinVelocity.x)
+		m_Velocity.x = 0.f;
 
 	// Set max speed in the x dimension
-	if (std::abs(this->velocity.x) > this->maxVelocity.x)
-		this->velocity.x =
-			this->maxVelocity.x * ((this->velocity.x < 0.f) ? -1.f : 1.f); // based on directuon
+	if (std::abs(m_Velocity.x) > m_MaxVelocity.x)
+		m_Velocity.x = m_MaxVelocity.x * ((m_Velocity.x < 0.f) ? -1.f : 1.f); // based on directuon
 
 	// Set max speed in the y dimension
-	if (std::abs(this->velocity.y) > this->maxVelocity.y)
-		this->velocity.y =
-			this->maxVelocity.y * ((this->velocity.y < 0.f) ? -1.f : 1.f); // based on directuon
+	if (std::abs(m_Velocity.y) > m_MaxVelocity.y)
+		m_Velocity.y = m_MaxVelocity.y * ((m_Velocity.y < 0.f) ? -1.f : 1.f); // based on directuon
 
-	this->sprite.move(this->velocity.x * deltaTime * movementModifier,
-		this->velocity.y * deltaTime * movementModifier);
+
+	m_Sprite.move(m_Velocity * deltaTime * m_MovementModifier);
 }
 
 void Player::stopFalling()
 {
-	this->velocity.y = 0.f;
-	numberOfJumps = Player::MAX_NUMBER_OF_JUMPS;
+	m_Velocity.y = 0.f;
+	m_NumberOfJumps = DefaultPlayerAttributes::MaxNumberOfJumps;
 }
 
 void Player::setPosition(const float x, const float y)
 {
-	this->sprite.setPosition(x, y);
+	m_Sprite.setPosition(x, y);
 }
 
 void Player::move(const sf::Vector2f& offset)
 {
-	this->sprite.move(offset);
+	m_Sprite.move(offset);
 }
 
 // This animation switch mechanism is required for smoother animations: no stutter and flickering
 bool Player::getAnimationSwitch()
 {
-	bool tempAnimationSwitch = this->animationSwitch;
-	this->animationSwitch = false;
+	bool tempAnimationSwitch = m_AnimationSwitch;
+	m_AnimationSwitch = false;
 	return tempAnimationSwitch;
 }
 
 void Player::resetAnimationTimer()
 {
-	this->animationTimer.restart();
-	this->animationSwitch = true;
+	m_AnimationTimer.restart();
+	m_AnimationSwitch = true;
 }
 
 const Hitbox& Player::getHitbox() const
 {
-	return this->hitbox;
+	return m_Hitbox;
 }
 
 const sf::Vector2f Player::getCenterPosition() const
 {
-	float x = this->hitbox.getGlobalBounds().left + this->hitbox.getGlobalBounds().width / 2.f;
-	float y = this->hitbox.getGlobalBounds().top + this->hitbox.getGlobalBounds().height / 2.f;
+	float x = m_Hitbox.getGlobalBounds().left + m_Hitbox.getGlobalBounds().width / 2.f;
+	float y = m_Hitbox.getGlobalBounds().top + m_Hitbox.getGlobalBounds().height / 2.f;
 	return sf::Vector2f(x, y);
 }
 
 void Player::setVelocity(sf::Vector2f velocity)
 {
-	this->velocity = velocity;
+	m_Velocity = velocity;
 }
 
 const sf::Vector2f Player::getVelocity() const
 {
-	return this->velocity;
+	return m_Velocity;
 }
 
 void Player::updateHitbox()
 {
-	this->hitbox.update(this->sprite.getPosition());
+	m_Hitbox.update(m_Sprite.getPosition());
 }
 
 // This is needed, to stop a player if a game state change happens while pressing down a key
 void Player::stop()
 {
-	this->isMovingLeft = false;
-	this->isMovingRight = false;
+	m_IsMovingLeft = false;
+	m_IsMovingRight = false;
 }
 
 const bool Player::isCollidingWithLadder() const
 {
-	return this->collisionWithLadder;
+	return m_CollisionWithLadder;
 }
 
 const bool Player::isResolved() const
 {
-	return this->resolved;
-}
-
-const PlayerPossibleClimbingDir Player::getPossibleClimbingDirections() const
-{
-	return this->possibleClimbingDirection;
+	return m_Resolved;
 }
 
 const PlayerActualClimbingState Player::getActualClimbingState() const
 {
-	return this->actualClimbingState;
+	return m_ActualClimbingState;
 }
 
 void Player::setCollisionWithLadder(bool collisionWithLadder)
 {
-	this->collisionWithLadder = collisionWithLadder;
+	m_CollisionWithLadder = collisionWithLadder;
 }
 
 void Player::setResolved(bool newResolvedState)
 {
-	this->resolved = newResolvedState;
+	m_Resolved = newResolvedState;
 }
 
 void Player::setPossibleClimbingDirections(PlayerPossibleClimbingDir directionToSet)
 {
-	this->possibleClimbingDirection = directionToSet;
+	m_PossibleClimbingDirection = directionToSet;
 }
 
 void Player::setActualClimbingState(PlayerActualClimbingState stateToSet)
 {
-	this->actualClimbingState = stateToSet;
+	m_ActualClimbingState = stateToSet;
 }
 
 void Player::resolveCollision(const sf::FloatRect& overlap, const sf::Vector2f& collisionNormal)
 {
-	this->setResolved(true);
+	m_Resolved = true;
 
 	//the collision normal is stored in x and y, with the penetration in z
 	sf::Vector3f manifold;
@@ -423,22 +448,21 @@ void Player::resolveCollision(const sf::FloatRect& overlap, const sf::Vector2f& 
 	{
 		manifold.x = (collisionNormal.x < 0) ? 1.f : -1.f;
 		manifold.z = overlap.width;
-		this->setVelocity(sf::Vector2f(0, this->getVelocity().y));
+		m_Velocity = sf::Vector2f(0, m_Velocity.y);
 	}
 	else // collision in y direction
 	{
 		manifold.y = (collisionNormal.y < 0) ? 1.f : -1.f;
 		manifold.z = overlap.height;
-		this->stopFalling();
+		stopFalling();
 	}
 
 	sf::Vector2f normal(manifold.x * manifold.z, manifold.y * manifold.z);
-	this->move(normal);
+	move(normal);
 }
-
 
 // TODO: better
 bool Player::isOnGround() const
 {
-	return this->velocity.y == 1.f;
+	return m_Velocity.y == 1.f;
 }

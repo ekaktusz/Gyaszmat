@@ -10,16 +10,16 @@ TileLayer::TileLayer(const tmx::Map& map, MapLayerNames::TileLayerName name)
 
 		// round the chunk size to the nearest tile
 		const auto tileSize = map.getTileSize();
-		m_chunkSize.x = std::floor(m_chunkSize.x / tileSize.x) * tileSize.x;
-		m_chunkSize.y = std::floor(m_chunkSize.y / tileSize.y) * tileSize.y;
+		m_ChunkSize.x = std::floor(m_ChunkSize.x / tileSize.x) * tileSize.x;
+		m_ChunkSize.y = std::floor(m_ChunkSize.y / tileSize.y) * tileSize.y;
 		m_MapTileSize.x = map.getTileSize().x;
 		m_MapTileSize.y = map.getTileSize().y;
 		const auto& layer = layers[idx]->getLayerAs<tmx::TileLayer>();
 		createChunks(map, layer);
 
 		auto mapSize = map.getBounds();
-		m_globalBounds.width = mapSize.width;
-		m_globalBounds.height = mapSize.height;
+		m_GlobalBounds.width = mapSize.width;
+		m_GlobalBounds.height = mapSize.height;
 		SPDLOG_INFO("TileLayer: {}", idx);
 	}
 	else
@@ -30,7 +30,7 @@ TileLayer::TileLayer(const tmx::Map& map, MapLayerNames::TileLayerName name)
 
 const sf::FloatRect& TileLayer::getGlobalBounds() const
 {
-	return m_globalBounds;
+	return m_GlobalBounds;
 }
 
 void TileLayer::setTile(int tileX, int tileY, tmx::TileLayer::Tile tile, bool refresh)
@@ -63,7 +63,7 @@ sf::Color TileLayer::getColor(int tileX, int tileY)
 
 void TileLayer::update(sf::Time elapsed)
 {
-	for (auto& c : m_visibleChunks)
+	for (auto& c : m_VisibleChunks)
 	{
 		for (AnimationState& as : c->getActiveAnimations())
 		{
@@ -135,41 +135,41 @@ void TileLayer::createChunks(const tmx::Map& map, const tmx::TileLayer& layer)
 			}
 			newTexture->loadFromImage(img);
 		}
-		m_textureResource.insert(std::make_pair(path, std::move(newTexture)));
+		m_TextureResource.insert(std::make_pair(path, std::move(newTexture)));
 	}
 
 	// calculate the number of chunks in the layer
 	// and create each one
 	const auto bounds = map.getBounds();
-	m_chunkCount.x = static_cast<sf::Uint32>(std::ceil(bounds.width / m_chunkSize.x));
-	m_chunkCount.y = static_cast<sf::Uint32>(std::ceil(bounds.height / m_chunkSize.y));
+	m_ChunkCount.x = static_cast<sf::Uint32>(std::ceil(bounds.width / m_ChunkSize.x));
+	m_ChunkCount.y = static_cast<sf::Uint32>(std::ceil(bounds.height / m_ChunkSize.y));
 
 	sf::Vector2u tileSize(map.getTileSize().x, map.getTileSize().y);
 
-	for (auto y = 0u; y < m_chunkCount.y; ++y)
+	for (auto y = 0u; y < m_ChunkCount.y; ++y)
 	{
-		sf::Vector2f tileCount(m_chunkSize.x / tileSize.x, m_chunkSize.y / tileSize.y);
-		for (auto x = 0u; x < m_chunkCount.x; ++x)
+		sf::Vector2f tileCount(m_ChunkSize.x / tileSize.x, m_ChunkSize.y / tileSize.y);
+		for (auto x = 0u; x < m_ChunkCount.x; ++x)
 		{
 			// calculate size of each Chunk (clip against map)
-			if ((x + 1) * m_chunkSize.x > bounds.width)
+			if ((x + 1) * m_ChunkSize.x > bounds.width)
 			{
-				tileCount.x = (bounds.width - x * m_chunkSize.x) / map.getTileSize().x;
+				tileCount.x = (bounds.width - x * m_ChunkSize.x) / map.getTileSize().x;
 			}
-			if ((y + 1) * m_chunkSize.y > bounds.height)
+			if ((y + 1) * m_ChunkSize.y > bounds.height)
 			{
-				tileCount.y = (bounds.height - y * m_chunkSize.y) / map.getTileSize().y;
+				tileCount.y = (bounds.height - y * m_ChunkSize.y) / map.getTileSize().y;
 			}
 			// m_chunks.emplace_back(std::make_unique<Chunk>(layer, usedTileSets,
 			//     sf::Vector2f(x * m_chunkSize.x, y * m_chunkSize.y), tileCount, map.getTileCount().x,
 			//     m_textureResource));
-			m_chunks.emplace_back(std::make_unique<Chunk>(layer,
+			m_Chunks.emplace_back(std::make_unique<Chunk>(layer,
 				usedTileSets,
-				sf::Vector2f(x * m_chunkSize.x, y * m_chunkSize.y),
+				sf::Vector2f(x * m_ChunkSize.x, y * m_ChunkSize.y),
 				tileCount,
 				tileSize,
 				map.getTileCount().x,
-				m_textureResource,
+				m_TextureResource,
 				map.getAnimatedTiles()));
 		}
 	}
@@ -180,32 +180,32 @@ void TileLayer::updateVisibility(const sf::View& view) const
 	sf::Vector2f viewCorner = view.getCenter();
 	viewCorner -= view.getSize() / 2.f;
 
-	int posX = static_cast<int>(std::floor(viewCorner.x / m_chunkSize.x));
-	int posY = static_cast<int>(std::floor(viewCorner.y / m_chunkSize.y));
-	int posX2 = static_cast<int>(std::ceil((viewCorner.x + view.getSize().x) / m_chunkSize.x));
-	int posY2 = static_cast<int>(std::ceil((viewCorner.y + view.getSize().x) / m_chunkSize.y));
+	int posX = static_cast<int>(std::floor(viewCorner.x / m_ChunkSize.x));
+	int posY = static_cast<int>(std::floor(viewCorner.y / m_ChunkSize.y));
+	int posX2 = static_cast<int>(std::ceil((viewCorner.x + view.getSize().x) / m_ChunkSize.x));
+	int posY2 = static_cast<int>(std::ceil((viewCorner.y + view.getSize().x) / m_ChunkSize.y));
 
 	std::vector<Chunk*> visible;
 	for (auto y = posY; y < posY2; ++y)
 	{
 		for (auto x = posX; x < posX2; ++x)
 		{
-			std::size_t idx = y * int(m_chunkCount.x) + x;
-			if (idx >= 0u && idx < m_chunks.size() && !m_chunks[idx]->empty())
+			std::size_t idx = y * int(m_ChunkCount.x) + x;
+			if (idx >= 0u && idx < m_Chunks.size() && !m_Chunks[idx]->empty())
 			{
-				visible.push_back(m_chunks[idx].get());
+				visible.push_back(m_Chunks[idx].get());
 			}
 		}
 	}
 
-	std::swap(m_visibleChunks, visible);
+	std::swap(m_VisibleChunks, visible);
 }
 
 void TileLayer::draw(sf::RenderTarget& rt, sf::RenderStates states) const
 {
 	// calc view coverage and draw nearest chunks
 	updateVisibility(rt.getView());
-	for (const auto& c : m_visibleChunks)
+	for (const auto& c : m_VisibleChunks)
 	{
 		rt.draw(*c, states);
 	}

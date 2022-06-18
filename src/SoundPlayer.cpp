@@ -4,13 +4,13 @@
 
 namespace
 {
-	const float listenerZ = 300.f;
-	const float attenuation = 8.f;
-	const float minDistance2d = 200.f;
+	constexpr float listenerZ = 300.f;
+	constexpr float attenuation = 8.f;
+	constexpr float minDistance2d = 200.f;
 	const float minDistance3d = std::sqrt(minDistance2d * minDistance2d + listenerZ * listenerZ);
 }
 
-SoundPlayer::SoundPlayer() : sounds()
+SoundPlayer::SoundPlayer() : m_Sounds()
 {
 	// Listener points towards the screen (default in SFML)
 	sf::Listener::setDirection(0.f, 0.f, -1.f);
@@ -23,9 +23,9 @@ void SoundPlayer::play(res::Sound soundId)
 
 void SoundPlayer::play(res::Sound soundId, sf::Vector2f position)
 {
-	this->sounds.push_back(GSound(soundId, sf::Sound()));
+	m_Sounds.push_back(GSound(soundId, sf::Sound()));
 	
-	sf::Sound& sound = this->sounds.back().sound;
+	sf::Sound& sound = m_Sounds.back().sound;
 
 	sound.setBuffer(ResourceManager::getInstance().getSoundBuffer(soundId));
 	sound.setPosition(position.x, position.y, 0.f);
@@ -37,7 +37,7 @@ void SoundPlayer::play(res::Sound soundId, sf::Vector2f position)
 
 void SoundPlayer::pause()
 {
-	for (GSound gsound : this->sounds)
+	for (GSound gsound : m_Sounds)
 	{
 		gsound.sound.pause();
 	}
@@ -45,7 +45,7 @@ void SoundPlayer::pause()
 
 void SoundPlayer::resume()
 {
-	for (GSound gsound : this->sounds)
+	for (GSound gsound : m_Sounds)
 	{
 		if (gsound.sound.getStatus() == sf::Sound::Paused) gsound.sound.play();
 	}
@@ -53,12 +53,12 @@ void SoundPlayer::resume()
 
 void SoundPlayer::removeStoppedSounds()
 {
-	this->sounds.remove_if([](const GSound& gsound) { return gsound.sound.getStatus() == sf::Sound::Stopped; });
+	m_Sounds.remove_if([](const GSound& gsound) { return gsound.sound.getStatus() == sf::Sound::Stopped; });
 }
 
 void SoundPlayer::removeSoundsById(res::Sound soundId)
 {
-	this->sounds.remove_if([&](const GSound& gsound) { return gsound.soundId == soundId; });
+	m_Sounds.remove_if([&](const GSound& gsound) { return gsound.soundId == soundId; });
 }
 
 sf::Vector2f SoundPlayer::getListenerPosition() const

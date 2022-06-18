@@ -19,5 +19,5 @@ public:
 	void setVolume(float volume);
 
 private:
-	sf::Music* music;
+	sf::Music* m_Music;
 };

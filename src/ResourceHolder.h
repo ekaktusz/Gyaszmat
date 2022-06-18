@@ -16,20 +16,20 @@ public:
 protected:
 	void insert(Identifier id, std::unique_ptr<Resource> resource);
 
-	std::map<Identifier, std::unique_ptr<Resource>> resourceMap;
+	std::map<Identifier, std::unique_ptr<Resource>> m_ResourceMap;
 };
 
 template <typename Resource, typename Identifier>
 void ResourceHolder<Resource, Identifier>::insert(Identifier id, std::unique_ptr<Resource> resource)
 {
-	resourceMap.try_emplace(id, std::move(resource));
+	m_ResourceMap.try_emplace(id, std::move(resource));
 }
 
 template <typename Resource, typename Identifier>
 Resource& ResourceHolder<Resource, Identifier>::get(Identifier id) const
 {
-	auto found = resourceMap.find(id);
-	if (found == resourceMap.end())
+	auto found = m_ResourceMap.find(id);
+	if (found == m_ResourceMap.end())
 	{
 		SPDLOG_ERROR("Cant find resource by id: " + std::to_string((int) id));
 	}

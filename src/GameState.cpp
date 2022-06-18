@@ -5,128 +5,125 @@
 
 #include "Player.h"
 #include "TileLayer.h"
-#include "Ladder.h"
-#include "Terrain.h"
+#include "LadderLayer.h"
+#include "TerrainLayer.h"
 
-GameState::GameState(Game* game)
+GameState::GameState(Game* game) : State(game), m_Player(new Player(m_SoundPlayer)), m_FrameTime(0.f)
 {
-	this->game = game;
-	this->player = new Player(this->soundPlayer);
+	// Init m_Map
+	m_Map = &ResourceManager::getInstance().getMap(res::Map::TestMap);
+	m_TileLayerFar = new TileLayer(*m_Map, MapLayerNames::TileLayerName::BackLayer);
+	m_TileLayerMiddle = new TileLayer(*m_Map, MapLayerNames::TileLayerName::MidLayer);
+	m_TileLayerNear = new TileLayer(*m_Map, MapLayerNames::TileLayerName::FrontLayer);
+	m_LadderLayer = new LadderLayer(m_Map);
+	m_Terrain = new TerrainLayer(m_Map);
+	m_MapSize = m_Map->getBounds();
 
-	// Init map
-	this->map = &ResourceManager::getInstance().getMap(res::Map::TestMap);
-	this->tileLayerFar = new TileLayer(*this->map, MapLayerNames::TileLayerName::BackLayer);
-	this->tileLayerMiddle = new TileLayer(*this->map, MapLayerNames::TileLayerName::MidLayer);
-	this->tileLayerNear = new TileLayer(*this->map, MapLayerNames::TileLayerName::FrontLayer);
-	this->ladder = new Ladder(map);
-	this->terrain = new Terrain(map);
-	this->mapSize = map->getBounds();
-
-	this->view = sf::View(sf::Vector2f(0.f, 0.f), sf::Vector2f(Game::XX, Game::YY));
-	this->game->renderWindow.setView(this->view);
+	m_View = sf::View(sf::Vector2f(0.f, 0.f), sf::Vector2f(Game::s_WindowSizeX, Game::s_WindowSizeY));
+	m_Game->renderWindow.setView(m_View);
 
 	// Init healthbar
-	this->playerHealthBar.setHealth(100);
-	this->playerHealthBar.setMaxHealth(100);
+	m_PlayerHealthBar.setHealth(100);
+	m_PlayerHealthBar.setMaxHealth(100);
+	
 
 	// Init background
-	this->parallaxBackground.addLayer(new ParallaxLayer(
+	m_ParallaxBackground.addLayer(new ParallaxLayer(
 		ResourceManager::getInstance().getTexture(res::Texture::ParallaxForest1), 1.f));
-	this->parallaxBackground.addLayer(new ParallaxLayer(
+	m_ParallaxBackground.addLayer(new ParallaxLayer(
 		ResourceManager::getInstance().getTexture(res::Texture::ParallaxForest2), 0.97f));
-	this->parallaxBackground.addLayer(new ParallaxLayer(
+	m_ParallaxBackground.addLayer(new ParallaxLayer(
 		ResourceManager::getInstance().getTexture(res::Texture::ParallaxForest3), 0.94f, 30.f));
-	this->parallaxBackground.addLayer(new ParallaxLayer(
+	m_ParallaxBackground.addLayer(new ParallaxLayer(
 		ResourceManager::getInstance().getTexture(res::Texture::ParallaxForest4), 0.85f, 50.f));
-	this->parallaxBackground.addLayer(new ParallaxLayer(
+	m_ParallaxBackground.addLayer(new ParallaxLayer(
 		ResourceManager::getInstance().getTexture(res::Texture::ParallaxForest5), 0.8f, 50.f));
 
-	this->parallaxBackground.setScale(Game::YY / this->parallaxBackground.getGlobalBounds().height * 1.5,
-		Game::YY / this->parallaxBackground.getGlobalBounds().height * 1.5);
+	m_ParallaxBackground.setScale(Game::s_WindowSizeY / m_ParallaxBackground.getGlobalBounds().height * 1.5,
+		Game::s_WindowSizeY / m_ParallaxBackground.getGlobalBounds().height * 1.5);
 
 	// Init frame time widget
-	this->frameTimeLabel.getText().setFont(ResourceManager::getInstance().getFont(res::Font::Roboto));
-	this->frameTimeLabel.getText().setString("HLLO");
-	this->frameTimeLabel.getText().setCharacterSize(30);
-	this->frameTimeLabel.getText().setFillColor(sf::Color::Yellow);
-	this->frameTimeLabel.getText().setOutlineColor(sf::Color::Black);
-	this->frameTimeLabel.getText().setOutlineColor(sf::Color::Black);
-	this->frameTimeLabel.getText().setOutlineThickness(1.f);
+	m_FrameTimeLabel.getText().setFont(ResourceManager::getInstance().getFont(res::Font::Roboto));
+	m_FrameTimeLabel.getText().setString("HLLO");
+	m_FrameTimeLabel.getText().setCharacterSize(30);
+	m_FrameTimeLabel.getText().setFillColor(sf::Color::Yellow);
+	m_FrameTimeLabel.getText().setOutlineColor(sf::Color::Black);
+	m_FrameTimeLabel.getText().setOutlineColor(sf::Color::Black);
+	m_FrameTimeLabel.getText().setOutlineThickness(1.f);
 
 	// Init background music
-	musicPlayer.chooseTrack(res::Music::LudumDare2);
-	musicPlayer.play();
-	musicPlayer.setVolume(100);
+	m_MusicPlayer.chooseTrack(res::Music::LudumDare2);
+	m_MusicPlayer.play();
+	m_MusicPlayer.setVolume(100);
+	m_MusicPlayer.setLoop(true);
 }
 
 GameState::~GameState()
 {
-	delete tileLayerFar;
-	delete tileLayerMiddle;
-	delete tileLayerNear;
-	delete ladder;
-	delete terrain;
-	delete player;
+	delete m_TileLayerFar;
+	delete m_TileLayerMiddle;
+	delete m_TileLayerNear;
+	delete m_LadderLayer;
+	delete m_Terrain;
+	delete m_Player;
 }
 
 void GameState::update(sf::Time deltaTime)
 {
-	this->soundPlayer.removeStoppedSounds();
-	this->musicPlayer.play();
-	this->player->update();
-	sf::Vector2f movement =
-		player->getCenterPosition() - view.getCenter() - sf::Vector2f(0.f, Game::YY / 8);
-	this->view.move(movement * deltaTime.asSeconds() * 10.f);
-	//this->view.setCenter(this->player.getCenterPosition() - sf::Vector2f(0.f, Game::XX / 6));
-	this->updateCollision();
-	this->playerHealthBar.update(this->player->getHealth());
+	m_SoundPlayer.removeStoppedSounds();
+	m_MusicPlayer.play();
+	m_Player->update();
+	sf::Vector2f movement = m_Player->getCenterPosition() - m_View.getCenter() - sf::Vector2f(0.f, Game::s_WindowSizeY / 8);
+	m_View.move(movement * deltaTime.asSeconds() * 10.f);
+	updateCollision();
+	m_PlayerHealthBar.update(this->m_Player->getHealth());
 
-	sf::Vector2f cameraPosition(this->view.getCenter() - sf::Vector2f(Game::XX / 2, Game::YY / 2));
-	this->playerHealthBar.setPosition(cameraPosition);
-	this->frameTimeLabel.getText().setPosition(cameraPosition);
-	// Change to 1.f / this->frameTime to show FPS
-	this->frameTimeLabel.getText().setString(std::to_string(this->frameTime));
-
-	this->parallaxBackground.update(cameraPosition);
+	sf::Vector2f cameraPosition(m_View.getCenter() - sf::Vector2f(Game::s_WindowSizeX / 2, Game::s_WindowSizeY / 2));
+	m_PlayerHealthBar.setPosition(cameraPosition);
+	m_FrameTimeLabel.getText().setPosition(cameraPosition);
+	
+	// Change to 1.f / this->m_FrameTime to show FPS
+	m_FrameTimeLabel.getText().setString(std::to_string(m_FrameTime));
+	this->m_ParallaxBackground.update(cameraPosition);
 }
 
 void GameState::handleEvent(const sf::Event& event)
 {
 	if (event.type == sf::Event::Closed)
 	{
-		this->game->renderWindow.close();
+		this->m_Game->renderWindow.close();
 	}
 	else if (event.type == sf::Event::KeyPressed)
 	{
 		if (event.key.code == sf::Keyboard::Escape)
 		{
 			SPDLOG_INFO("Switch to PauseState...");
-			this->player->stop();
-			this->musicPlayer.pause();
-			this->game->pushState(new PauseState(this->game));
+			m_Player->stop();
+			m_MusicPlayer.pause();
+			m_Game->pushState(new PauseState(this->m_Game));
 		}
 	}
-	this->player->handleKeyboardInput(event);
+	this->m_Player->handleKeyboardInput(event);
 }
 
 void GameState::render()
 {
-	frameTime = this->clock.restart().asSeconds();
-	this->game->renderWindow.clear();
-	this->game->renderWindow.setView(this->view);
-	this->game->renderWindow.draw(this->parallaxBackground);
-	this->game->renderWindow.draw(*this->tileLayerFar); // layer behind player
-	this->game->renderWindow.draw(*this->tileLayerMiddle); // layer of map
-	this->game->renderWindow.draw(*this->player);
-	this->game->renderWindow.draw(*this->tileLayerNear); // layer vefore player
-	this->game->renderWindow.draw(this->playerHealthBar);
-	this->game->renderWindow.draw(this->frameTimeLabel); // comment out if dont want to see frame
-	this->game->renderWindow.display();
+	m_FrameTime = m_Clock.restart().asSeconds();
+	m_Game->renderWindow.clear();
+	m_Game->renderWindow.setView(m_View);
+	m_Game->renderWindow.draw(m_ParallaxBackground);
+	m_Game->renderWindow.draw(*m_TileLayerFar); // layer behind m_Player
+	m_Game->renderWindow.draw(*m_TileLayerMiddle); // layer of m_Map
+	m_Game->renderWindow.draw(*m_Player);
+	m_Game->renderWindow.draw(*m_TileLayerNear); // layer before m_Player
+	m_Game->renderWindow.draw(m_PlayerHealthBar);
+	m_Game->renderWindow.draw(m_FrameTimeLabel); // comment out if dont want to see frame
+	m_Game->renderWindow.display();
 }
 
 void GameState::updateCollision()
 {
-	this->player->setResolved(false);
-	this->terrain->updateCollision(*this->player);
-	this->ladder->updateCollision(*this->player);
+	m_Player->setResolved(false);
+	m_Terrain->updateCollision(*m_Player);
+	m_LadderLayer->updateCollision(*m_Player);
 }

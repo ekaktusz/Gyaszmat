@@ -9,12 +9,12 @@ public:
 	Hitbox(const sf::Vector2f& parentPosition, sf::Vector2f size, sf::Vector2f offset);
 	~Hitbox();
 
+	virtual void draw(sf::RenderTarget& target, sf::RenderStates states) const override;
 	void update(const sf::Vector2f& parentPosition);
-	void draw(sf::RenderTarget& target, sf::RenderStates states) const;
 
 	sf::FloatRect getGlobalBounds() const;
 
 private:
-	sf::RectangleShape hitbox;
-	sf::Vector2f offset;
+	sf::RectangleShape m_Hitbox;
+	sf::Vector2f m_Offset;
 };

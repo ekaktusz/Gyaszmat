@@ -86,3 +86,43 @@ Just press the build all button in Visual Studio.
 
 ### Execution
 1. Copy all the dll-s from Gyaszmat/include/SFML/bin to Gyaszmat/build
+
+## Coding Guidelines
+-----------------------------
+
+### Naming Conventions
+Use app hungarian notation: https://stackoverflow.com/a/1229360/12531771
+Never use system hungarian notation.
+Temporary variable names prfered to be short and understandable.
+Naming scheme:
+ - LongClassName
+ - longLocalVariableName
+ - m_LongPrivateMemberName
+ - longPublicMemberName
+ - s_LongStaticVariableName
+ - longFunctionMethodName()
+
+### Best Practices
+Only create struct if all member is public. In this case you dont have to use the m_ prefix.
+
+Only use pointers when neccessary. It's not neccesarly bad, but it can lead to nasty problems so if it's possible use smart pointers.
+ - std::unique_pointer is preferred. It means ownership, so use it if the lifetime is depended on the context, eg. class member
+ - std::shared_pointer when you are not owner
+ - if you use raw pointer make sure that you include delete in the destructor
+
+Use const ref in parameter passing and in return values, when the objects is relatively complex. It's not a big deal if you miss it in theory today compilers are smart enough to replace the code where neccessary, but the semi-official guideline still advise to use it. For std::strings you can use std::string_view.
+
+Prefer long ifs with returns/continues. Dont use else after return.
+
+Order class in tihs order: public methods / public variables / private methods / private members.
+
+Dont use using namespace std.
+
+Use const where the method can be const.
+
+Use constexpr where you can.
+
+If you override a method always use override keyword.
+
+If any question: https://github.com/isocpp/CppCoreGuidelines/blob/master/CppCoreGuidelines.md
+

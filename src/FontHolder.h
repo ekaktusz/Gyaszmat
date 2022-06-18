@@ -1,8 +1,9 @@
 #pragma once
 
+#include "pch.h"
+
 #include "ResourceHolder.h"
 #include "ResourceTypes.h"
-#include "pch.h"
 
 class FontHolder : public ResourceHolder<sf::Font, res::Font>
 {
@@ -16,6 +17,6 @@ public:
 			return;
 		}
 		SPDLOG_INFO("Font loaded successfully: " + filePath.string());
-		this->insert(id, std::move(font));
+		insert(id, std::move(font));
 	}
 };

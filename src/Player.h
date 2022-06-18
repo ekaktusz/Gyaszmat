@@ -36,20 +36,19 @@ public:
 	Player(SoundPlayer& soundPlayer);
 	~Player();
 
-	unsigned int getHealth();
-	unsigned int getMaxHealth();
+	virtual void draw(sf::RenderTarget& target, sf::RenderStates states) const override;
+	void update();
+	void handleKeyboardInput(sf::Event event);
+
+	unsigned int getHealth() const;
+	unsigned int getMaxHealth() const;
 	bool getAnimationSwitch();
 	const Hitbox& getHitbox() const;
 	const sf::Vector2f getVelocity() const;
 	const sf::Vector2f getCenterPosition() const;
 	const bool isCollidingWithLadder() const;
 	const bool isResolved() const;
-	const PlayerPossibleClimbingDir getPossibleClimbingDirections() const;
 	const PlayerActualClimbingState getActualClimbingState() const;
-
-	void draw(sf::RenderTarget& target, sf::RenderStates states) const;
-	void update();
-	void handleKeyboardInput(sf::Event event);
 
 	void setPosition(const float x, const float y);
 	void setVelocity(sf::Vector2f velocity);
@@ -64,55 +63,6 @@ public:
 	void move(const sf::Vector2f& offset);
 
 private:
-	// Game parameters
-	unsigned int health;
-	unsigned int maxHealth;
-
-	static const short MAX_NUMBER_OF_JUMPS = 2;
-
-	//Sound
-	sf::Clock soundTimer;
-	SoundPlayer& soundPlayer;
-
-	// Hitbox
-	Hitbox hitbox;
-
-	// Render
-	sf::Texture idleTexture;
-	sf::Texture runningTexture;
-	sf::Texture jumpingTexture;
-	sf::Texture climbingTexture;
-	sf::Sprite sprite;
-
-	// Animation
-	sf::IntRect currentFrame;
-	sf::Clock animationTimer;
-	PlayerAnimationState animationState;
-	bool animationSwitch;
-
-	// Physics
-	sf::Vector2f velocity;
-	sf::Vector2f maxVelocity;
-	sf::Vector2f minVelocity;
-
-	float acceleration;
-	float drag;
-	float gravity;
-	float jumpSpeed;
-	short numberOfJumps;
-	float movementModifier;
-
-	// Controls
-	bool isMovingLeft;
-	bool isMovingRight;
-	bool pressedJump;
-
-	// Ladder
-	bool collisionWithLadder;
-	bool resolved;
-	PlayerPossibleClimbingDir possibleClimbingDirection;
-	PlayerActualClimbingState actualClimbingState;
-
 	void resetAnimationTimer();
 	void setAnimation(float timePeriod, sf::Texture& animationTexture, bool stopped = false);
 
@@ -123,4 +73,52 @@ private:
 	void updateSound();
 
 	bool isOnGround() const;
+
+private:
+	// Game parameters
+	unsigned int m_Health;
+	unsigned int m_MaxHealth;
+
+	//Sound
+	sf::Clock m_SoundTimer; // needed for steps
+	SoundPlayer& m_SoundPlayer;
+
+	// Hitbox
+	Hitbox m_Hitbox;
+
+	// Render
+	sf::Texture m_IdleTexture;
+	sf::Texture m_RunningTexture;
+	sf::Texture m_JumpingTexture;
+	sf::Texture m_ClimbingTexture;
+	sf::Sprite m_Sprite;
+
+	// Animation
+	sf::IntRect m_CurrentFrame;
+	sf::Clock m_AnimationTimer;
+	PlayerAnimationState m_AnimationState;
+	bool m_AnimationSwitch;
+
+	// Physics
+	sf::Vector2f m_Velocity;
+	sf::Vector2f m_MaxVelocity;
+	sf::Vector2f m_MinVelocity;
+
+	float m_Acceleration;
+	float m_Drag;
+	float m_Gravity;
+	float m_JumpSpeed;
+	short m_NumberOfJumps;
+	float m_MovementModifier;
+
+	// Controls
+	bool m_IsMovingLeft;
+	bool m_IsMovingRight;
+	bool m_PressedJump;
+
+	// Ladder
+	bool m_CollisionWithLadder;
+	bool m_Resolved;
+	PlayerPossibleClimbingDir m_PossibleClimbingDirection;
+	PlayerActualClimbingState m_ActualClimbingState;
 };
