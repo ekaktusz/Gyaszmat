@@ -1,5 +1,7 @@
 #pragma once
 
+#include "pch.h"
+
 #include "Label.h"
 #include "ResourceTypes.h"
 #include "Widget.h"

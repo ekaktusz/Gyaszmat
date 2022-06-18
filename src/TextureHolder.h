@@ -16,6 +16,6 @@ public:
 			return;
 		}
 		SPDLOG_INFO("Texture loaded succesfully: " + filePath.string());
-		this->insert(id, std::move(texture));
+		insert(id, std::move(texture));
 	}
 };

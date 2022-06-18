@@ -10,15 +10,14 @@
 // Singleton for accessing resources in all classes. Loads everything in it's constructor, in the first time it accessed.
 // Maybe not the most efficient, but for this small game it's probably gonna be enough
 // Everytime we want to add a new asset we have to append it's methods.
-
 class ResourceManager
 {
 public:
 
 	static ResourceManager& getInstance()
 	{
-		static ResourceManager instance;
-		return instance;
+		static ResourceManager s_Instance;
+		return s_Instance;
 	}
 	
 	ResourceManager(ResourceManager const&) = delete;
@@ -40,13 +39,11 @@ private:
 	void loadMusic();
 
 	// Holders for each type
-	TextureHolder textureHolder;
-	FontHolder fontHolder;
-	MapHolder mapHolder;
-	MusicHolder musicHolder;
-	SoundBufferHolder soundBufferHolder;
-
-	std::filesystem::path assetPath = std::filesystem::current_path().parent_path() / "assets";
+	TextureHolder m_TextureHolder;
+	FontHolder m_FontHolder;
+	MapHolder m_MapHolder;
+	MusicHolder m_MusicHolder;
+	SoundBufferHolder m_SoundBufferHolder;
 };
 
 

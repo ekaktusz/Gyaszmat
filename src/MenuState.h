@@ -26,7 +26,7 @@ private:
 	Button m_ExitButton;
 
 	MusicPlayer m_MusicPlayer;
-	SoundPlayer m_SoundPlayer; // Will be used for button sounds etc.
+	SoundPlayer m_SoundPlayer; // Will be used for button m_sounds etc.
 
 	Label m_TitleLabel;
 };

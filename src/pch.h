@@ -45,12 +45,12 @@
 #include <type_traits>
 #include <vector>
 
-// TMXLITE
+// tmxlite
 #include <tmxlite/Map.hpp>
 #include <tmxlite/TileLayer.hpp>
 #include <tmxlite/detail/Log.hpp>
 
-// SPDLOG
+// spdlog
 #include <spdlog/spdlog.h>
 
 // Windows

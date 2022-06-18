@@ -15,6 +15,6 @@ public:
 			return;
 		}
 		SPDLOG_INFO("Sound loaded succesfully: " + filePath.string());
-		this->insert(id, std::move(sound));
+		insert(id, std::move(sound));
 	}
 };

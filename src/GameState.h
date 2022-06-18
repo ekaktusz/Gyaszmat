@@ -10,7 +10,7 @@
 class Player;
 class TileLayer;
 class LadderLayer;
-class Terrain;
+class TerrainLayer;
 
 class GameState : public State
 {
@@ -40,7 +40,7 @@ private:
 	TileLayer* m_TileLayerMiddle;
 	TileLayer* m_TileLayerNear;
 	LadderLayer* m_LadderLayer;
-	Terrain* m_Terrain;
+	TerrainLayer* m_Terrain;
 	
 	ParallaxBackground m_ParallaxBackground;
 

@@ -43,7 +43,7 @@ void ParallaxLayer::update(sf::Vector2f cameraPosition)
 {	
 	m_Sprite.setPosition(cameraPosition.x, cameraPosition.y + m_OffsetY);
 	m_ParallaxShader.setUniform("offsetx", cameraPosition.x * m_DistanceFromCamera * 0.0001f);
-	//parallaxShader.setUniform("offsety", cameraPosition.y * 1 / (this->distanceFromCamera) * 0.001f);
+	//m_ParallaxShader.setUniform("offsety", cameraPosition.y * 1 / m_distanceFromCamera * 0.001f);
 	m_ParallaxShader.setUniform("offsety", 0.f);
 }
 

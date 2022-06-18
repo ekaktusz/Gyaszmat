@@ -1,17 +1,17 @@
-#include "Terrain.h"
+#include "TerrainLayer.h"
 
 #include "ObjectLayer.h"
 #include "Player.h"
 
-Terrain::Terrain(const tmx::Map* map)
+TerrainLayer::TerrainLayer(const tmx::Map* map)
 {
-	this->objectLayer = new ObjectLayer(*map, MapLayerNames::ObjectLayerName::ObjectLayer);
+	this->m_ObjectLayer = new ObjectLayer(*map, MapLayerNames::ObjectLayerName::ObjectLayer);
 }
 
-void Terrain::updateCollision(Player& player)
+void TerrainLayer::updateCollision(Player& player)
 {
 	sf::FloatRect playerBound = player.getHitbox().getGlobalBounds();
-	std::vector<sf::FloatRect> objectBounds = this->objectLayer->getObjectBounds();
+	std::vector<sf::FloatRect> objectBounds = this->m_ObjectLayer->getObjectBounds();
 
 	// collision detection with every object on object layer
 	sf::FloatRect overlap;

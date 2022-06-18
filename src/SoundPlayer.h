@@ -26,6 +26,6 @@ private:
 		GSound(res::Sound soundId, const sf::Sound& sound) : soundId(soundId), sound(sound)
 		{}
 	};
-	std::list<GSound> sounds; // use std::list instead of vector that it garuanntees no relocating, and removing is easier
+	std::list<GSound> m_Sounds; // use std::list instead of vector that it garuanntees no relocating, and removing is easier
 
 };
