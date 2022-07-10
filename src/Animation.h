@@ -1,0 +1,27 @@
+#pragma once
+
+#include "pch.h"
+#include "ResourceTypes.h"
+
+struct Animation
+{
+public:
+	Animation(sf::Sprite& sprite, res::Texture texture, float timePeriod, unsigned int frameSize = 32);
+
+	void update();
+	void resetTimer();
+
+	void pause();
+	void play();
+
+private:
+	sf::Sprite& m_Sprite;
+	sf::Texture m_Texture;
+	sf::Clock m_Timer;
+	float m_TimePeriod;
+	unsigned int m_FrameSize;
+	sf::IntRect m_CurrentFrame;
+	bool m_Paused;
+
+	unsigned int m_FrameNumber;
+};

@@ -1,17 +1,16 @@
 #pragma once
 
 #include "Hitbox.h"
+#include "AnimationComponent.h"
 
 class SoundPlayer;
 
 enum class PlayerAnimationState
 {
-	IDLE = 0,
-	MOVING_LEFT,
-	MOVING_RIGHT,
-	JUMPING,
-	FALLING,
-	CLIMBING
+	Idle = 0,
+	Running,
+	Jumping,
+	Climbing
 };
 
 enum class PlayerPossibleClimbingDir
@@ -42,7 +41,7 @@ public:
 
 	unsigned int getHealth() const;
 	unsigned int getMaxHealth() const;
-	bool getAnimationSwitch();
+
 	const Hitbox& getHitbox() const;
 	const sf::Vector2f getVelocity() const;
 	const sf::Vector2f getCenterPosition() const;
@@ -63,9 +62,6 @@ public:
 	void move(const sf::Vector2f& offset);
 
 private:
-	void resetAnimationTimer();
-	void setAnimation(float timePeriod, sf::Texture& animationTexture, bool stopped = false);
-
 	// Update methods
 	void updateAnimation();
 	void updatePhysics();
@@ -86,18 +82,10 @@ private:
 	// Hitbox
 	Hitbox m_Hitbox;
 
-	// Render
-	sf::Texture m_IdleTexture;
-	sf::Texture m_RunningTexture;
-	sf::Texture m_JumpingTexture;
-	sf::Texture m_ClimbingTexture;
+	// Render, animation
 	sf::Sprite m_Sprite;
-
-	// Animation
-	sf::IntRect m_CurrentFrame;
-	sf::Clock m_AnimationTimer;
+	AnimationComponent<PlayerAnimationState> m_AnimationComponent;
 	PlayerAnimationState m_AnimationState;
-	bool m_AnimationSwitch;
 
 	// Physics
 	sf::Vector2f m_Velocity;
