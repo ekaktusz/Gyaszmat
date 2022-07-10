@@ -10,37 +10,17 @@ public:
 	AnimationComponent(sf::Sprite& sprite);
 
 	void addAnimation(Identifier id, std::unique_ptr<Animation> animation);
-
 	void update();
 
-	void setCurrentAnimation(Identifier id)
-	{
-		auto found = m_Animations.find(id);
-		if (found == m_Animations.end())
-		{
-			SPDLOG_ERROR("Cant find animation by id: " + std::to_string((int)id));
-		}
+	void setCurrentAnimation(Identifier id);
 
-		if (m_CurrentAnimationID != id)
-		{
-			m_CurrentAnimationID = id;
-			m_Animations[m_CurrentAnimationID]->resetTimer();
-		}
-	}
+	Identifier getCurrentAnimationID() { return m_CurrentAnimationID; }
 
-	Identifier getCurrentAnimationID()
-	{
-		return m_CurrentAnimationID;
-	}
-
-	void pause()
-	{
-		m_Animations[m_CurrentAnimationID]->pause();
+	void pause() { 
 	}
 
 	void play()
 	{
-		m_Animations[m_CurrentAnimationID]->play();
 	}
 
 private:
@@ -66,4 +46,21 @@ template <typename Identifier>
 inline void AnimationComponent<Identifier>::update()
 {
 	m_Animations[m_CurrentAnimationID]->update();
+}
+
+template <typename Identifier>
+inline void AnimationComponent<Identifier>::setCurrentAnimation(Identifier id)
+{
+	auto found = m_Animations.find(id);
+	if (found == m_Animations.end())
+	{
+		SPDLOG_ERROR("Cant find animation by id: " + std::to_string((int)id));
+	}
+
+	if (m_CurrentAnimationID != id)
+	{
+		SPDLOG_INFO("Animation changed: from" + std::to_string((int) m_CurrentAnimationID) + " to:" + std::to_string((int) id));
+		m_CurrentAnimationID = id;
+		m_Animations[m_CurrentAnimationID]->onAnimationChange();
+	}
 }

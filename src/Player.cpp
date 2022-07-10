@@ -168,32 +168,36 @@ void Player::handleKeyboardInput(sf::Event event)
 
 void Player::updateAnimation()
 {
-	m_AnimationComponent.setCurrentAnimation(PlayerAnimationState::Idle);
+	PlayerAnimationState prevState = m_AnimationState;
 
 	// Choose the correct animation
 	if (m_Velocity.y != 0 && !m_CollisionWithLadder)
 	{
-		m_AnimationComponent.setCurrentAnimation(PlayerAnimationState::Jumping);
+		m_AnimationState = PlayerAnimationState::Jumping;
 	}
 	else if (m_Velocity.y != 0 && m_CollisionWithLadder)
 	{
-		m_AnimationComponent.setCurrentAnimation(PlayerAnimationState::Climbing);
+		m_AnimationState = PlayerAnimationState::Climbing;
 	}
 	else
 	{
 		if (m_Velocity.x != 0)
 		{
-			m_AnimationComponent.setCurrentAnimation(PlayerAnimationState::Running);
+			m_AnimationState = PlayerAnimationState::Running;
 		}
 		else
 		{
 			if (m_ActualClimbingState == PlayerActualClimbingState::CLIMBED)
 			{
-				m_AnimationComponent.setCurrentAnimation(PlayerAnimationState::Climbing);
+				m_AnimationState = PlayerAnimationState::Climbing;
 				//m_AnimationComponent.pause();
 				m_ActualClimbingState == PlayerActualClimbingState::CLIMBED ?
 					  m_AnimationComponent.pause() :
 					  m_AnimationComponent.play();
+			}
+			else
+			{
+				m_AnimationState = PlayerAnimationState::Idle;
 			}
 		}
 	}
@@ -210,6 +214,7 @@ void Player::updateAnimation()
 		m_Sprite.setOrigin(m_Sprite.getGlobalBounds().width / 2.f, 0);
 	}
 
+	m_AnimationComponent.setCurrentAnimation(m_AnimationState);
 	m_AnimationComponent.update();
 }
 

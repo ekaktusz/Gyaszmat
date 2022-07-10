@@ -5,7 +5,8 @@ Animation::Animation(sf::Sprite& sprite, res::Texture texture, float timePeriod,
 	m_Sprite(sprite),
 	m_TimePeriod(timePeriod),
 	m_FrameSize(frameSize),
-	m_Paused(false)
+	m_Paused(false),
+	m_AnimSwitch(true)
 {
 
 	m_Texture = ResourceManager::getInstance().getTexture(texture);
@@ -37,17 +38,9 @@ void Animation::update()
 	}
 }
 
-void Animation::resetTimer()
+void Animation::onAnimationChange()
 {
-	m_Timer.restart();
-}
-
-void Animation::pause()
-{
-	m_Paused = true;
-}
-
-void Animation::play()
-{
-	m_Paused = false;
+	//m_CurrentFrame = sf::IntRect(0, 0, m_FrameSize, m_FrameSize);
+	//m_Sprite.setTextureRect(m_CurrentFrame);
+	//m_Timer.restart();
 }

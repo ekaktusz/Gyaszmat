@@ -9,10 +9,15 @@ public:
 	Animation(sf::Sprite& sprite, res::Texture texture, float timePeriod, unsigned int frameSize = 32);
 
 	void update();
-	void resetTimer();
 
-	void pause();
-	void play();
+	void onAnimationChange();
+
+	void pause()
+	{
+
+	}
+	void play()
+	{}
 
 private:
 	sf::Sprite& m_Sprite;
@@ -22,6 +27,7 @@ private:
 	unsigned int m_FrameSize;
 	sf::IntRect m_CurrentFrame;
 	bool m_Paused;
+	bool m_AnimSwitch;
 
 	unsigned int m_FrameNumber;
 };
