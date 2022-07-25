@@ -17,22 +17,21 @@ namespace DefaultPlayerAttributes
 }
 
 
-Player::Player(SoundPlayer& soundPlayer) : m_SoundPlayer(soundPlayer)
+Player::Player(SoundPlayer& soundPlayer) :
+	m_Sprite(),
+	m_SoundPlayer(soundPlayer),
+	m_AnimationComponent(m_Sprite)
 {
-
 	m_Health = DefaultPlayerAttributes::MaxHealth;
 	m_MaxHealth = DefaultPlayerAttributes::MaxHealth;
 
-	m_IdleTexture = ResourceManager::getInstance().getTexture(res::Texture::PlayerIdle);
-	m_RunningTexture = ResourceManager::getInstance().getTexture(res::Texture::PlayerRun);
-	m_JumpingTexture = ResourceManager::getInstance().getTexture(res::Texture::PlayerJump);
-	m_ClimbingTexture = ResourceManager::getInstance().getTexture(res::Texture::PlayerClimb);
+	m_AnimationComponent.addAnimation(PlayerAnimationState::Idle, std::make_unique<Animation>(m_Sprite, res::Texture::PlayerIdle, 0.2f));
+	m_AnimationComponent.addAnimation(PlayerAnimationState::Jumping, std::make_unique<Animation>(m_Sprite, res::Texture::PlayerJump, 0.3f));
+	m_AnimationComponent.addAnimation(PlayerAnimationState::Running, std::make_unique<Animation>(m_Sprite, res::Texture::PlayerRun, 0.1f));
+	m_AnimationComponent.addAnimation(PlayerAnimationState::Climbing, std::make_unique<Animation>(m_Sprite, res::Texture::PlayerClimb, 0.3f));
 
-	m_Sprite.setTexture(m_IdleTexture);
-	// Set starting frame to the first 32x32 part of the image
-	m_CurrentFrame = sf::IntRect(0, 0, 32, 32);
-	// Update the sprite texture
-    m_Sprite.setTextureRect(m_CurrentFrame);
+	m_AnimationComponent.setCurrentAnimation(PlayerAnimationState::Idle);
+
 	// Default is to small
 	m_Sprite.setScale(2, 2);
 
@@ -41,13 +40,9 @@ Player::Player(SoundPlayer& soundPlayer) : m_SoundPlayer(soundPlayer)
 		m_Sprite.getGlobalBounds().width - 34,
 		m_Sprite.getGlobalBounds().height - 12
 	);
+
 	sf::Vector2f hitboxOffSet = sf::Vector2f(17, 12);
 	m_Hitbox = Hitbox(m_Sprite.getPosition(), hitboxSize, hitboxOffSet);
-
-	// Init Animation
-	m_AnimationTimer.restart();
-	m_AnimationState = PlayerAnimationState::IDLE;
-	m_AnimationSwitch = true;
 
 	// Can be played with
 	m_Velocity = sf::Vector2f(0.f, 0.f);
@@ -175,65 +170,27 @@ void Player::updateAnimation()
 	PlayerAnimationState prevState = m_AnimationState;
 
 	// Choose the correct animation
-	if (m_Velocity.y > 0 && !m_CollisionWithLadder)
-		m_AnimationState = PlayerAnimationState::FALLING;
-	else if (m_Velocity.y > 0 && m_CollisionWithLadder)
-		m_AnimationState = PlayerAnimationState::CLIMBING;
-	else if (m_Velocity.y < 0 && !m_CollisionWithLadder)
-		m_AnimationState = PlayerAnimationState::JUMPING;
-	else if (m_Velocity.y < 0 && m_CollisionWithLadder)
-		m_AnimationState = PlayerAnimationState::CLIMBING;
+	if (m_Velocity.y != 0 )
+	{
+		m_AnimationState = m_CollisionWithLadder ? PlayerAnimationState::Climbing : PlayerAnimationState::Jumping;
+	}
 	else
 	{
-		if (m_Velocity.x > 0)
-			m_AnimationState = PlayerAnimationState::MOVING_RIGHT;
-		else if (m_Velocity.x < 0)
-			m_AnimationState = PlayerAnimationState::MOVING_LEFT;
+		if (m_Velocity.x != 0)
+		{
+			m_AnimationState = PlayerAnimationState::Running;
+		}
 		else
 		{
-			if (m_ActualClimbingState == PlayerActualClimbingState::CLIMBED)
-			{
-				m_AnimationState = PlayerAnimationState::CLIMBING;
-			}
-			else
-			{
-				m_AnimationState = PlayerAnimationState::IDLE;
-			}
+			m_AnimationState = (m_ActualClimbingState == PlayerActualClimbingState::CLIMBED) ? PlayerAnimationState::Climbing : PlayerAnimationState::Idle;
 		}
 	}
 
-	// If we enter to a new state we have to reset the timer.
-	if (prevState != m_AnimationState)
-	{
-		resetAnimationTimer();
-	}
+	m_AnimationComponent.setCurrentAnimation(m_AnimationState);
 
-	// Set the correct animation
-	if (m_AnimationState == PlayerAnimationState::IDLE)
+	if (m_AnimationState == PlayerAnimationState::Climbing)
 	{
-		setAnimation(0.2f, m_IdleTexture);
-	}
-	else if (m_AnimationState == PlayerAnimationState::MOVING_RIGHT || m_AnimationState == PlayerAnimationState::MOVING_LEFT)
-	{
-		setAnimation(0.1f, m_RunningTexture);
-	}
-	else if (m_AnimationState == PlayerAnimationState::JUMPING)
-	{
-		setAnimation(0.3f, m_JumpingTexture);
-	}
-	else if (m_AnimationState == PlayerAnimationState::FALLING)
-	{
-		setAnimation(0.3f, m_JumpingTexture);
-	}
-	else if (m_AnimationState == PlayerAnimationState::CLIMBING
-		&& m_ActualClimbingState == PlayerActualClimbingState::CLIMBED)
-	{
-		setAnimation(0.3f, m_ClimbingTexture, true);
-	}
-	else if (m_AnimationState == PlayerAnimationState::CLIMBING
-		&& m_ActualClimbingState != PlayerActualClimbingState::CLIMBED)
-	{
-		setAnimation(0.3f, m_ClimbingTexture);
+		(m_ActualClimbingState == PlayerActualClimbingState::CLIMBED) ? m_AnimationComponent.pauseAnimation() : m_AnimationComponent.playAnimation();
 	}
 
 	// This is for flipping the image to the right direction
@@ -247,12 +204,14 @@ void Player::updateAnimation()
 		m_Sprite.setScale(-2, 2);
 		m_Sprite.setOrigin(m_Sprite.getGlobalBounds().width / 2.f, 0);
 	}
+
+	m_AnimationComponent.update();
 }
 
 void Player::updateSound()
 {
 	// We should improve it to a better is onGround
-	if ((m_AnimationState == PlayerAnimationState::MOVING_LEFT || m_AnimationState == PlayerAnimationState::MOVING_RIGHT))
+	if (m_AnimationState == PlayerAnimationState::Running)
 	{
 		
 		if (this->m_SoundTimer.getElapsedTime().asSeconds() >= 0.3)
@@ -264,27 +223,6 @@ void Player::updateSound()
 	else
 	{
 		this->m_SoundPlayer.removeSoundsById(res::Sound::FootStepGrass);
-	}
-}
-
-void Player::setAnimation(float timePeriod, sf::Texture& animationTexture, bool stopped)
-{
-	unsigned int frameSize = 32;
-	unsigned int frameNumber = animationTexture.getSize().x / frameSize;
-	m_Sprite.setTexture(animationTexture);
-	if (m_AnimationTimer.getElapsedTime().asSeconds() >= timePeriod
-		|| getAnimationSwitch())
-	{
-		if (!stopped)
-		{
-			m_CurrentFrame.left += frameSize;
-			if (m_CurrentFrame.left >= (frameNumber - 1) * frameSize)
-			{
-				m_CurrentFrame.left = 0;
-			}
-			m_AnimationTimer.restart();
-		}
-		m_Sprite.setTextureRect(m_CurrentFrame);
 	}
 }
 
@@ -352,20 +290,6 @@ void Player::setPosition(const float x, const float y)
 void Player::move(const sf::Vector2f& offset)
 {
 	m_Sprite.move(offset);
-}
-
-// This animation switch mechanism is required for smoother animations: no stutter and flickering
-bool Player::getAnimationSwitch()
-{
-	bool tempAnimationSwitch = m_AnimationSwitch;
-	m_AnimationSwitch = false;
-	return tempAnimationSwitch;
-}
-
-void Player::resetAnimationTimer()
-{
-	m_AnimationTimer.restart();
-	m_AnimationSwitch = true;
 }
 
 const Hitbox& Player::getHitbox() const
