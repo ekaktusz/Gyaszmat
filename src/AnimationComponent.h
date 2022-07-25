@@ -2,7 +2,8 @@
 
 #include "pch.h"
 #include "Animation.h"
-
+ 
+// Component for Animations. Identifier should be an enum class from which the ID-s are gotten for the animation.
 template <typename Identifier>
 class AnimationComponent
 {
@@ -14,14 +15,8 @@ public:
 
 	void setCurrentAnimation(Identifier id);
 
-	Identifier getCurrentAnimationID() { return m_CurrentAnimationID; }
-
-	void pause() { 
-	}
-
-	void play()
-	{
-	}
+	void pauseAnimation() { m_Animations[m_CurrentAnimationID]->pause(); }
+	void playAnimation() { m_Animations[m_CurrentAnimationID]->play(); }
 
 private:
 	sf::Sprite& m_Sprite;
@@ -59,7 +54,6 @@ inline void AnimationComponent<Identifier>::setCurrentAnimation(Identifier id)
 
 	if (m_CurrentAnimationID != id)
 	{
-		SPDLOG_INFO("Animation changed: from" + std::to_string((int) m_CurrentAnimationID) + " to:" + std::to_string((int) id));
 		m_CurrentAnimationID = id;
 		m_Animations[m_CurrentAnimationID]->onAnimationChange();
 	}

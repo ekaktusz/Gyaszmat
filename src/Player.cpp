@@ -31,7 +31,6 @@ Player::Player(SoundPlayer& soundPlayer) :
 	m_AnimationComponent.addAnimation(PlayerAnimationState::Climbing, std::make_unique<Animation>(m_Sprite, res::Texture::PlayerClimb, 0.3f));
 
 	m_AnimationComponent.setCurrentAnimation(PlayerAnimationState::Idle);
-	//m_AnimationComponent.update();
 
 	// Default is to small
 	m_Sprite.setScale(2, 2);
@@ -171,13 +170,9 @@ void Player::updateAnimation()
 	PlayerAnimationState prevState = m_AnimationState;
 
 	// Choose the correct animation
-	if (m_Velocity.y != 0 && !m_CollisionWithLadder)
+	if (m_Velocity.y != 0 )
 	{
-		m_AnimationState = PlayerAnimationState::Jumping;
-	}
-	else if (m_Velocity.y != 0 && m_CollisionWithLadder)
-	{
-		m_AnimationState = PlayerAnimationState::Climbing;
+		m_AnimationState = m_CollisionWithLadder ? PlayerAnimationState::Climbing : PlayerAnimationState::Jumping;
 	}
 	else
 	{
@@ -187,19 +182,15 @@ void Player::updateAnimation()
 		}
 		else
 		{
-			if (m_ActualClimbingState == PlayerActualClimbingState::CLIMBED)
-			{
-				m_AnimationState = PlayerAnimationState::Climbing;
-				//m_AnimationComponent.pause();
-				m_ActualClimbingState == PlayerActualClimbingState::CLIMBED ?
-					  m_AnimationComponent.pause() :
-					  m_AnimationComponent.play();
-			}
-			else
-			{
-				m_AnimationState = PlayerAnimationState::Idle;
-			}
+			m_AnimationState = (m_ActualClimbingState == PlayerActualClimbingState::CLIMBED) ? PlayerAnimationState::Climbing : PlayerAnimationState::Idle;
 		}
+	}
+
+	m_AnimationComponent.setCurrentAnimation(m_AnimationState);
+
+	if (m_AnimationState == PlayerAnimationState::Climbing)
+	{
+		(m_ActualClimbingState == PlayerActualClimbingState::CLIMBED) ? m_AnimationComponent.pauseAnimation() : m_AnimationComponent.playAnimation();
 	}
 
 	// This is for flipping the image to the right direction
@@ -214,14 +205,13 @@ void Player::updateAnimation()
 		m_Sprite.setOrigin(m_Sprite.getGlobalBounds().width / 2.f, 0);
 	}
 
-	m_AnimationComponent.setCurrentAnimation(m_AnimationState);
 	m_AnimationComponent.update();
 }
 
 void Player::updateSound()
 {
 	// We should improve it to a better is onGround
-	if (m_AnimationComponent.getCurrentAnimationID() == PlayerAnimationState::Running)
+	if (m_AnimationState == PlayerAnimationState::Running)
 	{
 		
 		if (this->m_SoundTimer.getElapsedTime().asSeconds() >= 0.3)

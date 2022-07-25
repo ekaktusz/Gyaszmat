@@ -9,15 +9,13 @@ public:
 	Animation(sf::Sprite& sprite, res::Texture texture, float timePeriod, unsigned int frameSize = 32);
 
 	void update();
-
 	void onAnimationChange();
 
-	void pause()
-	{
+	void pause();
+	void play();
 
-	}
-	void play()
-	{}
+private:
+	bool getAnimationSwitch();
 
 private:
 	sf::Sprite& m_Sprite;
