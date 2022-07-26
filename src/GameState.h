@@ -41,7 +41,7 @@ private:
 	TileLayer* m_TileLayerNear;
 	LadderLayer* m_LadderLayer;
 	TerrainLayer* m_Terrain;
-	
+
 	ParallaxBackground m_ParallaxBackground;
 
 	HealthBar m_PlayerHealthBar;

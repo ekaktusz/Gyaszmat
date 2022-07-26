@@ -56,6 +56,10 @@ GameState::GameState(Game* game) : State(game), m_Player(new Player(m_SoundPlaye
 	m_MusicPlayer.play();
 	m_MusicPlayer.setVolume(100);
 	m_MusicPlayer.setLoop(true);
+
+	//FUN
+	b2Vec2 gravity(0.f, -10.f);
+	b2World world(gravity);
 }
 
 GameState::~GameState()

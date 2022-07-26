@@ -14,6 +14,9 @@
 #include <SFML/System/Time.hpp>
 #include <SFML/Window.hpp>
 
+// BOX 2D
+#include <box2d/box2d.h>
+
 // Typical stdafx.h
 #include <algorithm>
 #include <array>
