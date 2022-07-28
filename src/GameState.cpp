@@ -8,7 +8,14 @@
 #include "LadderLayer.h"
 #include "TerrainLayer.h"
 
-GameState::GameState(Game* game) : State(game), m_Player(new Player(m_SoundPlayer)), m_FrameTime(0.f)
+namespace {
+	const float PPM = 5.f;
+}
+
+GameState::GameState(Game* game) :
+	State(game),
+	m_Player(new Player(m_SoundPlayer)),
+	m_FrameTime(0.f)
 {
 	// Init m_Map
 	m_Map = &ResourceManager::getInstance().getMap(res::Map::TestMap);
@@ -19,13 +26,13 @@ GameState::GameState(Game* game) : State(game), m_Player(new Player(m_SoundPlaye
 	m_Terrain = new TerrainLayer(m_Map);
 	m_MapSize = m_Map->getBounds();
 
-	m_View = sf::View(sf::Vector2f(0.f, 0.f), sf::Vector2f(Game::s_WindowSizeX, Game::s_WindowSizeY));
+	m_View =
+		sf::View(sf::Vector2f(0.f, 0.f), sf::Vector2f(Game::s_WindowSizeX, Game::s_WindowSizeY));
 	m_Game->renderWindow.setView(m_View);
 
 	// Init healthbar
 	m_PlayerHealthBar.setHealth(100);
 	m_PlayerHealthBar.setMaxHealth(100);
-	
 
 	// Init background
 	m_ParallaxBackground.addLayer(new ParallaxLayer(
@@ -39,7 +46,8 @@ GameState::GameState(Game* game) : State(game), m_Player(new Player(m_SoundPlaye
 	m_ParallaxBackground.addLayer(new ParallaxLayer(
 		ResourceManager::getInstance().getTexture(res::Texture::ParallaxForest5), 0.8f, 50.f));
 
-	m_ParallaxBackground.setScale(Game::s_WindowSizeY / m_ParallaxBackground.getGlobalBounds().height * 1.5,
+	m_ParallaxBackground.setScale(
+		Game::s_WindowSizeY / m_ParallaxBackground.getGlobalBounds().height * 1.5,
 		Game::s_WindowSizeY / m_ParallaxBackground.getGlobalBounds().height * 1.5);
 
 	// Init frame time widget
@@ -58,8 +66,27 @@ GameState::GameState(Game* game) : State(game), m_Player(new Player(m_SoundPlaye
 	m_MusicPlayer.setLoop(true);
 
 	//FUN
-	b2Vec2 gravity(0.f, -10.f);
-	b2World world(gravity);
+	b2Vec2 gravity(0.0f, -10.0f);
+	world = new b2World(gravity);
+	groundBodyDef.position.Set(0.0f, -10.0f);
+	b2Body* groundBody = world->CreateBody(&groundBodyDef);
+	groundBox.SetAsBox(50.0f, 10.0f);
+	groundBody->CreateFixture(&groundBox, 0.0f);
+	groundBodySFMLShape.setSize(sf::Vector2f(PPM * 50.0f * 2, PPM * 10.0f * 2));
+	groundBodySFMLShape.setFillColor(sf::Color(0,255,0,128));
+
+	bodyDef.type = b2_dynamicBody;
+	bodyDef.position.Set(0.0f, 4.0f);
+	body = world->CreateBody(&bodyDef);
+	body->SetFixedRotation(true);
+	dynamicBox.SetAsBox(1.0f, 1.0f);
+	b2FixtureDef fixtureDef;
+	fixtureDef.shape = &dynamicBox;
+	fixtureDef.density = 1.0f;
+	fixtureDef.friction = 0.3f;
+	body->CreateFixture(&fixtureDef);
+	bodySFMLShape.setSize(sf::Vector2f(PPM * 1.0f * 2,PPM * 1.0f * 2));
+	bodySFMLShape.setFillColor(sf::Color(255,0,0,128));
 }
 
 GameState::~GameState()
@@ -70,6 +97,7 @@ GameState::~GameState()
 	delete m_LadderLayer;
 	delete m_Terrain;
 	delete m_Player;
+	delete world;
 }
 
 void GameState::update(sf::Time deltaTime)
@@ -89,6 +117,16 @@ void GameState::update(sf::Time deltaTime)
 	// Change to 1.f / this->m_FrameTime to show FPS
 	m_FrameTimeLabel.getText().setString(std::to_string(m_FrameTime));
 	this->m_ParallaxBackground.update(cameraPosition);
+
+
+	world->Step(timeStep, velocityIterations, positionIterations);
+	b2Vec2 position = body->GetPosition();
+	//float angle = body->GetAngle();
+	bodySFMLShape.setPosition((position.x * PPM) - bodySFMLShape.getSize().x / 2.f, -1.f * (position.y * PPM) - bodySFMLShape.getSize().y / 2.f);
+	//bodySFMLShape.setRotation(angle);
+	b2Vec2 groundPosition = groundBodyDef.position;
+	groundBodySFMLShape.setPosition((groundPosition.x * PPM) - groundBodySFMLShape.getSize().x / 2.f,
+		-1.f * (groundPosition.y * PPM) - groundBodySFMLShape.getSize().y / 2.f);
 }
 
 void GameState::handleEvent(const sf::Event& event)
@@ -122,6 +160,9 @@ void GameState::render()
 	m_Game->renderWindow.draw(*m_TileLayerNear); // layer before m_Player
 	m_Game->renderWindow.draw(m_PlayerHealthBar);
 	m_Game->renderWindow.draw(m_FrameTimeLabel); // comment out if dont want to see frame
+	m_Game->renderWindow.draw(groundBodySFMLShape);
+	m_Game->renderWindow.draw(bodySFMLShape);
+	
 	m_Game->renderWindow.display();
 }
 
