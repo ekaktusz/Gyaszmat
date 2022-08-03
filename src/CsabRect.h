@@ -5,13 +5,12 @@
 class CsabRect : public sf::Drawable
 {
 public:
-	CsabRect(float x, float y, float sx, float sy, b2World& world, bool dynamic);
+	CsabRect(float x, float y, float sx, float sy, b2World& world, bool dynamic = true);
 
 	// Inherited via Drawable
-	virtual void draw(RenderTarget& target, RenderStates states) const override;
+	virtual void draw(sf::RenderTarget& target, sf::RenderStates states) const override;
 
 	void update();
-	
 
 private:
 	// b2 staff

@@ -6,6 +6,7 @@
 #include "ParallaxBackground.h"
 #include "MusicPlayer.h"
 #include "SoundPlayer.h"
+#include "CsabRect.h"
 
 class Player;
 class TileLayer;
@@ -66,4 +67,8 @@ private:
 	float timeStep = 1.0f / 60.0f;
 	int32 velocityIterations = 8;
 	int32 positionIterations = 3;
+
+	CsabRect* csabrect1;
+	CsabRect* csabrect2;
+
 };

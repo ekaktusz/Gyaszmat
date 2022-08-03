@@ -5,11 +5,12 @@ namespace
 	float PPM = 32.f;
 }
 
-CsabRect::CsabRect(float x, float y, float sx, float sy, b2World& world, bool dynamic = true)
+CsabRect::CsabRect(float x, float y, float sx, float sy, b2World& world, bool dynamic)
 {
 	rectangleShape = sf::RectangleShape(sf::Vector2f(sx, sy));
 	rectangleShape.setOrigin(sx / 2, sy / 2);
-	groundBodySFMLShape.setFillColor(sf::Color(0, 255, 0, 128));
+	rectangleShape.setPosition(x, y);
+	rectangleShape.setFillColor(sf::Color(0, 255, 0, 128));
 	
 	if (dynamic) bodyDef.type = b2_dynamicBody;
 	bodyDef.position.Set(x/PPM, -y/PPM);
@@ -24,12 +25,16 @@ CsabRect::CsabRect(float x, float y, float sx, float sy, b2World& world, bool dy
 	body->CreateFixture(&bodyFixture);
 }
 
-void CsabRect::draw(RenderTarget& target, RenderStates states) const
+void CsabRect::draw(sf::RenderTarget& target, sf::RenderStates states) const
 {
 	target.draw(rectangleShape);
 }
 
 void CsabRect::update()
 {
-
+	 float x = body->GetPosition().x * PPM;
+	float y = - body->GetPosition().y * PPM;
+	x = x - rectangleShape.getSize().x / 2.f;
+	y = y - rectangleShape.getSize().y / 2.f;
+	rectangleShape.setPosition(x, y);
 }

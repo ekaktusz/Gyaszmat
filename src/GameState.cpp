@@ -68,7 +68,7 @@ GameState::GameState(Game* game) :
 	//FUN
 	b2Vec2 gravity(0.0f, -10.0f);
 	world = new b2World(gravity);
-	groundBodyDef.position.Set(0.0f, -10.0f);
+	/* groundBodyDef.position.Set(0.0f, -10.0f);
 	b2Body* groundBody = world->CreateBody(&groundBodyDef);
 	groundBox.SetAsBox(50.0f, 10.0f);
 	groundBody->CreateFixture(&groundBox, 0.0f);
@@ -86,7 +86,10 @@ GameState::GameState(Game* game) :
 	fixtureDef.friction = 0.3f;
 	body->CreateFixture(&fixtureDef);
 	bodySFMLShape.setSize(sf::Vector2f(PPM * 1.0f * 2,PPM * 1.0f * 2));
-	bodySFMLShape.setFillColor(sf::Color(255,0,0,128));
+	bodySFMLShape.setFillColor(sf::Color(255,0,0,128));*/
+
+	csabrect1 = new CsabRect(0, 0, 32, 32, *world, true);
+	csabrect2 = new CsabRect(-100, 100, 1000, 1000, *world, false);
 }
 
 GameState::~GameState()
@@ -98,6 +101,8 @@ GameState::~GameState()
 	delete m_Terrain;
 	delete m_Player;
 	delete world;
+	delete csabrect1;
+	delete csabrect2;
 }
 
 void GameState::update(sf::Time deltaTime)
@@ -120,13 +125,17 @@ void GameState::update(sf::Time deltaTime)
 
 
 	world->Step(timeStep, velocityIterations, positionIterations);
-	b2Vec2 position = body->GetPosition();
+	/*b2Vec2 position = body->GetPosition();
 	//float angle = body->GetAngle();
-	bodySFMLShape.setPosition((position.x * PPM) - bodySFMLShape.getSize().x / 2.f, -1.f * (position.y * PPM) - bodySFMLShape.getSize().y / 2.f);
+	 bodySFMLShape.setPosition((position.x * PPM) - bodySFMLShape.getSize().x / 2.f,
+		-1.f * (position.y * PPM) - bodySFMLShape.getSize().y / 2.f);
 	//bodySFMLShape.setRotation(angle);
 	b2Vec2 groundPosition = groundBodyDef.position;
 	groundBodySFMLShape.setPosition((groundPosition.x * PPM) - groundBodySFMLShape.getSize().x / 2.f,
-		-1.f * (groundPosition.y * PPM) - groundBodySFMLShape.getSize().y / 2.f);
+		-1.f * (groundPosition.y * PPM) - groundBodySFMLShape.getSize().y / 2.f);*/
+
+	csabrect1->update();
+	csabrect2->update();
 }
 
 void GameState::handleEvent(const sf::Event& event)
@@ -160,8 +169,10 @@ void GameState::render()
 	m_Game->renderWindow.draw(*m_TileLayerNear); // layer before m_Player
 	m_Game->renderWindow.draw(m_PlayerHealthBar);
 	m_Game->renderWindow.draw(m_FrameTimeLabel); // comment out if dont want to see frame
-	m_Game->renderWindow.draw(groundBodySFMLShape);
-	m_Game->renderWindow.draw(bodySFMLShape);
+	//m_Game->renderWindow.draw(groundBodySFMLShape);
+	//m_Game->renderWindow.draw(bodySFMLShape);
+	m_Game->renderWindow.draw(*csabrect1);
+	m_Game->renderWindow.draw(*csabrect2);
 	
 	m_Game->renderWindow.display();
 }
