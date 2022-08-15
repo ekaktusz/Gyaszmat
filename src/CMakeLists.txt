@@ -18,6 +18,7 @@ else()
     set(CMAKE_CXX_COMPILER "/usr/bin/clang++")
     set(CMAKE_C_COMPILER "/usr/bin/clang")
     set(TMXLITE_LIBRARIES "${CMAKE_CURRENT_LIST_DIR}/../lib/tmxlite/libtmxlite-d.so")
+    set(BOX2D_LIBRARIES "${CMAKE_CURRENT_LIST_DIR}/../lib/box2d/libbox2d.a")
 endif()
 
 set(TMXLITE_INCLUDE_DIR "${CMAKE_CURRENT_LIST_DIR}/../include/tmxlite/")
