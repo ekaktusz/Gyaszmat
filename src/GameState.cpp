@@ -62,7 +62,7 @@ GameState::GameState(Game* game) :
 	// Init background music
 	m_MusicPlayer.chooseTrack(res::Music::LudumDare2);
 	m_MusicPlayer.play();
-	m_MusicPlayer.setVolume(100);
+	m_MusicPlayer.setVolume(0);
 	m_MusicPlayer.setLoop(true);
 
 	//FUN
@@ -89,7 +89,7 @@ GameState::GameState(Game* game) :
 	bodySFMLShape.setFillColor(sf::Color(255,0,0,128));*/
 
 	csabrect1 = new CsabRect(0, 0, 32, 32, *world, true);
-	csabrect2 = new CsabRect(-100, 100, 1000, 1000, *world, false);
+	csabrect2 = new CsabRect(-100, 32*4, 1000, 10, *world, false);
 }
 
 GameState::~GameState()

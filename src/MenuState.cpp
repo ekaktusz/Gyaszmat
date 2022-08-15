@@ -35,6 +35,7 @@ MenuState::MenuState(Game* game) : State(game)
 
 	m_MusicPlayer.chooseTrack(res::Music::LudumDare1);
 	m_MusicPlayer.setLoop(true);
+	m_MusicPlayer.setVolume(0);
 }
 
 void MenuState::update(sf::Time deltaTime)

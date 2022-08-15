@@ -31,6 +31,7 @@ void SoundPlayer::play(res::Sound soundId, sf::Vector2f position)
 	sound.setPosition(position.x, position.y, 0.f);
 	sound.setAttenuation(attenuation);
 	sound.setMinDistance(minDistance3d);
+	sound.setVolume(0); //DEBUG
 
 	sound.play();
 }
