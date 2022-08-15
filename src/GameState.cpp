@@ -135,7 +135,7 @@ void GameState::update(sf::Time deltaTime)
 		-1.f * (groundPosition.y * PPM) - groundBodySFMLShape.getSize().y / 2.f);*/
 
 	csabrect1->update();
-	csabrect2->update();
+	//csabrect2->update();
 }
 
 void GameState::handleEvent(const sf::Event& event)
