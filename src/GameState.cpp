@@ -14,7 +14,6 @@ namespace {
 
 GameState::GameState(Game* game) :
 	State(game),
-	m_Player(new Player(m_SoundPlayer)),
 	m_FrameTime(0.f)
 {
 	// Init m_Map
@@ -67,29 +66,9 @@ GameState::GameState(Game* game) :
 
 	//FUN
 	b2Vec2 gravity(0.0f, -10.0f);
-	world = new b2World(gravity);
-	/* groundBodyDef.position.Set(0.0f, -10.0f);
-	b2Body* groundBody = world->CreateBody(&groundBodyDef);
-	groundBox.SetAsBox(50.0f, 10.0f);
-	groundBody->CreateFixture(&groundBox, 0.0f);
-	groundBodySFMLShape.setSize(sf::Vector2f(PPM * 50.0f * 2, PPM * 10.0f * 2));
-	groundBodySFMLShape.setFillColor(sf::Color(0,255,0,128));
+	m_World = new b2World(gravity);
 
-	bodyDef.type = b2_dynamicBody;
-	bodyDef.position.Set(0.0f, 4.0f);
-	body = world->CreateBody(&bodyDef);
-	body->SetFixedRotation(true);
-	dynamicBox.SetAsBox(1.0f, 1.0f);
-	b2FixtureDef fixtureDef;
-	fixtureDef.shape = &dynamicBox;
-	fixtureDef.density = 1.0f;
-	fixtureDef.friction = 0.3f;
-	body->CreateFixture(&fixtureDef);
-	bodySFMLShape.setSize(sf::Vector2f(PPM * 1.0f * 2,PPM * 1.0f * 2));
-	bodySFMLShape.setFillColor(sf::Color(255,0,0,128));*/
-
-	csabrect1 = new CsabRect(0, 0, 32, 32, *world, true);
-	csabrect2 = new CsabRect(-100, 32*4, 1000, 10, *world, false);
+	m_Player = new Player(m_SoundPlayer, m_World);
 }
 
 GameState::~GameState()
@@ -100,9 +79,7 @@ GameState::~GameState()
 	delete m_LadderLayer;
 	delete m_Terrain;
 	delete m_Player;
-	delete world;
-	delete csabrect1;
-	delete csabrect2;
+	delete m_World;
 }
 
 void GameState::update(sf::Time deltaTime)
@@ -124,7 +101,7 @@ void GameState::update(sf::Time deltaTime)
 	this->m_ParallaxBackground.update(cameraPosition);
 
 
-	world->Step(timeStep, velocityIterations, positionIterations);
+	m_World->Step(timeStep, velocityIterations, positionIterations);
 	/*b2Vec2 position = body->GetPosition();
 	//float angle = body->GetAngle();
 	 bodySFMLShape.setPosition((position.x * PPM) - bodySFMLShape.getSize().x / 2.f,
@@ -134,8 +111,6 @@ void GameState::update(sf::Time deltaTime)
 	groundBodySFMLShape.setPosition((groundPosition.x * PPM) - groundBodySFMLShape.getSize().x / 2.f,
 		-1.f * (groundPosition.y * PPM) - groundBodySFMLShape.getSize().y / 2.f);*/
 
-	csabrect1->update();
-	//csabrect2->update();
 }
 
 void GameState::handleEvent(const sf::Event& event)
@@ -162,6 +137,7 @@ void GameState::render()
 	m_FrameTime = m_Clock.restart().asSeconds();
 	m_Game->renderWindow.clear();
 	m_Game->renderWindow.setView(m_View);
+
 	m_Game->renderWindow.draw(m_ParallaxBackground);
 	m_Game->renderWindow.draw(*m_TileLayerFar); // layer behind m_Player
 	m_Game->renderWindow.draw(*m_TileLayerMiddle); // layer of m_Map
@@ -169,10 +145,6 @@ void GameState::render()
 	m_Game->renderWindow.draw(*m_TileLayerNear); // layer before m_Player
 	m_Game->renderWindow.draw(m_PlayerHealthBar);
 	m_Game->renderWindow.draw(m_FrameTimeLabel); // comment out if dont want to see frame
-	//m_Game->renderWindow.draw(groundBodySFMLShape);
-	//m_Game->renderWindow.draw(bodySFMLShape);
-	m_Game->renderWindow.draw(*csabrect1);
-	m_Game->renderWindow.draw(*csabrect2);
 	
 	m_Game->renderWindow.display();
 }

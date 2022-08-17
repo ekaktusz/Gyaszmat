@@ -53,22 +53,11 @@ private:
 
 
 	//FUN
-	b2World* world;
-	b2BodyDef groundBodyDef;
-	b2Body* groundBody;
-	sf::RectangleShape groundBodySFMLShape;
-	b2PolygonShape groundBox;
-
-	b2BodyDef bodyDef;
-	b2Body* body;
-	sf::RectangleShape bodySFMLShape;
-	b2PolygonShape dynamicBox;
+	b2World* m_World;
+	
 
 	float timeStep = 1.0f / 60.0f;
 	int32 velocityIterations = 8;
 	int32 positionIterations = 3;
-
-	CsabRect* csabrect1;
-	CsabRect* csabrect2;
 
 };

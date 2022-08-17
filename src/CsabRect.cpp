@@ -32,7 +32,6 @@ void CsabRect::draw(sf::RenderTarget& target, sf::RenderStates states) const
 
 void CsabRect::update()
 {
-	
 	float x = body->GetPosition().x * PPM;
 	float y = -body->GetPosition().y * PPM;
 	//x = x - rectangleShape.getSize().x / 2.f;

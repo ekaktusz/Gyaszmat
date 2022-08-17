@@ -17,7 +17,7 @@ namespace DefaultPlayerAttributes
 }
 
 
-Player::Player(SoundPlayer& soundPlayer) :
+Player::Player(SoundPlayer& soundPlayer, b2World* world) :
 	m_Sprite(),
 	m_SoundPlayer(soundPlayer),
 	m_AnimationComponent(m_Sprite)
@@ -40,6 +40,12 @@ Player::Player(SoundPlayer& soundPlayer) :
 		m_Sprite.getGlobalBounds().width - 34,
 		m_Sprite.getGlobalBounds().height - 12
 	);
+
+	m_RigidBody = RigidBody(0,
+		0,
+		m_Sprite.getGlobalBounds().width - 34,
+		m_Sprite.getGlobalBounds().height - 12,
+		world);
 
 	sf::Vector2f hitboxOffSet = sf::Vector2f(17, 12);
 	m_Hitbox = Hitbox(m_Sprite.getPosition(), hitboxSize, hitboxOffSet);
@@ -70,6 +76,10 @@ Player::Player(SoundPlayer& soundPlayer) :
 
 	m_PossibleClimbingDirection = PlayerPossibleClimbingDir::NONE;
 	m_ActualClimbingState = PlayerActualClimbingState::NONE;
+
+	m_RigidBodyRectangleShape = sf::RectangleShape(sf::Vector2f(m_Sprite.getGlobalBounds().width - 34, m_Sprite.getGlobalBounds().height - 12));
+	m_RigidBodyRectangleShape.setPosition(m_RigidBody.getPosition());
+	m_RigidBodyRectangleShape.setFillColor(sf::Color(0, 255, 0, 128));
 }
 
 Player::~Player()
@@ -90,6 +100,7 @@ void Player::draw(sf::RenderTarget& target, sf::RenderStates states) const
 	target.draw(m_Sprite);
 	// Uncomment the following row to draw the player's m_Hitbox:
 	target.draw(this->m_Hitbox);
+	target.draw(m_RigidBodyRectangleShape);
 }
 
 void Player::update()
@@ -98,6 +109,8 @@ void Player::update()
 	updateSound();
 	updatePhysics();
 	updateHitbox();
+
+	m_RigidBodyRectangleShape.setPosition(m_RigidBody.getPosition());
 }
 
 void Player::handleKeyboardInput(sf::Event event)
@@ -112,6 +125,7 @@ void Player::handleKeyboardInput(sf::Event event)
 				m_SoundPlayer.play(res::Sound::Jump1);
 				m_NumberOfJumps--;
 				m_PressedJump = true;
+				m_RigidBody.getBody()->ApplyForce(b2Vec2(), b2Vec2(), true);
 			}
 
 			// if on ladder
@@ -129,8 +143,8 @@ void Player::handleKeyboardInput(sf::Event event)
 		{
 			if (m_PossibleClimbingDirection == PlayerPossibleClimbingDir::BOTH || m_PossibleClimbingDirection == PlayerPossibleClimbingDir::DOWN)
 			{
-				this->m_ActualClimbingState = PlayerActualClimbingState::CLIMBINGDOWN;
-				this->setVelocity(sf::Vector2f(0.f, 3.f));
+				m_ActualClimbingState = PlayerActualClimbingState::CLIMBINGDOWN;
+				setVelocity(sf::Vector2f(0.f, 3.f));
 			}
 		}
 

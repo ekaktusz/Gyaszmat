@@ -2,6 +2,7 @@
 
 #include "Hitbox.h"
 #include "AnimationComponent.h"
+#include "RigidBody.h"
 
 class SoundPlayer;
 
@@ -32,7 +33,7 @@ enum class PlayerActualClimbingState
 class Player : public sf::Drawable
 {
 public:
-	Player(SoundPlayer& soundPlayer);
+	Player(SoundPlayer& soundPlayer, b2World* world);
 	~Player();
 
 	virtual void draw(sf::RenderTarget& target, sf::RenderStates states) const override;
@@ -81,6 +82,9 @@ private:
 
 	// Hitbox
 	Hitbox m_Hitbox;
+	RigidBody m_RigidBody;
+
+	sf::RectangleShape m_RigidBodyRectangleShape;
 
 	// Render, animation
 	sf::Sprite m_Sprite;
