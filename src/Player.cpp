@@ -41,11 +41,13 @@ Player::Player(SoundPlayer& soundPlayer, b2World* world) :
 		m_Sprite.getGlobalBounds().height - 12
 	);
 
-	m_RigidBody = RigidBody(0,
-		0,
+	m_RigidBody = RigidBody(17,
+		12,
 		m_Sprite.getGlobalBounds().width - 34,
 		m_Sprite.getGlobalBounds().height - 12,
 		world);
+
+	m_RigidBody.getBody()->SetGravityScale(3);
 
 	sf::Vector2f hitboxOffSet = sf::Vector2f(17, 12);
 	m_Hitbox = Hitbox(m_Sprite.getPosition(), hitboxSize, hitboxOffSet);
@@ -76,10 +78,6 @@ Player::Player(SoundPlayer& soundPlayer, b2World* world) :
 
 	m_PossibleClimbingDirection = PlayerPossibleClimbingDir::NONE;
 	m_ActualClimbingState = PlayerActualClimbingState::NONE;
-
-	m_RigidBodyRectangleShape = sf::RectangleShape(sf::Vector2f(m_Sprite.getGlobalBounds().width - 34, m_Sprite.getGlobalBounds().height - 12));
-	m_RigidBodyRectangleShape.setPosition(m_RigidBody.getPosition());
-	m_RigidBodyRectangleShape.setFillColor(sf::Color(0, 255, 0, 128));
 }
 
 Player::~Player()
@@ -97,10 +95,10 @@ unsigned int Player::getMaxHealth() const
 
 void Player::draw(sf::RenderTarget& target, sf::RenderStates states) const
 {
-	target.draw(m_Sprite);
+	//target.draw(m_Sprite);
 	// Uncomment the following row to draw the player's m_Hitbox:
-	target.draw(this->m_Hitbox);
-	target.draw(m_RigidBodyRectangleShape);
+	//target.draw(this->m_Hitbox);
+	target.draw(m_RigidBody);
 }
 
 void Player::update()
@@ -110,7 +108,7 @@ void Player::update()
 	updatePhysics();
 	updateHitbox();
 
-	m_RigidBodyRectangleShape.setPosition(m_RigidBody.getPosition());
+	m_RigidBody.update();
 }
 
 void Player::handleKeyboardInput(sf::Event event)
@@ -125,7 +123,7 @@ void Player::handleKeyboardInput(sf::Event event)
 				m_SoundPlayer.play(res::Sound::Jump1);
 				m_NumberOfJumps--;
 				m_PressedJump = true;
-				m_RigidBody.getBody()->ApplyForce(b2Vec2(), b2Vec2(), true);
+				m_RigidBody.getBody()->SetLinearVelocity(b2Vec2(0, 33));
 			}
 
 			// if on ladder
@@ -245,9 +243,16 @@ void Player::updatePhysics()
 	float deltaTime = 1.f;
 	// Movement
 	if (m_IsMovingLeft)
+	{
 		m_Velocity.x += -1.f * m_Acceleration * deltaTime;
+		//m_RigidBody.getBody()->ApplyLinearImpulseToCenter(b2Vec2(-8,0), true);
+		//b2Vec2 vel = m_RigidBody.getBody()->GetLinearVelocity();
+	}
 	if (m_IsMovingRight)
+	{
 		m_Velocity.x += 1.f * m_Acceleration * deltaTime;
+		//m_RigidBody.getBody()->ApplyLinearImpulseToCenter(b2Vec2(5,0), true);
+	}
 	if (m_PressedJump)
 	{
 		m_Velocity.y = m_JumpSpeed;
@@ -286,8 +291,11 @@ void Player::updatePhysics()
 	if (std::abs(m_Velocity.y) > m_MaxVelocity.y)
 		m_Velocity.y = m_MaxVelocity.y * ((m_Velocity.y < 0.f) ? -1.f : 1.f); // based on directuon
 
-
+	//m_RigidBody.getBody()->SetLinearVelocity(b2Vec2(m_Velocity.x * deltaTime * m_MovementModifier / RigidBody::PPM, m_Velocity.y * deltaTime * m_MovementModifier / RigidBody::PPM));
+	//m_RigidBody.getBody()->SetLinearVelocity(b2Vec2(m_Velocity.x * deltaTime, m_Velocity.y * deltaTime));
+	m_RigidBody.getBody()->SetLinearVelocity(b2Vec2(m_Velocity.x * 1.955, m_RigidBody.getBody()->GetLinearVelocity().y));
 	m_Sprite.move(m_Velocity * deltaTime * m_MovementModifier);
+	//m_Sprite.setPosition(m_RigidBody.getPosition());
 }
 
 void Player::stopFalling()

@@ -6,7 +6,6 @@
 #include "ParallaxBackground.h"
 #include "MusicPlayer.h"
 #include "SoundPlayer.h"
-#include "CsabRect.h"
 
 class Player;
 class TileLayer;

@@ -84,8 +84,6 @@ private:
 	Hitbox m_Hitbox;
 	RigidBody m_RigidBody;
 
-	sf::RectangleShape m_RigidBodyRectangleShape;
-
 	// Render, animation
 	sf::Sprite m_Sprite;
 	AnimationComponent<PlayerAnimationState> m_AnimationComponent;

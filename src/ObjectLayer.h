@@ -9,6 +9,6 @@ public:
 	ObjectLayer(const tmx::Map& map, MapLayerNames::ObjectLayerName name);
 	const std::vector<sf::FloatRect>& getObjectBounds() const;
 
-private:
+protected:
 	std::vector<sf::FloatRect> m_ObjectBounds;
 };

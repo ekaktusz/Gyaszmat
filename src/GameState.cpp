@@ -16,13 +16,19 @@ GameState::GameState(Game* game) :
 	State(game),
 	m_FrameTime(0.f)
 {
+	//FUN
+	b2Vec2 gravity(0.0f, -40.0f);
+	m_World = new b2World(gravity);
+
+	m_Player = new Player(m_SoundPlayer, m_World);
+
 	// Init m_Map
 	m_Map = &ResourceManager::getInstance().getMap(res::Map::TestMap);
 	m_TileLayerFar = new TileLayer(*m_Map, MapLayerNames::TileLayerName::BackLayer);
 	m_TileLayerMiddle = new TileLayer(*m_Map, MapLayerNames::TileLayerName::MidLayer);
 	m_TileLayerNear = new TileLayer(*m_Map, MapLayerNames::TileLayerName::FrontLayer);
 	m_LadderLayer = new LadderLayer(m_Map);
-	m_Terrain = new TerrainLayer(m_Map);
+	m_Terrain = new TerrainLayer(m_Map, m_World);
 	m_MapSize = m_Map->getBounds();
 
 	m_View =
@@ -63,12 +69,6 @@ GameState::GameState(Game* game) :
 	m_MusicPlayer.play();
 	m_MusicPlayer.setVolume(0);
 	m_MusicPlayer.setLoop(true);
-
-	//FUN
-	b2Vec2 gravity(0.0f, -10.0f);
-	m_World = new b2World(gravity);
-
-	m_Player = new Player(m_SoundPlayer, m_World);
 }
 
 GameState::~GameState()
@@ -100,17 +100,7 @@ void GameState::update(sf::Time deltaTime)
 	m_FrameTimeLabel.getText().setString(std::to_string(m_FrameTime));
 	this->m_ParallaxBackground.update(cameraPosition);
 
-
 	m_World->Step(timeStep, velocityIterations, positionIterations);
-	/*b2Vec2 position = body->GetPosition();
-	//float angle = body->GetAngle();
-	 bodySFMLShape.setPosition((position.x * PPM) - bodySFMLShape.getSize().x / 2.f,
-		-1.f * (position.y * PPM) - bodySFMLShape.getSize().y / 2.f);
-	//bodySFMLShape.setRotation(angle);
-	b2Vec2 groundPosition = groundBodyDef.position;
-	groundBodySFMLShape.setPosition((groundPosition.x * PPM) - groundBodySFMLShape.getSize().x / 2.f,
-		-1.f * (groundPosition.y * PPM) - groundBodySFMLShape.getSize().y / 2.f);*/
-
 }
 
 void GameState::handleEvent(const sf::Event& event)
@@ -145,6 +135,7 @@ void GameState::render()
 	m_Game->renderWindow.draw(*m_TileLayerNear); // layer before m_Player
 	m_Game->renderWindow.draw(m_PlayerHealthBar);
 	m_Game->renderWindow.draw(m_FrameTimeLabel); // comment out if dont want to see frame
+	m_Game->renderWindow.draw(*m_Terrain);
 	
 	m_Game->renderWindow.display();
 }
