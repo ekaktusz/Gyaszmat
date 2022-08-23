@@ -10,17 +10,25 @@ public:
 	RigidBody();
 	RigidBody(float x, float y, float sx, float sy, b2World* world, bool dynamic = true); // dynamic defines wether gravity and other forces will apply or not
 
-	sf::Vector2f getPosition(); // returns the sfml coordinates
-	const sf::Vector2f& getSize(); // returns the sfml coordinates
+	sf::Vector2f getPosition() const; // returns the sfml coordinates
+	sf::Vector2f getCenterPosition() const;
+	const sf::Vector2f& getSize() const; // returns the sfml coordinates
+	void setDampening(float dampening)
+	{
+		m_Dampening = dampening;
+	}
 
 	void update(); // Only required for updating the drawable, not must to implement
 
-	b2Body* getBody() // It's only for now
+	b2Body* getBody() const // It's only for now
 	{
 		return m_Body;
 	};
 
 private:
+	// Inherited via Drawable
+	virtual void draw(sf::RenderTarget& target, sf::RenderStates states) const override;
+
 	b2Body* m_Body; // Abstract body, physical thing. No need for delete, as the world which is attached to will delete it.
 	b2BodyDef m_BodyDef; // A body definition holds all the data needed to construct a rigid body. 
 	b2PolygonShape m_Shape; // Shape of the body, will be attached to a body with a fixture. Later as we progress we should consider other shapes then rectangle.
@@ -28,8 +36,8 @@ private:
 	sf::RectangleShape m_RigidBodyRectangleShape; // Only for debugging purposes (draw it)
 
 	sf::Vector2f m_Size; // Maybe get from b2 somehow?
+	float m_Dampening = 1.f;
 	
-	// Inherited via Drawable
-	virtual void draw(sf::RenderTarget& target, sf::RenderStates states) const override;
+	
 	
 };

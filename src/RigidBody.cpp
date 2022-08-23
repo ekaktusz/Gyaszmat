@@ -25,24 +25,35 @@ RigidBody::RigidBody(float x, float y, float sx, float sy, b2World* world, bool 
 	m_Body->SetFixedRotation(true);
 }
 
-sf::Vector2f RigidBody::getPosition()
+sf::Vector2f RigidBody::getPosition() const
 {
 	float x = m_Body->GetPosition().x * PPM;
 	float y = -m_Body->GetPosition().y * PPM;
 	return sf::Vector2f(x - m_RigidBodyRectangleShape.getSize().x / 2, y - m_RigidBodyRectangleShape.getSize().y / 2);
 }
 
-const sf::Vector2f& RigidBody::getSize()
+sf::Vector2f RigidBody::getCenterPosition() const
+{
+	float x = m_Body->GetPosition().x * PPM;
+	float y = -m_Body->GetPosition().y * PPM;
+	return sf::Vector2f(x, y);
+}
+
+const sf::Vector2f& RigidBody::getSize() const
 {
 	return m_Size;
 }
 
 void RigidBody::update()
 {
+	b2Vec2 vel = m_Body->GetLinearVelocity();
+	float newX = vel.x * m_Dampening;
+	vel.x = newX;
+	m_Body->SetLinearVelocity(vel);
 	m_RigidBodyRectangleShape.setPosition(getPosition());
 }
 
 void RigidBody::draw(sf::RenderTarget& target, sf::RenderStates states) const
 {
-	target.draw(m_RigidBodyRectangleShape);
+	//target.draw(m_RigidBodyRectangleShape);
 }

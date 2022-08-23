@@ -95,9 +95,9 @@ unsigned int Player::getMaxHealth() const
 
 void Player::draw(sf::RenderTarget& target, sf::RenderStates states) const
 {
-	//target.draw(m_Sprite);
+	target.draw(m_Sprite);
 	// Uncomment the following row to draw the player's m_Hitbox:
-	//target.draw(this->m_Hitbox);
+	target.draw(this->m_Hitbox);
 	target.draw(m_RigidBody);
 }
 
@@ -182,13 +182,13 @@ void Player::updateAnimation()
 	PlayerAnimationState prevState = m_AnimationState;
 
 	// Choose the correct animation
-	if (m_Velocity.y != 0 )
+	if (m_RigidBody.getBody()->GetLinearVelocity().y != 0 )
 	{
 		m_AnimationState = m_CollisionWithLadder ? PlayerAnimationState::Climbing : PlayerAnimationState::Jumping;
 	}
 	else
 	{
-		if (m_Velocity.x != 0)
+		if (m_RigidBody.getBody()->GetLinearVelocity().x != 0)
 		{
 			m_AnimationState = PlayerAnimationState::Running;
 		}
@@ -206,12 +206,12 @@ void Player::updateAnimation()
 	}
 
 	// This is for flipping the image to the right direction
-	if (m_Velocity.x > 0)
+	if (m_RigidBody.getBody()->GetLinearVelocity().x > 0)
 	{
 		m_Sprite.setScale(2, 2);
 		m_Sprite.setOrigin(0.f, 0.f);
 	}
-	else if (this->m_Velocity.x < 0)
+	else if (m_RigidBody.getBody()->GetLinearVelocity().x < 0)
 	{
 		m_Sprite.setScale(-2, 2);
 		m_Sprite.setOrigin(m_Sprite.getGlobalBounds().width / 2.f, 0);
@@ -240,18 +240,20 @@ void Player::updateSound()
 
 void Player::updatePhysics()
 {
-	float deltaTime = 1.f;
+	m_RigidBody.setDampening(drag);
+
 	// Movement
 	if (m_IsMovingLeft)
 	{
 		m_Velocity.x += -1.f * m_Acceleration * deltaTime;
-		//m_RigidBody.getBody()->ApplyLinearImpulseToCenter(b2Vec2(-8,0), true);
+		//m_RigidBody.getBody()->ApplyLinearImpulseToCenter(b2Vec2(-,0), true);
+		m_RigidBody.getBody()->ApplyLinearImpulseToCenter(b2Vec2(-s_x,0), true);
 		//b2Vec2 vel = m_RigidBody.getBody()->GetLinearVelocity();
 	}
 	if (m_IsMovingRight)
 	{
 		m_Velocity.x += 1.f * m_Acceleration * deltaTime;
-		//m_RigidBody.getBody()->ApplyLinearImpulseToCenter(b2Vec2(5,0), true);
+		m_RigidBody.getBody()->ApplyLinearImpulseToCenter(b2Vec2(s_x,0), true);
 	}
 	if (m_PressedJump)
 	{
@@ -276,7 +278,10 @@ void Player::updatePhysics()
 
 	// Apply bigger drag in air TODO: better, what happens if falling?
 	if (m_NumberOfJumps < 2)
+	{
+		m_RigidBody.setDampening(drag*drag*drag);
 		m_Velocity.x *= (1 - m_Drag * deltaTime);
+	}
 
 	// Min speed is neccessary cause otherwise it will go slower and slower but never gonna actually stop (drag)
 	// Set min speed in the x dimension
@@ -291,10 +296,22 @@ void Player::updatePhysics()
 	if (std::abs(m_Velocity.y) > m_MaxVelocity.y)
 		m_Velocity.y = m_MaxVelocity.y * ((m_Velocity.y < 0.f) ? -1.f : 1.f); // based on directuon
 
+	
+	float vel_x = std::abs(m_RigidBody.getBody()->GetLinearVelocity().x);
+	if (vel_x > max_x)
+	{
+		float x = max_x;
+		if (m_RigidBody.getBody()->GetLinearVelocity().x < 0)
+			x = -x;
+		float y = m_RigidBody.getBody()->GetLinearVelocity().y;
+		m_RigidBody.getBody()->SetLinearVelocity(b2Vec2(x, y));
+	}
+
 	//m_RigidBody.getBody()->SetLinearVelocity(b2Vec2(m_Velocity.x * deltaTime * m_MovementModifier / RigidBody::PPM, m_Velocity.y * deltaTime * m_MovementModifier / RigidBody::PPM));
 	//m_RigidBody.getBody()->SetLinearVelocity(b2Vec2(m_Velocity.x * deltaTime, m_Velocity.y * deltaTime));
-	m_RigidBody.getBody()->SetLinearVelocity(b2Vec2(m_Velocity.x * 1.955, m_RigidBody.getBody()->GetLinearVelocity().y));
-	m_Sprite.move(m_Velocity * deltaTime * m_MovementModifier);
+	//m_RigidBody.getBody()->SetLinearVelocity(b2Vec2(m_Velocity.x * 1.955, m_RigidBody.getBody()->GetLinearVelocity().y));
+	//m_Sprite.move(m_Velocity * deltaTime * m_MovementModifier);
+	m_Sprite.setPosition(m_RigidBody.getPosition() - sf::Vector2f(17, 12));
 	//m_Sprite.setPosition(m_RigidBody.getPosition());
 }
 
@@ -321,8 +338,11 @@ const Hitbox& Player::getHitbox() const
 
 const sf::Vector2f Player::getCenterPosition() const
 {
-	float x = m_Hitbox.getGlobalBounds().left + m_Hitbox.getGlobalBounds().width / 2.f;
-	float y = m_Hitbox.getGlobalBounds().top + m_Hitbox.getGlobalBounds().height / 2.f;
+	//float x = m_Hitbox.getGlobalBounds().left + m_Hitbox.getGlobalBounds().width / 2.f;
+	//float y = m_Hitbox.getGlobalBounds().top + m_Hitbox.getGlobalBounds().height / 2.f;
+	//HMMM
+	float x = m_RigidBody.getCenterPosition().x;
+	float y = m_RigidBody.getCenterPosition().y;
 	return sf::Vector2f(x, y);
 }
 

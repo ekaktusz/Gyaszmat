@@ -97,7 +97,7 @@ void GameState::update(sf::Time deltaTime)
 	m_FrameTimeLabel.getText().setPosition(cameraPosition);
 	
 	// Change to 1.f / this->m_FrameTime to show FPS
-	m_FrameTimeLabel.getText().setString(std::to_string(m_FrameTime));
+	m_FrameTimeLabel.getText().setString(std::to_string(1.f / m_FrameTime));
 	this->m_ParallaxBackground.update(cameraPosition);
 
 	m_World->Step(timeStep, velocityIterations, positionIterations);
