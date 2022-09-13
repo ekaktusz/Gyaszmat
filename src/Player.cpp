@@ -132,6 +132,7 @@ void Player::handleKeyboardInput(sf::Event event)
 				if (m_PossibleClimbingDirection == PlayerPossibleClimbingDir::BOTH || m_PossibleClimbingDirection == PlayerPossibleClimbingDir::UP)
 				{
 					m_ActualClimbingState = PlayerActualClimbingState::CLIMBINGUP;
+					//m_RigidBody.getBody()->SetLinearVelocity(b2Vec2(0, -4));
 					setVelocity(sf::Vector2f(0.f, -3.f));
 				}
 			}
@@ -142,6 +143,7 @@ void Player::handleKeyboardInput(sf::Event event)
 			if (m_PossibleClimbingDirection == PlayerPossibleClimbingDir::BOTH || m_PossibleClimbingDirection == PlayerPossibleClimbingDir::DOWN)
 			{
 				m_ActualClimbingState = PlayerActualClimbingState::CLIMBINGDOWN;
+				//m_RigidBody.getBody()->SetLinearVelocity(b2Vec2(0, 4));
 				setVelocity(sf::Vector2f(0.f, 3.f));
 			}
 		}
@@ -240,6 +242,11 @@ void Player::updateSound()
 
 void Player::updatePhysics()
 {
+	float max_x = 17.35;
+	float s_x = 5.5;
+	float deltaTime = 1.f;
+	float drag = 0.9;
+
 	m_RigidBody.setDampening(drag);
 
 	// Movement
@@ -257,6 +264,7 @@ void Player::updatePhysics()
 	}
 	if (m_PressedJump)
 	{
+		//m_RigidBody.getBody()->SetLinearVelocity(b2Vec2(0, 33));
 		m_Velocity.y = m_JumpSpeed;
 		m_PressedJump = false;
 	}
