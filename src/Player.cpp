@@ -170,7 +170,7 @@ void Player::updateAnimation()
 	PlayerAnimationState prevState = m_AnimationState;
 
 	// Choose the correct animation
-	if (m_Velocity.y != 0 )
+	if (m_Velocity.y != 0)
 	{
 		m_AnimationState = m_CollisionWithLadder ? PlayerAnimationState::Climbing : PlayerAnimationState::Jumping;
 	}
