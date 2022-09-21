@@ -70,6 +70,10 @@ Player::Player(SoundPlayer& soundPlayer) :
 
 	m_PossibleClimbingDirection = PlayerPossibleClimbingDir::NONE;
 	m_ActualClimbingState = PlayerActualClimbingState::NONE;
+
+	// Light
+	light.setRange(150);
+	edges.emplace_back(sf::Vector2f(200.f, 100.f), sf::Vector2f(200.f, 300.f));
 }
 
 Player::~Player()
@@ -87,6 +91,7 @@ unsigned int Player::getMaxHealth() const
 
 void Player::draw(sf::RenderTarget& target, sf::RenderStates states) const
 {
+	target.draw(light);
 	target.draw(m_Sprite);
 	// Uncomment the following row to draw the player's m_Hitbox:
 	target.draw(this->m_Hitbox);
@@ -98,6 +103,9 @@ void Player::update()
 	updateSound();
 	updatePhysics();
 	updateHitbox();
+
+	light.setPosition(getCenterPosition());
+	light.castLight(edges.begin(), edges.end());
 }
 
 void Player::handleKeyboardInput(sf::Event event)

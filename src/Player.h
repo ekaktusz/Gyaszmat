@@ -109,4 +109,8 @@ private:
 	bool m_Resolved;
 	PlayerPossibleClimbingDir m_PossibleClimbingDirection;
 	PlayerActualClimbingState m_ActualClimbingState;
+
+	// Light
+	candle::RadialLight light;
+	candle::EdgeVector edges;
 };
