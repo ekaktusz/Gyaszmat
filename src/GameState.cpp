@@ -56,6 +56,13 @@ GameState::GameState(Game* game) : State(game), m_Player(new Player(m_SoundPlaye
 	m_MusicPlayer.play();
 	m_MusicPlayer.setVolume(100);
 	m_MusicPlayer.setLoop(true);
+
+	// Light
+	light.setRange(800);
+	light.setIntensity(1);
+	edges.emplace_back(sf::Vector2f(200.f, 100.f), sf::Vector2f(200.f, 300.f));
+	fog.setAreaColor(sf::Color::Black);
+	fog.setAreaOpacity(.5);
 }
 
 GameState::~GameState()
@@ -85,6 +92,16 @@ void GameState::update(sf::Time deltaTime)
 	// Change to 1.f / this->m_FrameTime to show FPS
 	m_FrameTimeLabel.getText().setString(std::to_string(m_FrameTime));
 	this->m_ParallaxBackground.update(cameraPosition);
+
+	fog.setPosition(cameraPosition);
+	light.setPosition(m_Player->getCenterPosition());
+	//light.setPosition(m_View.getCenter());
+	
+	fog.clear();
+
+	light.castLight(edges.begin(), edges.end());
+	fog.draw(light);
+	fog.display();
 }
 
 void GameState::handleEvent(const sf::Event& event)
@@ -103,7 +120,7 @@ void GameState::handleEvent(const sf::Event& event)
 			m_Game->pushState(new PauseState(this->m_Game));
 		}
 	}
-	this->m_Player->handleKeyboardInput(event);
+	this->m_Player->handleEvent(event);
 }
 
 void GameState::render()
@@ -116,6 +133,7 @@ void GameState::render()
 	m_Game->renderWindow.draw(*m_TileLayerMiddle); // layer of m_Map
 	m_Game->renderWindow.draw(*m_Player);
 	m_Game->renderWindow.draw(*m_TileLayerNear); // layer before m_Player
+	m_Game->renderWindow.draw(fog);
 	m_Game->renderWindow.draw(m_PlayerHealthBar);
 	m_Game->renderWindow.draw(m_FrameTimeLabel); // comment out if dont want to see frame
 	m_Game->renderWindow.display();

@@ -49,4 +49,11 @@ private:
 
 	MusicPlayer m_MusicPlayer;
 	SoundPlayer m_SoundPlayer;
+
+	// Light
+	candle::RadialLight light;
+	candle::EdgeVector edges;
+	candle::LightingArea fog = {
+		candle::LightingArea::FOG, sf::Vector2f(0.f, 0.f), sf::Vector2f(1000, 800)
+	};
 };
