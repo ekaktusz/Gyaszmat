@@ -9,7 +9,7 @@ class Player;
 class LadderLayer : public Collidable
 {
 public:
-	LadderLayer(const tmx::Map* map);
+	LadderLayer(const tmx::Map& map);
 	~LadderLayer();
 
 	virtual void updateCollision(Player& player) override;

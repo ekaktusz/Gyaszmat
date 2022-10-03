@@ -15,8 +15,8 @@ GameState::GameState(Game* game) : State(game), m_Player(new Player(m_SoundPlaye
 	m_TileLayerFar = new TileLayer(*m_Map, MapLayerNames::TileLayerName::BackLayer);
 	m_TileLayerMiddle = new TileLayer(*m_Map, MapLayerNames::TileLayerName::MidLayer);
 	m_TileLayerNear = new TileLayer(*m_Map, MapLayerNames::TileLayerName::FrontLayer);
-	m_LadderLayer = new LadderLayer(m_Map);
-	m_Terrain = new TerrainLayer(m_Map);
+	m_LadderLayer = new LadderLayer(*m_Map);
+	m_TerrainLayer = new TerrainLayer(*m_Map);
 	m_MapSize = m_Map->getBounds();
 
 	m_View = sf::View(sf::Vector2f(0.f, 0.f), sf::Vector2f(Game::s_WindowSizeX, Game::s_WindowSizeY));
@@ -25,7 +25,6 @@ GameState::GameState(Game* game) : State(game), m_Player(new Player(m_SoundPlaye
 	// Init healthbar
 	m_PlayerHealthBar.setHealth(100);
 	m_PlayerHealthBar.setMaxHealth(100);
-	
 
 	// Init background
 	m_ParallaxBackground.addLayer(new ParallaxLayer(
@@ -58,11 +57,10 @@ GameState::GameState(Game* game) : State(game), m_Player(new Player(m_SoundPlaye
 	m_MusicPlayer.setLoop(true);
 
 	// Light
-	light.setRange(800);
+	light.setRange(600);
 	light.setIntensity(1);
-	edges.emplace_back(sf::Vector2f(200.f, 100.f), sf::Vector2f(200.f, 300.f));
 	fog.setAreaColor(sf::Color::Black);
-	fog.setAreaOpacity(.5);
+	fog.setAreaOpacity(.9);
 }
 
 GameState::~GameState()
@@ -71,7 +69,7 @@ GameState::~GameState()
 	delete m_TileLayerMiddle;
 	delete m_TileLayerNear;
 	delete m_LadderLayer;
-	delete m_Terrain;
+	delete m_TerrainLayer;
 	delete m_Player;
 }
 
@@ -83,23 +81,25 @@ void GameState::update(sf::Time deltaTime)
 	sf::Vector2f movement = m_Player->getCenterPosition() - m_View.getCenter() - sf::Vector2f(0.f, Game::s_WindowSizeY / 8);
 	m_View.move(movement * deltaTime.asSeconds() * 10.f);
 	updateCollision();
-	m_PlayerHealthBar.update(this->m_Player->getHealth());
+	m_PlayerHealthBar.update(m_Player->getHealth());
 
-	sf::Vector2f cameraPosition(m_View.getCenter() - sf::Vector2f(Game::s_WindowSizeX / 2, Game::s_WindowSizeY / 2));
-	m_PlayerHealthBar.setPosition(cameraPosition);
-	m_FrameTimeLabel.getText().setPosition(cameraPosition);
+	m_CameraPosition = { m_View.getCenter()
+		- sf::Vector2f(Game::s_WindowSizeX / 2, Game::s_WindowSizeY / 2) };
+	m_PlayerHealthBar.setPosition(m_CameraPosition);
+	m_FrameTimeLabel.getText().setPosition(m_CameraPosition);
 	
 	// Change to 1.f / this->m_FrameTime to show FPS
 	m_FrameTimeLabel.getText().setString(std::to_string(m_FrameTime));
-	this->m_ParallaxBackground.update(cameraPosition);
+	m_ParallaxBackground.update(m_CameraPosition);
 
-	fog.setPosition(cameraPosition);
+	updateLights();
+}
+
+void GameState::updateLights()
+{
+	fog.setPosition(m_CameraPosition);
 	light.setPosition(m_Player->getCenterPosition());
-	//light.setPosition(m_View.getCenter());
-	
 	fog.clear();
-
-	light.castLight(edges.begin(), edges.end());
 	fog.draw(light);
 	fog.display();
 }
@@ -142,6 +142,6 @@ void GameState::render()
 void GameState::updateCollision()
 {
 	m_Player->setResolved(false);
-	m_Terrain->updateCollision(*m_Player);
+	m_TerrainLayer->updateCollision(*m_Player);
 	m_LadderLayer->updateCollision(*m_Player);
 }

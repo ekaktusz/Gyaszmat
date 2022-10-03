@@ -2,10 +2,10 @@
 #include "ObjectLayer.h"
 #include "Player.h"
 
-LadderLayer::LadderLayer(const tmx::Map* map) : 
-	m_BotLadderLayer(new ObjectLayer(*map, MapLayerNames::ObjectLayerName::BotLadderLayer)),
-	m_MidLadderLayer(new ObjectLayer(*map, MapLayerNames::ObjectLayerName::MidLadderLayer)),
-	m_TopLadderLayer(new ObjectLayer(*map, MapLayerNames::ObjectLayerName::TopLadderLayer))
+LadderLayer::LadderLayer(const tmx::Map& map) : 
+	m_BotLadderLayer(new ObjectLayer(map, MapLayerNames::ObjectLayerName::BotLadderLayer)),
+	m_MidLadderLayer(new ObjectLayer(map, MapLayerNames::ObjectLayerName::MidLadderLayer)),
+	m_TopLadderLayer(new ObjectLayer(map, MapLayerNames::ObjectLayerName::TopLadderLayer))
 {
 }
 
