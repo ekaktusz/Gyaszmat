@@ -37,7 +37,7 @@ public:
 
 	virtual void draw(sf::RenderTarget& target, sf::RenderStates states) const override;
 	void update();
-	void handleKeyboardInput(sf::Event event);
+	void handleEvent(sf::Event event);
 
 	unsigned int getHealth() const;
 	unsigned int getMaxHealth() const;
@@ -67,6 +67,7 @@ private:
 	void updatePhysics();
 	void updateHitbox();
 	void updateSound();
+	void updateLight();
 
 	bool isOnGround() const;
 

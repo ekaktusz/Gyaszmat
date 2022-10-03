@@ -54,6 +54,9 @@
 // spdlog
 #include <spdlog/spdlog.h>
 
+// candle
+#include <Candle/Candle.hpp>
+
 // Windows
 #ifdef _WIN32
 	#include <windows.h>

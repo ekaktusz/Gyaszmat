@@ -21,6 +21,9 @@ public:
 	// Inherited via State
 	virtual void render() override;
 	virtual void update(sf::Time deltaTime) override;
+
+	void updateLights();
+
 	virtual void handleEvent(const sf::Event& event) override;
 
 private:
@@ -30,6 +33,7 @@ private:
 	Player* m_Player;
 
 	sf::View m_View;
+	sf::Vector2f m_CameraPosition;
 
 	sf::Clock m_Clock;
 	float m_FrameTime;
@@ -40,7 +44,7 @@ private:
 	TileLayer* m_TileLayerMiddle;
 	TileLayer* m_TileLayerNear;
 	LadderLayer* m_LadderLayer;
-	TerrainLayer* m_Terrain;
+	TerrainLayer* m_TerrainLayer;
 	
 	ParallaxBackground m_ParallaxBackground;
 
@@ -49,4 +53,10 @@ private:
 
 	MusicPlayer m_MusicPlayer;
 	SoundPlayer m_SoundPlayer;
+
+	// Light
+	candle::RadialLight light;
+	candle::LightingArea fog = {
+		candle::LightingArea::FOG, sf::Vector2f(0.f, 0.f), sf::Vector2f(1000, 800)
+	};
 };

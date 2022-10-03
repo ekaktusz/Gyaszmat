@@ -87,6 +87,7 @@ unsigned int Player::getMaxHealth() const
 
 void Player::draw(sf::RenderTarget& target, sf::RenderStates states) const
 {
+	//target.draw(light);
 	target.draw(m_Sprite);
 	// Uncomment the following row to draw the player's m_Hitbox:
 	target.draw(this->m_Hitbox);
@@ -98,9 +99,10 @@ void Player::update()
 	updateSound();
 	updatePhysics();
 	updateHitbox();
+	updateLight();
 }
 
-void Player::handleKeyboardInput(sf::Event event)
+void Player::handleEvent(sf::Event event)
 {
 	if (event.type == sf::Event::KeyPressed)
 	{
@@ -170,7 +172,7 @@ void Player::updateAnimation()
 	PlayerAnimationState prevState = m_AnimationState;
 
 	// Choose the correct animation
-	if (m_Velocity.y != 0 )
+	if (m_Velocity.y != 0)
 	{
 		m_AnimationState = m_CollisionWithLadder ? PlayerAnimationState::Climbing : PlayerAnimationState::Jumping;
 	}
@@ -224,6 +226,11 @@ void Player::updateSound()
 	{
 		this->m_SoundPlayer.removeSoundsById(res::Sound::FootStepGrass);
 	}
+}
+
+void Player::updateLight()
+{
+	
 }
 
 void Player::updatePhysics()

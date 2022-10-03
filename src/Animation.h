@@ -9,6 +9,7 @@ public:
 	Animation(sf::Sprite& sprite, res::Texture texture, float timePeriod, unsigned int frameSize = 32);
 
 	void update();
+
 	void onAnimationChange();
 
 	void pause();
@@ -16,6 +17,7 @@ public:
 
 private:
 	bool getAnimationSwitch();
+	void moveToNextFrame();
 
 private:
 	sf::Sprite& m_Sprite;

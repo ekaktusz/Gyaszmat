@@ -24,17 +24,22 @@ void Animation::update()
 	m_Sprite.setTexture(m_Texture);
 	if (m_Timer.getElapsedTime().asSeconds() >= m_TimePeriod || getAnimationSwitch())
 	{
-		if (!m_Paused)
-		{
-			m_CurrentFrame.left += m_FrameSize;
-			if (m_CurrentFrame.left >= (m_FrameNumber - 1) * m_FrameSize)
-			{
-				m_CurrentFrame.left = 0;
-			}
-			m_Timer.restart();
-		}
-		m_Sprite.setTextureRect(m_CurrentFrame);
+		moveToNextFrame();
 	}
+}
+
+void Animation::moveToNextFrame()
+{
+	if (!m_Paused)
+	{
+		m_CurrentFrame.left += m_FrameSize;
+		if (m_CurrentFrame.left >= (m_FrameNumber - 1) * m_FrameSize)
+		{
+			m_CurrentFrame.left = 0;
+		}
+		m_Timer.restart();
+	}
+	m_Sprite.setTextureRect(m_CurrentFrame);
 }
 
 void Animation::onAnimationChange()
