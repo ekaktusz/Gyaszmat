@@ -17,7 +17,7 @@ MenuState::MenuState(Game* game) : State(game)
 	m_StartButton.setAlignment(Button::Alignment::Center);
 	m_StartButton.setPosition(sf::Vector2f(30, 100));
 	m_StartButton.setSize(sf::Vector2f(200, 30));
-	this->m_StartButton.setAction([&]() {
+	m_StartButton.setAction([&]() {
 		SPDLOG_INFO("Switch to GameState: Starting the game");
 		m_MusicPlayer.pause();
 		m_Game->pushState(new GameState(m_Game));

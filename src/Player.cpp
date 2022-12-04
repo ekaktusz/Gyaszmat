@@ -62,7 +62,7 @@ Player::Player(SoundPlayer& soundPlayer) :
 
 	// Health kaland
 	m_MaxHealth = 100;
-	m_Health = this->m_MaxHealth;
+	m_Health = m_MaxHealth;
 
 	// Ladder
 	m_CollisionWithLadder = false;
@@ -90,7 +90,7 @@ void Player::draw(sf::RenderTarget& target, sf::RenderStates states) const
 	//target.draw(light);
 	target.draw(m_Sprite);
 	// Uncomment the following row to draw the player's m_Hitbox:
-	target.draw(this->m_Hitbox);
+	target.draw(m_Hitbox);
 }
 
 void Player::update()
@@ -131,8 +131,8 @@ void Player::handleEvent(sf::Event event)
 		{
 			if (m_PossibleClimbingDirection == PlayerPossibleClimbingDir::BOTH || m_PossibleClimbingDirection == PlayerPossibleClimbingDir::DOWN)
 			{
-				this->m_ActualClimbingState = PlayerActualClimbingState::CLIMBINGDOWN;
-				this->setVelocity(sf::Vector2f(0.f, 3.f));
+				m_ActualClimbingState = PlayerActualClimbingState::CLIMBINGDOWN;
+				setVelocity(sf::Vector2f(0.f, 3.f));
 			}
 		}
 
@@ -160,8 +160,8 @@ void Player::handleEvent(sf::Event event)
 		}
 		else if ((event.key.code == sf::Keyboard::W || event.key.code == sf::Keyboard::S) && (m_CollisionWithLadder))
 		{
-			this->m_ActualClimbingState = PlayerActualClimbingState::CLIMBED;
-			this->setVelocity(sf::Vector2f(0.f, 0.f));
+			m_ActualClimbingState = PlayerActualClimbingState::CLIMBED;
+			setVelocity(sf::Vector2f(0.f, 0.f));
 			stopFalling();
 		}
 	}
@@ -201,7 +201,7 @@ void Player::updateAnimation()
 		m_Sprite.setScale(2, 2);
 		m_Sprite.setOrigin(0.f, 0.f);
 	}
-	else if (this->m_Velocity.x < 0)
+	else if (m_Velocity.x < 0)
 	{
 		m_Sprite.setScale(-2, 2);
 		m_Sprite.setOrigin(m_Sprite.getGlobalBounds().width / 2.f, 0);
@@ -216,15 +216,15 @@ void Player::updateSound()
 	if (m_AnimationState == PlayerAnimationState::Running)
 	{
 		
-		if (this->m_SoundTimer.getElapsedTime().asSeconds() >= 0.3)
+		if (m_SoundTimer.getElapsedTime().asSeconds() >= 0.3)
 		{	
-			this->m_SoundPlayer.play(res::Sound::FootStepGrass);
-			this->m_SoundTimer.restart();
+			m_SoundPlayer.play(res::Sound::FootStepGrass);
+			m_SoundTimer.restart();
 		}
 	}
 	else
 	{
-		this->m_SoundPlayer.removeSoundsById(res::Sound::FootStepGrass);
+		m_SoundPlayer.removeSoundsById(res::Sound::FootStepGrass);
 	}
 }
 

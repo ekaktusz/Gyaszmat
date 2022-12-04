@@ -14,11 +14,11 @@ Button::Button() // just for setting default values
 	m_Label.getText().setFillColor(sf::Color::White);
 
 	// set default size
-	this->setSize(sf::Vector2f(300, 50));
+	setSize(sf::Vector2f(300, 50));
 
 	m_Alignment = Alignment::Center;
 
-	this->setPosition(sf::Vector2f(50, 50));
+	setPosition(sf::Vector2f(50, 50));
 }
 
 void Button::draw(sf::RenderTarget& target, sf::RenderStates states) const

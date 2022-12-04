@@ -3,7 +3,7 @@
 #include "pch.h"
 #include "ResourceTypes.h"
 
-struct Animation
+class Animation
 {
 public:
 	Animation(sf::Sprite& sprite, res::Texture texture, float timePeriod, unsigned int frameSize = 32);

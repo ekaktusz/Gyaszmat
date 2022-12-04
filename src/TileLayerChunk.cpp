@@ -133,7 +133,7 @@ void TileLayer::Chunk::generateTiles(bool registerAnimation)
 
 std::vector<TileLayer::AnimationState>& TileLayer::Chunk::getActiveAnimations()
 {
-	return this->m_ActiveAnimations;
+	return m_ActiveAnimations;
 }
 
 tmx::TileLayer::Tile TileLayer::Chunk::getTile(int x, int y) const

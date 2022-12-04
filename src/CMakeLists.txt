@@ -1,4 +1,4 @@
-cmake_minimum_required(VERSION 3.16)
+cmake_minimum_required(VERSION 3.25)
 
 set(CMAKE_DEBUG_POSTFIX d)
 # it can be useful to build libs later:

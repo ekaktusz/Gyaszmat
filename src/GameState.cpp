@@ -78,7 +78,7 @@ void GameState::update(sf::Time deltaTime)
 	m_SoundPlayer.removeStoppedSounds();
 	m_MusicPlayer.play();
 	m_Player->update();
-	sf::Vector2f movement = m_Player->getCenterPosition() - m_View.getCenter() - sf::Vector2f(0.f, Game::s_WindowSizeY / 8);
+	const sf::Vector2f movement = m_Player->getCenterPosition() - m_View.getCenter() - sf::Vector2f(0.f, Game::s_WindowSizeY / 8);
 	m_View.move(movement * deltaTime.asSeconds() * 10.f);
 	updateCollision();
 	m_PlayerHealthBar.update(m_Player->getHealth());
@@ -108,7 +108,7 @@ void GameState::handleEvent(const sf::Event& event)
 {
 	if (event.type == sf::Event::Closed)
 	{
-		this->m_Game->renderWindow.close();
+		m_Game->renderWindow.close();
 	}
 	else if (event.type == sf::Event::KeyPressed)
 	{
@@ -117,10 +117,10 @@ void GameState::handleEvent(const sf::Event& event)
 			SPDLOG_INFO("Switch to PauseState...");
 			m_Player->stop();
 			m_MusicPlayer.pause();
-			m_Game->pushState(new PauseState(this->m_Game));
+			m_Game->pushState(new PauseState(m_Game));
 		}
 	}
-	this->m_Player->handleEvent(event);
+	m_Player->handleEvent(event);
 }
 
 void GameState::render()
@@ -135,7 +135,7 @@ void GameState::render()
 	m_Game->renderWindow.draw(*m_TileLayerNear); // layer before m_Player
 	m_Game->renderWindow.draw(fog);
 	m_Game->renderWindow.draw(m_PlayerHealthBar);
-	m_Game->renderWindow.draw(m_FrameTimeLabel); // comment out if dont want to see frame
+	//m_Game->renderWindow.draw(m_FrameTimeLabel); // comment out if dont want to see frame
 	m_Game->renderWindow.display();
 }
 

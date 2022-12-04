@@ -64,6 +64,6 @@ void HealthBar::setMaxHealth(unsigned int maxHealth)
 void HealthBar::alignTextToMid()
 {
 	float x = m_MaxHealthBar.getPosition().x + m_MaxHealthBar.getSize().x / 2 - m_Label.getText().getGlobalBounds().width / 2;
-	float y = this->m_MaxHealthBar.getPosition().y;
+	float y = m_MaxHealthBar.getPosition().y;
 	m_Label.getText().setPosition(x, y);
 }

@@ -7,7 +7,7 @@ PauseState::PauseState(Game* game) : State(game)
 	m_TitleLabel.getText().setFont(ResourceManager::getInstance().getFont(res::Font::Pixel));
 	m_TitleLabel.getText().setCharacterSize(50);
 	m_TitleLabel.getText().setPosition(m_Game->renderWindow.getSize().x / 2.f
-			- this->m_TitleLabel.getText().getGlobalBounds().width / 2.f,
+			- m_TitleLabel.getText().getGlobalBounds().width / 2.f,
 		20.f);
 
 	m_BackgroundTexture =
@@ -36,7 +36,7 @@ PauseState::PauseState(Game* game) : State(game)
 	m_MainMenuButton.setPosition(sf::Vector2f(m_Game->renderWindow.getSize().x / 2.f
 			- m_MainMenuButton.getGlobalBounds().width / 2.f,
 		200));
-	this->m_MainMenuButton.setAction([&]() { m_Game->returnToMain(); });
+	m_MainMenuButton.setAction([&]() { m_Game->returnToMain(); });
 }
 
 void PauseState::render()

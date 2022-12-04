@@ -9,7 +9,8 @@
       "installRoot": "${projectDir}\\..\\install",
       "cmakeCommandArgs": "",
       "buildCommandArgs": "",
-      "ctestCommandArgs": ""
+      "ctestCommandArgs": "",
+      "cmakeExecutable": "C:\\Program Files\\CMake\\bin\\cmake.exe" 
     }
   ]
 }
