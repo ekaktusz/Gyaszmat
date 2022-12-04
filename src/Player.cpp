@@ -70,6 +70,10 @@ Player::Player(SoundPlayer& soundPlayer) :
 
 	m_PossibleClimbingDirection = PlayerPossibleClimbingDir::NONE;
 	m_ActualClimbingState = PlayerActualClimbingState::NONE;
+
+
+	m_PlayerParticleEmitter =
+		ParticleEmitter(getCenterPosition().x, getCenterPosition().y, 10, 10, 1);
 }
 
 Player::~Player()

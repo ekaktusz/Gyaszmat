@@ -6,7 +6,7 @@
 	m_Intensity(intensity)
 {}
 
-void ParticleEmitter::draw(RenderTarget& target, RenderStates states) const
+void ParticleEmitter::draw(sf::RenderTarget& target, sf::RenderStates states) const
 {
 	for (const Particle& particle : m_Particles)
 	{
@@ -16,6 +16,8 @@ void ParticleEmitter::draw(RenderTarget& target, RenderStates states) const
 
 void ParticleEmitter::update()
 {
+	Particle particle(m_Position.x, m_Position.y, rand() % (10-5 + 1) + 5, 5, rand() % (10-5 + 1) + 5, sf::Color.Red, sf::Color.Red, 1);
+	m_Particles.push_back(particle);
 	for (Particle& particle : m_Particles)
 	{
 		particle.update();

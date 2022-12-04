@@ -2,14 +2,13 @@
 
 #include "pch.h"
 
-
 // For now it's only rectangles
 class Particle : public sf::Drawable
 {
 public:
 	Particle(float x, float y, float dx, float dy, int maxAge, sf::Color firstColor, sf::Color secondColor, float gravity);
 
-	void draw(RenderTarget& target, RenderStates states) const override;
+	void draw(sf::RenderTarget& target, sf::RenderStates states) const override;
 	void update();
 
 private:

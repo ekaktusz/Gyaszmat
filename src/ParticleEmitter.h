@@ -2,11 +2,13 @@
 
 #include "pch.h"
 
+#include "Particle.h"
+
 class ParticleEmitter : public sf::Drawable
 {
 public:
 	ParticleEmitter(float x, float y, float sx, float sy, float intensity);
-	void draw(RenderTarget& target, RenderStates states) const override;
+	void draw(sf::RenderTarget& target, sf::RenderStates states) const override;
 	void update();
 
 private:
