@@ -22,7 +22,7 @@ file(GLOB SOURCES
 
 add_executable(gyaszmat ${SOURCES})
 
-# TMXlite is trash, we have to look for this
+# TMXlite is trash, the vcpkg support is poopoo
 set(TMXLITE_LIBRARIES "${CMAKE_CURRENT_LIST_DIR}/vendor/tmxlite/lib/libtmxlite-s-d.lib")
 set(TMXLITE_INCLUDE_DIR "${CMAKE_CURRENT_LIST_DIR}/tmxlite/include/tmxlite/")
 set(CMAKE_MODULE_PATH ${CMAKE_MODULE_PATH} "${CMAKE_CURRENT_LIST_DIR}/vendor/tmxlite/module/")
