@@ -2,7 +2,7 @@
 
 namespace 
 {
-	const std::filesystem::path assetPath = std::filesystem::current_path().parent_path() / "assets";
+	const std::filesystem::path assetPath = std::filesystem::current_path().parent_path().parent_path() / "assets";
 	const std::filesystem::path fontPath = assetPath / "fonts";
 	const std::filesystem::path mapPath = assetPath / "maps";
 	const std::filesystem::path soundPath = assetPath / "sounds";
