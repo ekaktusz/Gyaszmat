@@ -14,29 +14,32 @@ set(CANDLE_LIB "${CMAKE_CURRENT_LIST_DIR}/vendor/candle/lib/Candle-s.lib")
 include_directories(
     "${CMAKE_CURRENT_SOURCE_DIR}/vendor/candle/include"
     "${CMAKE_CURRENT_SOURCE_DIR}/vendor/tmxlite/include"
-    "${CMAKE_CURRENT_SOURCE_DIR}/src/gui/"
-    "${CMAKE_CURRENT_SOURCE_DIR}/src/audio/"
-    "${CMAKE_CURRENT_SOURCE_DIR}/src/map/"
-    "${CMAKE_CURRENT_SOURCE_DIR}/src/parallax/"
-    "${CMAKE_CURRENT_SOURCE_DIR}/src/resource/"
-    "${CMAKE_CURRENT_SOURCE_DIR}/src/state/"
+    "${CMAKE_CURRENT_SOURCE_DIR}/src/bagla/gui/"
+    "${CMAKE_CURRENT_SOURCE_DIR}/src/bagla/audio/"
+    "${CMAKE_CURRENT_SOURCE_DIR}/src/bagla/map/"
+    "${CMAKE_CURRENT_SOURCE_DIR}/src/bagla/parallax/"
+    "${CMAKE_CURRENT_SOURCE_DIR}/src/bagla/resource/"
+    "${CMAKE_CURRENT_SOURCE_DIR}/src/bagla/state/"
+    "${CMAKE_CURRENT_SOURCE_DIR}/src/bagla/animation/"
     "${CMAKE_CURRENT_SOURCE_DIR}/src/"
 )
 
 file(GLOB SOURCES
     src/*.h
     src/*.cpp
-    src/audio/*.h
-    src/audio/*.cpp
-    src/gui/*.h
-    src/gui/*.cpp
-    src/map/*.h
-    src/map/*.cpp
-    src/resource/*.h
-    src/resource/*.cpp
-    src/parallax/*.h
-    src/parallax/*.cpp
-    src/state/*.h
+    src/bagla/audio/*.h
+    src/bagla/audio/*.cpp
+    src/bagla/gui/*.h
+    src/bagla/gui/*.cpp
+    src/bagla/map/*.h
+    src/bagla/map/*.cpp
+    src/bagla/resource/*.h
+    src/bagla/resource/*.cpp
+    src/bagla/parallax/*.h
+    src/bagla/parallax/*.cpp
+    src/bagla/state/*.h
+    src/bagla/animation/*.h
+    src/bagla/animation/*.cpp
 )
 
 add_executable(gyaszmat ${SOURCES})

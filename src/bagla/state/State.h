@@ -1,12 +1,14 @@
 #pragma once
 
-#include "Game.h"
 #include "pch.h"
+#include "Game.h"
+
 
 class State
 {
 public:
-	State(Game* game) : m_Game(game) {}
+	State(Game* game) : m_Game(game)
+	{}
 	virtual ~State() {};
 
 	virtual void render() = 0;
@@ -16,3 +18,5 @@ public:
 public:
 	Game* m_Game;
 };
+
+
