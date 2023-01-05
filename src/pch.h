@@ -57,6 +57,12 @@
 // candle
 #include <Candle/Candle.hpp>
 
+
+// Random
+#include <effolkronium/random.hpp>
+// get base random alias which is auto seeded and has static API and internal state
+using Random = effolkronium::random_static;
+
 // Windows
 #ifdef _WIN32
 	#include <windows.h>

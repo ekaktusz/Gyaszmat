@@ -14,6 +14,7 @@ set(CANDLE_LIB "${CMAKE_CURRENT_LIST_DIR}/vendor/candle/lib/Candle-s.lib")
 include_directories(
     "${CMAKE_CURRENT_SOURCE_DIR}/vendor/candle/include"
     "${CMAKE_CURRENT_SOURCE_DIR}/vendor/tmxlite/include"
+    "${CMAKE_CURRENT_SOURCE_DIR}/vendor/effolkronium/include"
     "${CMAKE_CURRENT_SOURCE_DIR}/src/bagla-engine/gui/"
     "${CMAKE_CURRENT_SOURCE_DIR}/src/bagla-engine/audio/"
     "${CMAKE_CURRENT_SOURCE_DIR}/src/bagla-engine/map/"
