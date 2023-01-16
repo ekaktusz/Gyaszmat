@@ -1,27 +1,36 @@
 # Gyaszmat
-Gyaszmat is the best game ever created in C++ using SFML.
-
+Gyaszmat is a C++ SFML platformer game with lot of love put in to it.
 
 **Roadmap:** https://trello.com/b/wMSF3RLJ/gyaszmat
 
-## Building on Windows
+## Setting up Development Environment
 
-### Setup the environment
+Note: Only Windows is regularly tested.
+
+### Windows
+#### Setup the environment
 1. Download and install Visual Studio 2022 with cmake
 2. Also download and install the latest cmake seperately
 3. Open project in Visual Studio, it should parse everything.
 
-### Build
+#### Build
 Just press the build all button in Visual Studio.
 
-### Execution
+#### Execution
 Just press the play button
 
+### Linux
+#### Build
+#### Execution
+
+### macOS
+#### Build
+#### Execution
+
 ## Coding Guidelines
------------------------------
 
 ### Naming Conventions
-Use app hungarian notation for members and statics: https://stackoverflow.com/a/1229360/12531771
+Use [app hungarian notation](https://stackoverflow.com/a/1229360/12531771) for members and statics. 
 Temporary variable names prfered to be short and understandable.
 Naming scheme:
  - LongClassName
