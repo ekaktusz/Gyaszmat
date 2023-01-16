@@ -2,6 +2,7 @@
 
 #include "Hitbox.h"
 #include "AnimationComponent.h"
+#include "ParticleEmitter.h"
 
 class SoundPlayer;
 
@@ -110,4 +111,6 @@ private:
 	bool m_Resolved;
 	PlayerPossibleClimbingDir m_PossibleClimbingDirection;
 	PlayerActualClimbingState m_ActualClimbingState;
+
+	ParticleEmitter m_ParticleEmitter;
 };

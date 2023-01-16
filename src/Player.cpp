@@ -20,8 +20,11 @@ namespace DefaultPlayerAttributes
 Player::Player(SoundPlayer& soundPlayer) :
 	m_Sprite(),
 	m_SoundPlayer(soundPlayer),
-	m_AnimationComponent(m_Sprite)
+	m_AnimationComponent(m_Sprite),
+	m_ParticleEmitter({ParticleEmitter::Type::CIRCLE})
 {
+	m_ParticleEmitter.setIntensity(1);
+
 	m_Health = DefaultPlayerAttributes::MaxHealth;
 	m_MaxHealth = DefaultPlayerAttributes::MaxHealth;
 
@@ -91,6 +94,7 @@ void Player::draw(sf::RenderTarget& target, sf::RenderStates states) const
 	target.draw(m_Sprite);
 	// Uncomment the following row to draw the player's m_Hitbox:
 	target.draw(m_Hitbox);
+	target.draw(m_ParticleEmitter);
 }
 
 void Player::update()
@@ -100,6 +104,8 @@ void Player::update()
 	updatePhysics();
 	updateHitbox();
 	updateLight();
+	m_ParticleEmitter.update();
+	m_ParticleEmitter.setPosition(getCenterPosition());
 }
 
 void Player::handleEvent(sf::Event event)

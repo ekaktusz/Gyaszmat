@@ -9,10 +9,16 @@ public:
 	void draw(sf::RenderTarget& target, sf::RenderStates states) const override;
 	void update();
 
+	bool isDead() const
+	{
+		return m_Clock.getElapsedTime() > m_TimeToLive;
+	}
+
 protected:
 	sf::Vector2f m_Position;
 	sf::Vector2f m_Delta;
 	sf::Time m_TimeToLive;
+	sf::Clock m_Clock;
 	sf::Time m_CurrentAge;
 	sf::Color m_Color;
 	float m_Gravity;

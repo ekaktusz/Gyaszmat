@@ -22,6 +22,7 @@ include_directories(
     "${CMAKE_CURRENT_SOURCE_DIR}/src/bagla-engine/resource/"
     "${CMAKE_CURRENT_SOURCE_DIR}/src/bagla-engine/state/"
     "${CMAKE_CURRENT_SOURCE_DIR}/src/bagla-engine/animation/"
+    "${CMAKE_CURRENT_SOURCE_DIR}/src/bagla-engine/particles/"
     "${CMAKE_CURRENT_SOURCE_DIR}/src/"
 )
 
@@ -41,6 +42,8 @@ file(GLOB SOURCES
     src/bagla-engine/state/*.h
     src/bagla-engine/animation/*.h
     src/bagla-engine/animation/*.cpp
+    src/bagla-engine/particles/*.h
+    src/bagla-engine/particles/*.cpp
 )
 
 add_executable(gyaszmat ${SOURCES})
