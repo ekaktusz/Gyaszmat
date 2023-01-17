@@ -12,6 +12,7 @@ public:
 	TerrainLayer(const tmx::Map& map,
 		MapLayerNames::ObjectLayerName name = MapLayerNames::ObjectLayerName::ObjectLayer) :
 		ObjectLayer(map, name)
-	{}
+	{
+	}
 	virtual void updateCollision(Player& player) override;
 };

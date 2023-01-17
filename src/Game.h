@@ -15,7 +15,6 @@ public:
 	void changeState(State* state);
 	State* peekState() const;
 	void returnToMain();
-
 	void run();
 
 public:
