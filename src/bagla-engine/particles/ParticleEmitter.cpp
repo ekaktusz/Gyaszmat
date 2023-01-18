@@ -66,12 +66,35 @@ void ParticleEmitter::generateParticle()
 	float dx = Random::get(-10, 10);
 	float dy = Random::get(-10, 10);
 	sf::Time ttl = sf::seconds(Random::get(0, 3));
-	sf::Color color = sf::Color::Red;
-	float r = Random::get(6, 10);
+	//sf::Color color = sf::Color::Red;
+	sf::Color color(Random::get(0,255), Random::get(0,255), Random::get(0,255));
 	float g = 0;
 
-	m_Particles.push_back(
-		std::make_unique<CircleParticle>(m_Position.x, m_Position.y, r, dx, dy, ttl, color, g));
+	if (m_Type == ParticleEmitter::Type::CIRCLE)
+	{
+		float r = Random::get(6, 10);
+		m_Particles.push_back(
+			std::make_unique<CircleParticle>(m_Position.x, m_Position.y, r, dx, dy, ttl, color, g));
+		return;
+	}
+
+	if (m_Type == ParticleEmitter::Type::RECTANGLE)
+	{
+		float s = Random::get(6, 10);
+		m_Particles.push_back(std::make_unique<RectangleParticle>(
+			m_Position.x, m_Position.y, s, s, dx, dy, ttl, color, g));
+		return;
+	}
+
+	if (m_Type == ParticleEmitter::Type::MIXED)
+	{
+		float s = Random::get(6, 10);
+		m_Particles.push_back(std::make_unique<RectangleParticle>(
+			m_Position.x, m_Position.y, s, s, dx, dy, ttl, color, g));
+		m_Particles.push_back(
+			std::make_unique<CircleParticle>(m_Position.x, m_Position.y, s, dx, dy, ttl, color, g));
+		return;
+	}
 }
 
 
