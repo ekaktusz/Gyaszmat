@@ -21,7 +21,7 @@ Player::Player(SoundPlayer& soundPlayer) :
 	m_Sprite(),
 	m_SoundPlayer(soundPlayer),
 	m_AnimationComponent(m_Sprite),
-	m_ParticleEmitter({ParticleEmitter::Type::CIRCLE})
+	m_ParticleEmitter({ParticleEmitter::Type::MIXED})
 {
 	m_ParticleEmitter.setIntensity(1);
 
@@ -99,6 +99,7 @@ void Player::draw(sf::RenderTarget& target, sf::RenderStates states) const
 
 void Player::update()
 {
+	m_ParticleEmitter.generateParticle(); // Temporary until we figure out
 	updateAnimation();
 	updateSound();
 	updatePhysics();
@@ -244,9 +245,13 @@ void Player::updatePhysics()
 	float deltaTime = 1.f;
 	// Movement
 	if (m_IsMovingLeft)
+	{
 		m_Velocity.x += -1.f * m_Acceleration * deltaTime;
+	}
 	if (m_IsMovingRight)
+	{
 		m_Velocity.x += 1.f * m_Acceleration * deltaTime;
+	}
 	if (m_PressedJump)
 	{
 		m_Velocity.y = m_JumpSpeed;

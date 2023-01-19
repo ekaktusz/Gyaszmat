@@ -125,7 +125,7 @@ void GameState::handleEvent(const sf::Event& event)
 
 void GameState::render()
 {
-	m_FrameTime = m_Clock.restart().asSeconds();
+	m_FrameTime = 1 / m_Clock.restart().asSeconds();
 	m_Game->renderWindow.clear();
 	m_Game->renderWindow.setView(m_View);
 	m_Game->renderWindow.draw(m_ParallaxBackground);
@@ -135,7 +135,7 @@ void GameState::render()
 	m_Game->renderWindow.draw(*m_TileLayerNear); // layer before m_Player
 	m_Game->renderWindow.draw(fog);
 	m_Game->renderWindow.draw(m_PlayerHealthBar);
-	//m_Game->renderWindow.draw(m_FrameTimeLabel); // comment out if dont want to see frame
+	m_Game->renderWindow.draw(m_FrameTimeLabel); // comment out if dont want to see frame
 	m_Game->renderWindow.display();
 }
 

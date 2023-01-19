@@ -20,6 +20,9 @@ void Particle::draw(sf::RenderTarget& target, sf::RenderStates states) const
 
 void Particle::update()
 {
+	float a = m_Clock.getElapsedTime().asMilliseconds() / m_TimeToLive.asSeconds() / 1000;
+	m_Color.a = 255 - a * 255;
+	m_Shape->setFillColor(m_Color);
 	m_Delta.y += m_Gravity;
 	m_Position += m_Delta;
 	m_Shape->setPosition(m_Position);

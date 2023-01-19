@@ -29,7 +29,6 @@ public:
 	float getIntensity() const;
 	void setIntensity(float intensity);
 
-private:
 	void generateParticle();
 
 private:

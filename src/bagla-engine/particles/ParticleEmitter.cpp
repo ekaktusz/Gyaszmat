@@ -21,7 +21,6 @@ void ParticleEmitter::draw(sf::RenderTarget& target, sf::RenderStates states) co
 
 void ParticleEmitter::update()
 {
-	generateParticle();
 	for (auto& particle : m_Particles)
 	{
 		particle->update();
@@ -89,10 +88,16 @@ void ParticleEmitter::generateParticle()
 	if (m_Type == ParticleEmitter::Type::MIXED)
 	{
 		float s = Random::get(6, 10);
-		m_Particles.push_back(std::make_unique<RectangleParticle>(
-			m_Position.x, m_Position.y, s, s, dx, dy, ttl, color, g));
-		m_Particles.push_back(
-			std::make_unique<CircleParticle>(m_Position.x, m_Position.y, s, dx, dy, ttl, color, g));
+		bool isRectangle = Random::get<bool>();
+		if (isRectangle)
+		{
+			m_Particles.push_back(std::make_unique<RectangleParticle>(m_Position.x, m_Position.y, s, s, dx, dy, ttl, color, g));
+		}
+		else
+		{
+			m_Particles.push_back(std::make_unique<CircleParticle>(m_Position.x, m_Position.y, s, dx, dy, ttl, color, g));
+		}
+		//m_Particles.push_back(particle);
 		return;
 	}
 }
