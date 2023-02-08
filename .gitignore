@@ -4,3 +4,4 @@ build/*
 src/out
 include/SFML
 bin/
+out
