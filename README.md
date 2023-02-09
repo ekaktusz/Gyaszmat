@@ -5,7 +5,7 @@ Gyaszmat is a C++ SFML platformer game with lot of love put in to it.
 
 ## Setting up Development Environment
 
-Note: Only Windows is regularly tested.
+Note: Currently only Windows is regularly tested and supported.
 
 ### Windows
 #### Setup the environment
@@ -19,18 +19,10 @@ Just press the build all button in Visual Studio.
 #### Execution
 Just press the play button
 
-### Linux
-#### Build
-#### Execution
-
-### macOS
-#### Build
-#### Execution
-
 ## Coding Guidelines
 
 ### Naming Conventions
-Use [app hungarian notation](https://stackoverflow.com/a/1229360/12531771) for members and statics. 
+Use [app hungarian notation](https://stackoverflow.com/a/1229360/12531771) for members and statics.
 Temporary variable names prfered to be short and understandable.
 Naming scheme:
  - LongClassName
