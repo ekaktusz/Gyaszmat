@@ -99,7 +99,7 @@ void Player::draw(sf::RenderTarget& target, sf::RenderStates states) const
 
 void Player::update()
 {
-	m_ParticleEmitter.generateParticle(); // Temporary until we figure out
+	//m_ParticleEmitter.generateParticle(); // Temporary until we figure out
 	updateAnimation();
 	updateSound();
 	updatePhysics();

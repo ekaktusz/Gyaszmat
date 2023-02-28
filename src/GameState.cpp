@@ -16,7 +16,7 @@ GameState::GameState(Game* game) : State(game), m_Player(new Player(m_SoundPlaye
 	m_TileLayerMiddle = new TileLayer(*m_Map, MapLayerNames::TileLayerName::MidLayer);
 	m_TileLayerNear = new TileLayer(*m_Map, MapLayerNames::TileLayerName::FrontLayer);
 	m_LadderLayer = new LadderLayer(*m_Map);
-	m_TerrainLayer = new TerrainLayer(*m_Map);
+	m_TerrainLayer = new SolidLayer(*m_Map);
 	m_MapSize = m_Map->getBounds();
 
 	m_View = sf::View(sf::Vector2f(0.f, 0.f), sf::Vector2f(Game::s_WindowSizeX, Game::s_WindowSizeY));

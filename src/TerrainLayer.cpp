@@ -3,7 +3,7 @@
 #include "ObjectLayer.h"
 #include "Player.h"
 
-void TerrainLayer::updateCollision(Player& player)
+void SolidLayer::updateCollision(Player& player)
 {
 	sf::FloatRect playerBound = player.getHitbox().getGlobalBounds();
 
