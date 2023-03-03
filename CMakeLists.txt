@@ -9,8 +9,6 @@ project(gyaszmat)
 set(CMAKE_CXX_STANDARD 17)
 set(CMAKE_DEBUG_POSTFIX d)
 
-set(CANDLE_LIB "${CMAKE_CURRENT_LIST_DIR}/vendor/candle/lib/Candle-s.lib")
-
 include_directories(
     "${CMAKE_CURRENT_SOURCE_DIR}/vendor/candle/include"
     "${CMAKE_CURRENT_SOURCE_DIR}/vendor/tmxlite/include"
@@ -48,13 +46,19 @@ file(GLOB SOURCES
 
 add_executable(gyaszmat ${SOURCES})
 
-# TMXlite is trash, the vcpkg support is poopoo
-set(TMXLITE_LIBRARIES "${CMAKE_CURRENT_LIST_DIR}/vendor/tmxlite/lib/libtmxlite-s-d.lib")
+if(WIN32)
+  set(TMXLITE_LIBRARIES "${CMAKE_CURRENT_LIST_DIR}/vendor/tmxlite/lib/libtmxlite-s-d.lib")
+  set(CANDLE_LIB "${CMAKE_CURRENT_LIST_DIR}/vendor/candle/lib/Candle-s.lib")
+else()
+  set(TMXLITE_LIBRARIES "${CMAKE_CURRENT_LIST_DIR}/vendor/tmxlite/lib/libtmxlite-d.so")
+  set(CANDLE_LIB "${CMAKE_CURRENT_LIST_DIR}/vendor/candle/lib/libCandle-s.a")
+endif()
+
 set(TMXLITE_INCLUDE_DIR "${CMAKE_CURRENT_LIST_DIR}/tmxlite/include/tmxlite/")
 set(CMAKE_MODULE_PATH ${CMAKE_MODULE_PATH} "${CMAKE_CURRENT_LIST_DIR}/vendor/tmxlite/module/")
-find_package(TMXLITE REQUIRED)
 
-find_package(SFML COMPONENTS system window graphics CONFIG REQUIRED)
+find_package(TMXLITE REQUIRED)
+find_package(SFML COMPONENTS system window graphics audio CONFIG REQUIRED)
 find_package(spdlog CONFIG REQUIRED)
 
 target_precompile_headers(gyaszmat PUBLIC "src/pch.h")
