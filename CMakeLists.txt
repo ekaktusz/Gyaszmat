@@ -58,7 +58,7 @@ set(TMXLITE_INCLUDE_DIR "${CMAKE_CURRENT_LIST_DIR}/tmxlite/include/tmxlite/")
 set(CMAKE_MODULE_PATH ${CMAKE_MODULE_PATH} "${CMAKE_CURRENT_LIST_DIR}/vendor/tmxlite/module/")
 
 find_package(TMXLITE REQUIRED)
-find_package(SFML COMPONENTS system window graphics audio CONFIG REQUIRED)
+find_package(SFML COMPONENTS system window graphics audio network CONFIG REQUIRED)
 find_package(spdlog CONFIG REQUIRED)
 
 target_precompile_headers(gyaszmat PUBLIC "src/pch.h")

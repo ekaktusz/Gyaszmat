@@ -1,1 +1,1 @@
-(cd build/; ./gyaszmat)
+(cd out/build/; ./gyaszmat)
