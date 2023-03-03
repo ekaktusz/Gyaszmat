@@ -19,6 +19,21 @@ Just press the build all button in Visual Studio.
 #### Execution
 Just press the play button
 
+### Ubuntu
+#### Setup the environment
+1. Install these:
+```
+sudo apt install libssl-dev autoconf libtool pkg-config libx11-dev libxrandr-dev libxi-dev libudev-dev libgl1-mesa-dev udev
+```
+2.. Download the latest cmake source, build and install it.
+
+#### Build
+Run the build.sh script from the Project root directory.
+
+
+#### Run
+Run the run.sh script from the Project root directory.
+
 ## Coding Guidelines
 
 ### Naming Conventions
